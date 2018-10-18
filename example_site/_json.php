@@ -5,13 +5,21 @@
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
 
-/* Bootsrap */
 
-/* Declare page varaiables */
+function _json_send($data, bool $hasError){
+    header('Content-Type: application/json', true);
+    dispatcher_send( json_encode([
+        'hasError' => $hasError,
+        'payload' => $data
+    ]));
+}
 
+
+require '../sprout/dispatcher.inc';
 
 try{
     
+    /* Declare page varaiables */
     $GLOBALS['._import_path'] = '';
     $GLOBALS['._view_path'] = __DIR__;
     $GLOBALS['._view_path'] = "{$GLOBALS['._view_path']}\_json\%s.inc";
@@ -25,23 +33,21 @@ try{
     $_execution_view = sprintf($GLOBALS['._view_path'], $_request_path);
     $_json_data = ['hasError' => false, 'payload' => null ];
 
-    // Check for file:
     if ( false == file_exists($_execution_view) ){
+        // File not found error
         http_response_code(404);
-        $_json_data['hasError'] = true;
-        $_json_data['payload'] = "Unable to find requested resource: {$_request_path}";
+        _json_send( "Unable to find requested resource: {$_request_path}", true);
     }else{
-        $_json_data['payload'] = require($_execution_view);
+        // Load requested file
+        _json_send( require $_execution_view, false );
     }
 
 }catch(Exception $_exception){
     http_response_code(500);
-    $_json_data['hasError'] = true;
-    $_json_data['payload'] = $_exception->getMessage();
+    _json_send( $_exception->getMessage(), true );
 }catch(Error $_exception){
     http_response_code(500);
-    $_json_data['hasError'] = true;
-    $_json_data['payload'] = $_exception->getMessage();
+    _json_send( $_exception->getMessage(), true );
 }
 
 header('Content-Type: application/json', true);
