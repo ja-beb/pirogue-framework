@@ -14,7 +14,7 @@ try{
     
     $GLOBALS['._import_path'] = '';
     $GLOBALS['._view_path'] = __DIR__;
-    $GLOBALS['._view_path'] = "{$GLOBALS['._view_path']}\_content\json\%s.inc";
+    $GLOBALS['._view_path'] = "{$GLOBALS['._view_path']}\_json\%s.inc";
 
     /* Parse request */
     $_request_data = $_GET;
@@ -29,7 +29,7 @@ try{
     if ( false == file_exists($_execution_view) ){
         http_response_code(404);
         $_json_data['hasError'] = true;
-        $_json_data['payload'] = 'Unable to find requested resource';
+        $_json_data['payload'] = "Unable to find requested resource: {$_request_path}";
     }else{
         $_json_data['payload'] = require($_execution_view);
     }
