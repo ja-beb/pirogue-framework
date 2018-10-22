@@ -1,10 +1,15 @@
 <?php
 
+
+namespace sprout;
+
+
 /**
  * dispatcher address.
  * @var string 
  */
 $GLOBALS['.dispatcher_address'] = '';
+
 
 
 /**
