@@ -8,7 +8,7 @@
 
 function _json_send($data, bool $hasError){
     header('Content-Type: application/json', true);
-    dispatcher_send( json_encode([
+    sprout\dispatcher_send( json_encode([
         'hasError' => $hasError,
         'payload' => $data
     ]));
