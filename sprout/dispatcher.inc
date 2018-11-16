@@ -1,6 +1,10 @@
 <?php
-namespace sprout;
+/**
+ * Primary dispatcher library.
+ * @author Bourg, Sean <sean.bourg@gmail.com>
+ */
 
+namespace sprout;
 
 /**
  *
@@ -36,120 +40,106 @@ define('CACHE_CONTROL_STORE', 0x08);
  *
  * @var int $GLOBALS['._cache_control']
  */
-$GLOBALS['._dispatcher_cache_control'] = 0x00;
+$GLOBALS['._sprout.dispatcher.cache_control'] = 0x00;
 
 /**
  *
- * @var int $GLOBALS['._cache_control']
+ * @var int $GLOBALS['._sprout.dispatcher.cache_control_max_age']
  */
-$GLOBALS['._dispatcher_cache_control_max_age'] = 0;
+$GLOBALS['._sprout.dispatcher.cache_control_max_age'] = 0;
 
 /**
- *
- * @param int $code
+ * Dispatcher address.
+ * @var string $GLOBALS['.sprout.dispatcher.address']
  */
-function dispatcher_set_cache_control(int $code, int $max_age = 0)
-{
-    $GLOBALS['._dispatcher_cache_control'] = $code;
-    $GLOBALS['._dispatcher_cache_control_max_age'] = $max_age;
-}
+$GLOBALS['.sprout.dispatcher.address'] = '';
 
 /**
- * dispatcher address.
- *
- * @var string
- */
-$GLOBALS['.dispatcher_address'] = '';
-
-/**
- *
+ * Setup dispatcher library.
  * @param string $address
  */
 function __dispatcher(string $address)
 {
-    $GLOBALS['.dispatcher_address'] = $address;
+    $GLOBALS['.sprout.dispatcher.address'] = $address;
 }
-
 
 /**
  * Send content to user then exit.
- *
+ * @internal
  * @param string $content
  */
-function _dispatcher_cache():string 
+function _dispatcher_cache(): string
 {
     // Cache control:
-    if (0x01 != ($GLOBALS['._dispatcher_cache_control'] & 0x01)) {
+    if (0x01 != ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x01)) {
         return 'no-cache, no-store';
-    } 
-    
-    
-    if (0x02 == ($GLOBALS['._dispatcher_cache_control'] & 0x02)) {
+    }
+
+    if (0x02 == ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x02)) {
         $cache = 'public';
     } else {
         $cache = 'private';
     }
-    
-    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._dispatcher_cache_control'])) {
+
+    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
         $cache = "{$cache}, proxy-revalidate";
     }
-    
-    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $GLOBALS['._dispatcher_cache_control'])) {
+
+    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
         $cache = "{$cache}, no-store";
     }
-    
-    switch ($GLOBALS['._dispatcher_cache_control_max_age']) {
+
+    switch ($GLOBALS['._sprout.dispatcher.cache_control_max_age']) {
         case - 1:
             $max_age = ';max-age=86400';
             break;
-            
+
         case 0:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._dispatcher_cache_control_max_age']);
+            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
             break;
-            
+
         default:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._dispatcher_cache_control_max_age']);
+            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
             break;
     }
-    return  "{$cache}{$max_age}";
-    
+    return "{$cache}{$max_age}";
 }
 
 /**
  * Send content to user then exit.
- *
+ * @internal Called from dispatcher only. 
  * @param string $content
  */
-function dispatcher_send(string $content)
+function _dispatcher_send(string $content)
 {
     // Cache control:
-    if (0x01 != ($GLOBALS['._dispatcher_cache_control'] & 0x01)) {
+    if (0x01 != ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x01)) {
         $cache = 'no-cache, no-store';
-    } elseif (0x02 == ($GLOBALS['._dispatcher_cache_control'] & 0x02)) {
+    } elseif (0x02 == ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x02)) {
         $cache = 'public';
     } else {
         $cache = 'private';
     }
 
-    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._dispatcher_cache_control'])) {
+    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
         $cache = "{$cache}, proxy-revalidate";
     }
 
-    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $GLOBALS['._dispatcher_cache_control'])) {
+    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
         $cache = "{$cache}, no-store";
     }
 
-    switch ($GLOBALS['._dispatcher_cache_control_max_age']) {
+    switch ($GLOBALS['._sprout.dispatcher.cache_control_max_age']) {
         case - 1:
             $max_age = ';max-age=86400';
             break;
 
         case 0:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._dispatcher_cache_control_max_age']);
+            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
             break;
 
         default:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._dispatcher_cache_control_max_age']);
+            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
             break;
     }
     header("Cache-Control: {$cache}{$max_age}");
@@ -175,3 +165,13 @@ function dispatcher_redirect(string $address, int $code = 301)
     exit();
 }
 
+
+/**
+ *
+ * @param int $code
+ */
+function dispatcher_set_cache_control(int $code, int $max_age = 0)
+{
+    $GLOBALS['._sprout.dispatcher.cache_control'] = $code;
+    $GLOBALS['._sprout.dispatcher.cache_control_max_age'] = $max_age;
+}

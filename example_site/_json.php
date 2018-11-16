@@ -23,7 +23,7 @@ import('sprout/database_collection');
 set_error_handler('sprout\error_handler');
 
 /**
- * 
+ * Send json error message to user.
  * @param ErrorException | Error $exception
  */
 function _json_error($exception)
@@ -34,7 +34,6 @@ function _json_error($exception)
 }
 
 
-
 try {
     /* Initialize */
     sprout\__database_collection(realpath('_config'));
@@ -43,6 +42,7 @@ try {
     $_request_data = $_GET;
     $_request_path = $_request_data['__execution_path'] ?? '';
     unset($_request_data['__execution_path']);
+    
     $_parts = explode('/', $_request_path);
     $_module = array_shift($_parts);
 
@@ -51,10 +51,10 @@ try {
         require "_json/{$_module}.inc";
         $_func = sprintf('%s\%s_%s', $_module, $_SERVER['REQUEST_METHOD'], array_shift($_parts));
         if (function_exists($_func)) {
-            return sprout\dispatcher_send(json_encode($_func($_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : [])));
+            return sprout\dispatcher_send(json_encode($_func(implode('/', $_parts ), $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : [])));
         }
     }
-
+    
     http_response_code(404);
     sprout\dispatcher_set_cache_control(CACHE_CONTROL_TYPE_PRIVATE, - 1);
     return sprout\dispatcher_send(json_encode('Unable to find requested item.'));

@@ -46,3 +46,8 @@ function get_notices(string $path, array $request): array
     sqlsrv_free_stmt($sql_results);
     return $list;
 }
+
+
+function get_testValue(string $path, array $request): string{
+    return "Value: {$path}";
+}
