@@ -3,7 +3,6 @@
  * Primary dispatcher library.
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
-
 namespace sprout;
 
 /**
@@ -50,12 +49,14 @@ $GLOBALS['._sprout.dispatcher.cache_control_max_age'] = 0;
 
 /**
  * Dispatcher address.
+ *
  * @var string $GLOBALS['.sprout.dispatcher.address']
  */
 $GLOBALS['.sprout.dispatcher.address'] = '';
 
 /**
  * Setup dispatcher library.
+ *
  * @param string $address
  */
 function __dispatcher(string $address)
@@ -65,13 +66,14 @@ function __dispatcher(string $address)
 
 /**
  * Send content to user then exit.
+ *
  * @internal
  * @param string $content
  */
 function _dispatcher_cache(): string
 {
     // Cache control:
-    if (0x01 != ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x01)) {
+    if (CACHE_CONTROL_DISABLED == $GLOBALS['._sprout.dispatcher.cache_control']) {
         return 'no-cache, no-store';
     }
 
@@ -107,7 +109,8 @@ function _dispatcher_cache(): string
 
 /**
  * Send content to user then exit.
- * @internal Called from dispatcher only. 
+ *
+ * @internal Called from dispatcher only.
  * @param string $content
  */
 function _dispatcher_send(string $content)
@@ -164,7 +167,6 @@ function dispatcher_redirect(string $address, int $code = 301)
     header("Location: {$address}", true, $code);
     exit();
 }
-
 
 /**
  *
