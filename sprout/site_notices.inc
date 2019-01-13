@@ -2,6 +2,7 @@
 
 /**
  * Site notifications
+ * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 namespace sprout;
 
@@ -18,13 +19,43 @@ define('SITE_NOTICE_UPDATE', 0x01);
 define('SITE_NOTICE_CREATE', 0x01);
 define('SITE_NOTICE_DELETE', 0x01);
 
-function _page_notice_init(string $index)
-{}
 
-function page_notice_clear(): array
+/**
+ * Site notices index in session array.
+ * @internal
+ * @var string $GLOBALS['._sprout.site_notices.index']
+ */
+$GLOBALS['._sprout.site_notices.index'] = '';
+
+/**
+ * Setup site notices.
+ * @param string $index Session array index for site notices.
+ */
+function __site_notices(string $index)
 {
-    return [];
+    $GLOBALS['._sprout.site_notices.index'] = $index;
+    if ( false == array_key_exists($GLOBALS['._sprout.site_notices.index'], $_SESSION) ){
+        $_SESSION[$GLOBALS['._sprout.site_notices.index']] = [];
+    }
 }
 
+/**
+ * 
+ * @return array
+ */
+function page_notice_clear(): array
+{
+    $list = $_SESSION[$GLOBALS['._sprout.site_notices.index']];
+    $_SESSION[$GLOBALS['._sprout.site_notices.index']] = [];
+    return $list;
+}
+
+/**
+ * 
+ * @param int $type
+ * @param string $message
+ */
 function page_notice_create(int $type, string $message)
-{}
+{
+    array_push($_SESSION[$GLOBALS['._sprout.site_notices.index']], [$type, $message]);
+}

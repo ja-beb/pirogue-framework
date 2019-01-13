@@ -1,5 +1,6 @@
 <?php
 
-
-    namespace sprout;
-
+/**
+ * Site notifications
+ * @author Bourg, Sean <sean.bourg@gmail.com>
+ */
