@@ -2,6 +2,27 @@
 namespace Testing;
 
 /**
+ * 
+ * @param string $path
+ * @param array $request
+ * @return array
+ */
+function get_run_check(string $path, array $request): array{
+    return ['path' => $path, 'data' => $request ];
+}
+   
+/**
+ * 
+ * @param string $path
+ * @param array $request
+ * @param array $post_data
+ * @return array
+ */
+function post_run_check(string $path, array $request, array $post_data): array{
+    return ['path' => $path, 'data' => $request, 'post_data' => $post_data ];
+}
+
+/**
  *
  * @param string $path
  * @param array $request
@@ -20,9 +41,9 @@ function get_user(string $path, array $request): array
  *
  * @param string $path
  * @param array $request
- * @param array $form_data
+ * @param array $post_data
  */
-function post_user(string $path, array $request, array $form_data)
+function post_user(string $path, array $request, array $post_data): array
 {
     return get_user($path, $request);
 }
