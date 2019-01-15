@@ -1,4 +1,6 @@
 <?php
+use function sprout\__import;
+use function sprout\import;
 use function sprout\database_collection_open;
 use function sprout\error_handler;
 use function sprout\dispatcher_send;
@@ -40,10 +42,11 @@ __import(sprintf('%s\_include', _BASE_PATH));
 // Import required libraries
 import('sprout/dispatcher');
 import('sprout/error_handler');
-import('sprout/json');
 import('sprout/database_collection');
 
-set_error_handler('sprout\error_handler');
+set_error_handler(function (string $message, string $file, int $line) {
+    error_handler($message, $file, $line);
+});
 
 /**
  * Send json error message to user.
@@ -68,7 +71,7 @@ function _json_error($exception): string
 function _json_not_found(string $path): string
 {
     http_response_code(404);
-    dispatcher_set_cache_control(CACHE_CONTROL_TYPE_PRIVATE, - 1);
+    dispatcher_set_cache_control(CACHE_CONTROL_DISABLED);
     return "Unable to find requested module: '{$path}.";
 }
 
@@ -113,4 +116,4 @@ $_request_path = $_request_data['__execution_path'] ?? '';
 unset($_request_data['__execution_path']);
 
 /* Route request and send results to client */
-dispatcher_send(_json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
+_dispatcher_send(_json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
