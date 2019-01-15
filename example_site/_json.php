@@ -4,7 +4,10 @@ use function sprout\import;
 use function sprout\database_collection_open;
 use function sprout\error_handler;
 use function sprout\_dispatcher_send;
+<<<<<<< HEAD
 use function sprout\dispatcher_send;
+=======
+>>>>>>> init/json-dispatcher
 use function sprout\__database_collection;
 use function sprout\dispatcher_set_cache_control;
 
