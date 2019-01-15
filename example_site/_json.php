@@ -3,11 +3,8 @@ use function sprout\__import;
 use function sprout\import;
 use function sprout\database_collection_open;
 use function sprout\error_handler;
-<<<<<<< HEAD
 use function sprout\_dispatcher_send;
-=======
 use function sprout\dispatcher_send;
->>>>>>> f7322eefdd80c3f247c0b68b63abcd8270cb55a2
 use function sprout\__database_collection;
 use function sprout\dispatcher_set_cache_control;
 
