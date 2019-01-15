@@ -1,5 +1,10 @@
 <?php 
 
+/**
+ * Primary dispatcher library.
+ * @author Bourg, Sean <sean.bourg@gmail.com>
+ */
+
 namespace sprout;
 
 use ErrorException;
@@ -15,7 +20,7 @@ use ErrorException;
  * @throws ErrorException
  * @return boolean
  */
-function error_handler(int $number, string $message, string $file, int $line)
+function _error_handler(int $number, string $message, string $file, int $line)
 {
     if (0 === error_reporting()) {
         return false;
@@ -24,8 +29,12 @@ function error_handler(int $number, string $message, string $file, int $line)
 }
 
 
-
-function error_handler_log($database_connection, string $message, string $file, int $line){
-    echo $message;
-    exit();
+/**
+ * Write error to log.
+ * @param string $message
+ * @param string $file
+ * @param int $line
+ */
+function error_handler_log(string $message, string $file, int $line){
+    
 }
