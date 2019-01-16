@@ -1,5 +1,4 @@
 <?php
-
 use function sprout\__import;
 use function sprout\import;
 use function sprout\database_collection_open;
@@ -44,7 +43,6 @@ import('sprout/json');
 
 set_error_handler('_error_handler');
 
-
 /* Initialize */
 __database_collection(realpath('_config'));
 
@@ -54,4 +52,5 @@ $_request_path = $_request_data['__execution_path'] ?? '';
 unset($_request_data['__execution_path']);
 
 /* Route request and send results to client */
-_dispatcher_send(_json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
+$_json_data = _json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []);
+_dispatcher_send($_json_data);
