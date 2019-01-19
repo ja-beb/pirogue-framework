@@ -44,9 +44,9 @@ function database_collection_open(string $name)
             throw new ErrorException("Unable to find database connection {$name}.");
         }
         $config = parse_ini_file($file, false);
-        $GLOBALS['._sprout.database_collection.config_path'][$name] = sqlsrv_connect($config['name'] ?? '', $config['options'] ?? []);
+        $GLOBALS['._sprout.database_collection.database_connections'][$name] = sqlsrv_connect($config['name'] ?? '', $config['options'] ?? []);
         
-        if (false === $GLOBALS['._sprout.database_collection.config_path'][$name] ){
+        if (false === $GLOBALS['._sprout.database_collection.database_connections'][$name] ){
             throw new ErrorException("Unable to open database connection {$name}.");
         }
     }
