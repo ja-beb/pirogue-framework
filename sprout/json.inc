@@ -66,7 +66,7 @@ function _json_route(string $method, string $route, array $request_data, array $
         $_file = "_json/{$_module}.inc";
         if (file_exists($_file)) {
             require $_file;
-            $_func = sprintf('%s\%s_%s', $_module, $method, array_shift($_parts));
+            $_func = sprintf('%s\%s_%s', $_module, $method, str_replace('-', '_', array_shift($_parts)));
             $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _json_not_found($route);
         } else {
             $_results = _json_not_found($route);
