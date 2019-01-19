@@ -1,5 +1,4 @@
 <?php
-
 use function sprout\__import;
 use function sprout\import;
 use function sprout\database_collection_open;
@@ -7,6 +6,7 @@ use function sprout\_error_handler;
 use function sprout\_dispatcher_send;
 use function sprout\__database_collection;
 use function sprout\dispatcher_set_cache_control;
+use function sprout\_json_route;
 
 /**
  * Main dispatcher for JSON content.
@@ -32,9 +32,11 @@ use function sprout\dispatcher_set_cache_control;
 // Send request headers (type for this dispatcher):
 header('Content-Type: application/json', true);
 
+define('_BASE_URI', __DIR__);
+
 // Load & intialize sprout framework:
 require '_include/sprout/import.inc';
-__import(sprintf('%s\_include', __DIR__));
+__import(sprintf('%s\_include', _BASE_URI));
 
 // Import required libraries
 import('sprout/dispatcher');
@@ -42,16 +44,31 @@ import('sprout/error_handler');
 import('sprout/database_collection');
 import('sprout/json');
 
-set_error_handler('_error_handler');
+set_error_handler('sprout\_error_handler');
 
+$GLOBALS['._dispatcher_failsafe_exception'] = null;
 
-/* Initialize */
-__database_collection(realpath('_config'));
+try {
+    /* Initialize */
+    __database_collection(realpath('_config'));
 
-/* Parse request */
-$_request_data = $_GET;
-$_request_path = $_request_data['__execution_path'] ?? '';
-unset($_request_data['__execution_path']);
+    /* Parse request */
+    $_request_data = $_GET;
+    $_request_path = $_request_data['__execution_path'] ?? '';
+    unset($_request_data['__execution_path']);
 
-/* Route request and send results to client */
-_dispatcher_send(_json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
+    /* Route request and send results to client */
+    return _dispatcher_send(_json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
+} catch (Error $_exception) {
+    $GLOBALS['._dispatcher_failsafe_exception'] = $_exception;
+} catch (Exception $_exception) {
+    $GLOBALS['._dispatcher_failsafe_exception'] = $_exception;
+}
+
+// Failsafe errors:
+http_response_code(500);
+if ($GLOBALS['._dispatcher_failsafe_exception']) {
+    echo json_encode(sprintf('%s: (%s:%d)', $GLOBALS['._dispatcher_failsafe_exception']->getMessage(), str_replace(_BASE_URI, '', $GLOBALS['._dispatcher_failsafe_exception']->getFile()), $GLOBALS['._dispatcher_failsafe_exception']->getLine()));
+} else {
+    echo json_encode('Unknown exception encountered');
+}
