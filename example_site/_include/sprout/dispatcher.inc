@@ -3,7 +3,6 @@
  * Primary dispatcher library.
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
-
 namespace sprout;
 
 /**
@@ -40,7 +39,7 @@ define('CACHE_CONTROL_STORE', 0x08);
  *
  * @var int $GLOBALS['._cache_control']
  */
-$GLOBALS['._sprout.dispatcher.cache_control'] = 0x00;
+$GLOBALS['._sprout.dispatcher.cache_control'] = CACHE_CONTROL_TYPE_PUBLIC;
 
 /**
  *
@@ -50,12 +49,14 @@ $GLOBALS['._sprout.dispatcher.cache_control_max_age'] = 0;
 
 /**
  * Dispatcher address.
+ *
  * @var string $GLOBALS['.sprout.dispatcher.address']
  */
 $GLOBALS['.sprout.dispatcher.address'] = '';
 
 /**
  * Setup dispatcher library.
+ *
  * @param string $address
  */
 function __dispatcher(string $address)
@@ -65,21 +66,18 @@ function __dispatcher(string $address)
 
 /**
  * Send content to user then exit.
+ *
  * @internal
  * @param string $content
  */
 function _dispatcher_cache(): string
 {
     // Cache control:
-    if (0x01 != ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x01)) {
+    if (CACHE_CONTROL_DISABLED == $GLOBALS['._sprout.dispatcher.cache_control']) {
         return 'no-cache, no-store';
     }
 
-    if (0x02 == ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x02)) {
-        $cache = 'public';
-    } else {
-        $cache = 'private';
-    }
+    $cache = (CACHE_CONTROL_TYPE_PRIVATE == ($GLOBALS['._sprout.dispatcher.cache_control'] & CACHE_CONTROL_TYPE_PRIVATE)) ? 'public' : 'private';
 
     if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
         $cache = "{$cache}, proxy-revalidate";
@@ -92,10 +90,6 @@ function _dispatcher_cache(): string
     switch ($GLOBALS['._sprout.dispatcher.cache_control_max_age']) {
         case - 1:
             $max_age = ';max-age=86400';
-            break;
-
-        case 0:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
             break;
 
         default:
@@ -107,52 +101,24 @@ function _dispatcher_cache(): string
 
 /**
  * Send content to user then exit.
- * @internal Called from dispatcher only. 
+ *
+ * @internal Called from dispatcher only.
  * @param string $content
  */
 function _dispatcher_send(string $content)
 {
     // Cache control:
-    if (0x01 != ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x01)) {
-        $cache = 'no-cache, no-store';
-    } elseif (0x02 == ($GLOBALS['._sprout.dispatcher.cache_control'] & 0x02)) {
-        $cache = 'public';
-    } else {
-        $cache = 'private';
-    }
-
-    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
-        $cache = "{$cache}, proxy-revalidate";
-    }
-
-    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $GLOBALS['._sprout.dispatcher.cache_control'])) {
-        $cache = "{$cache}, no-store";
-    }
-
-    switch ($GLOBALS['._sprout.dispatcher.cache_control_max_age']) {
-        case - 1:
-            $max_age = ';max-age=86400';
-            break;
-
-        case 0:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
-            break;
-
-        default:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._sprout.dispatcher.cache_control_max_age']);
-            break;
-    }
-    header("Cache-Control: {$cache}{$max_age}");
+    header(sprintf('Cache-Control: %s', _dispatcher_cache()));
 
     $etag = md5($content);
     header("ETAG: {$etag}");
+    $http_status_code = http_response_code();
     if (false == array_key_exists('HTTP_IF_NONE_MATCH', $_SERVER)) {
-        http_response_code(200);
+        http_response_code($http_status_code);
         echo $content;
     } elseif ($etag == $_SERVER['HTTP_IF_NONE_MATCH']) {
-        http_response_code(304);
+        http_response_code((200 == $http_status_code) ? 304 : $http_status_code);
     }
-
     exit();
 }
 
@@ -164,7 +130,6 @@ function dispatcher_redirect(string $address, int $code = 301)
     header("Location: {$address}", true, $code);
     exit();
 }
-
 
 /**
  *
