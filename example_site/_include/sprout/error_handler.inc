@@ -35,6 +35,6 @@ function _error_handler(int $number, string $message, string $file, int $line)
  * @param string $file
  * @param int $line
  */
-function error_handler_log(string $message, string $file, int $line){
+function error_handler_log($database, string $message, string $file, int $line){
     
 }
