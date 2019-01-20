@@ -10,18 +10,6 @@ use Exception;
  */
 
 /**
- * Error handler for dispatcher
- *
- * @param string $message
- * @param string $file
- * @param int $line
- */
-function _dispatcher_error_handler(string $message, string $file, int $line)
-{
-    error_handler($message, $file, $line);
-}
-
-/**
  * Send json error message to user.
  *
  * @param
