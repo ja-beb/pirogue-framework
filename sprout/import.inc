@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Site notifications
+ * Import library files.
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
