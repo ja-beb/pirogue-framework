@@ -16,6 +16,12 @@ use ErrorException;
  */
 $GLOBALS['._sprout.index.import_path'] = '';
 
+/**
+ * Library file extension.
+ *
+ * @internal
+ * @var string $GLOBALS['._sprout.index.file_extension']
+ */
 $GLOBALS['._sprout.index.file_exteions'] = '';
 
 /**
@@ -30,7 +36,7 @@ $GLOBALS['._sprout.index.file_exteions'] = '';
 function __import(string $path, string $file_extension = 'inc')
 {
     $GLOBALS['._sprout.index.import_path'] = $path;
-    $GLOBALS['._sprout.index.file_exteions'] = $file_extension;
+    $GLOBALS['._sprout.index.file_extension'] = $file_extension;
 }
 
 /**
@@ -42,7 +48,7 @@ function __import(string $path, string $file_extension = 'inc')
  */
 function import(string $name)
 {
-    $file = sprintf("%s\%s.%s", $GLOBALS['._sprout.index.import_path'], $name, $GLOBALS['._sprout.index.file_exteions']);
+    $file = sprintf("%s\%s.%s", $GLOBALS['._sprout.index.import_path'], $name, $GLOBALS['._sprout.index.file_extension']);
     if (false == file_exists($file)) {
         throw new ErrorException("Unable to find library: {$name}");
     }
