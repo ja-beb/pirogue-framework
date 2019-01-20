@@ -5,7 +5,7 @@ use Error;
 use Exception;
 
 /**
- *
+ * Base collection of JSON dispatcher functions.
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
 
