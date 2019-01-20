@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Database connection functionality.
+ * Database connection functionality. Functions are not multi-thread safe - executing database_collection_open() 
+ * and _database_collection_close() can cause race conditions.  
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 namespace sprout;
