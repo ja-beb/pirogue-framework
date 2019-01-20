@@ -8,8 +8,6 @@ namespace sprout;
 
 use ErrorException;
 
-
-
 /**
  * Base folder for library import.
  *
@@ -18,15 +16,21 @@ use ErrorException;
  */
 $GLOBALS['._sprout.index.import_path'] = '';
 
+$GLOBALS['._sprout.index.file_exteions'] = '';
+
 /**
  * Setup import library - needed before import function can be called.
  *
  * @param string $path
- *            Base pat that contains library files.
+ *            Base path that contains library files.
+ *            
+ * @param string $file_extension
+ *            The file extension for library files.
  */
-function __import(string $path)
+function __import(string $path, string $file_extension = 'inc')
 {
     $GLOBALS['._sprout.index.import_path'] = $path;
+    $GLOBALS['._sprout.index.file_exteions'] = $file_extension;
 }
 
 /**
@@ -38,7 +42,7 @@ function __import(string $path)
  */
 function import(string $name)
 {
-    $file = sprintf("%s\%s.inc", $GLOBALS['._sprout.index.import_path'], $name);
+    $file = sprintf("%s\%s.%s", $GLOBALS['._sprout.index.import_path'], $name, $GLOBALS['._sprout.index.file_exteions']);
     if (false == file_exists($file)) {
         throw new ErrorException("Unable to find library: {$name}");
     }
