@@ -4,21 +4,25 @@
  * Import library files.
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
-
 namespace sprout;
 
 use ErrorException;
 
+
+
 /**
- * Base folder for library import. 
+ * Base folder for library import.
+ *
  * @internal
  * @var string $GLOBALS['._sprout.index.import_path']
  */
 $GLOBALS['._sprout.index.import_path'] = '';
 
 /**
- * setup import library.
+ * Setup import library - needed before import function can be called.
+ *
  * @param string $path
+ *            Base pat that contains library files.
  */
 function __import(string $path)
 {
@@ -27,8 +31,10 @@ function __import(string $path)
 
 /**
  * Import library file.
- * @param string $lib
- * @throws ErrorException
+ *
+ * @param string $name
+ *            Name of library being loaded without file extension.
+ * @throws ErrorException Error thrown if the requested library file is not found.
  */
 function import(string $name)
 {
