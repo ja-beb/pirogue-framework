@@ -19,7 +19,7 @@ use Exception;
  */
 function _json_error($exception): string
 {
-    http_response_code(500);
+    http_response_code(HTTP_STATUS_INTERNAL_SERVER_ERROR);
     error_handler_log(database_collection_open('website'), $exception->getMessage(), $exception->getFile(), $exception->getLine());
     return $exception->getMessage();
 }
@@ -32,7 +32,7 @@ function _json_error($exception): string
  */
 function _json_not_found(string $path): string
 {
-    http_response_code(404);
+    http_response_code(HTTP_STATUS_NOT_FOUND);
     dispatcher_set_cache_control(CACHE_CONTROL_DISABLED);
     return "Unable to find requested module: '{$path}.";
 }
