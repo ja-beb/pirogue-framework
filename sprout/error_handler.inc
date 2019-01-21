@@ -1,16 +1,16 @@
-<?php 
+<?php
 
 /**
  * Primary error handler library.
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
-
 namespace sprout;
 
 use ErrorException;
 
-
 /**
+ * Translate PHP trigger errors into SPL ErrorException instance.
+ * Assigned using set_error_handler()
  *
  * @internal
  * @param int $number
@@ -20,21 +20,10 @@ use ErrorException;
  * @throws ErrorException
  * @return boolean
  */
-function _error_handler(int $number, string $message, string $file, int $line)
+function _error_handler(int $errno, string $errstr, string $errfile, int $errline): bool
 {
-    if (0 === error_reporting()) {
-        return false;
+    if ($errno & error_reporting()) {
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
-    throw new ErrorException($message, 0, $number, $file, $line);
-}
-
-
-/**
- * Write error to log.
- * @param string $message
- * @param string $file
- * @param int $line
- */
-function error_handler_log($database, string $message, string $file, int $line){
-    
+    return false;
 }
