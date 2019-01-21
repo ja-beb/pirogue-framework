@@ -23,7 +23,7 @@ $GLOBALS['._sprout.database_collection.config_path'] = null;
  *
  * @internal
  * @var array $GLOBALS['._sprout.database_collection.connections']
- */
+ */  
 $GLOBALS['._sprout.database_collection.connections'] = [];
 
 /**
@@ -39,10 +39,13 @@ function __database_collection(string $config_path)
 }
 
 /**
- * Open database connection - fetches connection based on name by translating user inputed "databaseName" into
- * a config file {$config_path}\sqlsrv-{$name}.ini
+ * Open database connection.
+ * 
+ * Fetches connection information based on name by translating to a config file {$config_path}\{$name}.ini
+ * For case sensitive impementations this function translate inputed name varaible to lower case.
  *
  * @param string $name
+ * @return resource
  */
 function database_collection_open(string $name)
 {
