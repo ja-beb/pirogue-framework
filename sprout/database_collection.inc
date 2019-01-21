@@ -1,8 +1,9 @@
 <?php
 
 /**
- * Database connection functionality. Functions are not multi-thread safe - executing database_collection_open() 
- * and _database_collection_close() can cause race conditions.  
+ * Database connection functionality. 
+ * 
+ * Functions are not multi-thread safe - executing database_collection_open() and _database_collection_close() can cause race conditions.  
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 namespace sprout;
@@ -10,12 +11,16 @@ namespace sprout;
 use ErrorException;
 
 /**
+ * Base config path.
+ *
  * @internal
  * @var string $GLOBALS['._sprout.database_collection.config_path']
  */
 $GLOBALS['._sprout.database_collection.config_path'] = null;
 
 /**
+ * Collection of open database connections.
+ *
  * @internal
  * @var array $GLOBALS['._sprout.database_collection.database_connections']
  */
@@ -23,7 +28,9 @@ $GLOBALS['._sprout.database_collection.database_connections'] = [];
 
 /**
  * Setup database collection library.
- * @param string $config_path Configuration path folder - where the database connection settings can be found.
+ *
+ * @param string $config_path
+ *            Configuration path folder - where the database connection settings can be found.
  */
 function __database_collection(string $config_path)
 {
@@ -34,6 +41,7 @@ function __database_collection(string $config_path)
 /**
  * Open database connection - fetches connection based on name by translating user inputed "databaseName" into
  * a config file {$config_path}\sqlsrv-{$name}.ini
+ *
  * @param string $name
  */
 function database_collection_open(string $name)
@@ -46,8 +54,8 @@ function database_collection_open(string $name)
         }
         $config = parse_ini_file($file, false);
         $GLOBALS['._sprout.database_collection.database_connections'][$name] = sqlsrv_connect($config['name'] ?? '', $config['options'] ?? []);
-        
-        if (false === $GLOBALS['._sprout.database_collection.database_connections'][$name] ){
+
+        if (false === $GLOBALS['._sprout.database_collection.database_connections'][$name]) {
             throw new ErrorException("Unable to open database connection {$name}.");
         }
     }
@@ -55,13 +63,13 @@ function database_collection_open(string $name)
 }
 
 /**
- * @internal
- * Close all active database connections (cleanup function.
+ *
+ * @internal Close all active database connections (cleanup function.
  */
 function _database_collection_close()
 {
     foreach ($GLOBALS['._sprout.database_collection.database_connections'] as $connection) {
-        if (null != $connection && 'SQL Server Connection' == get_resource_type ( $connection )) {
+        if (null != $connection && 'SQL Server Connection' == get_resource_type($connection)) {
             sqlsrv_close($connection);
         }
     }
