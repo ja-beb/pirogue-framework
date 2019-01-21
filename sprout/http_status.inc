@@ -1,8 +1,9 @@
 <?php
+namespace sprout;
 
 /**
  * Collection of HTTP status codes used by the framework.
- * 
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
