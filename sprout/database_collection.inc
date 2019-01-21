@@ -36,7 +36,14 @@ $GLOBALS['._sprout.database_collection.connections'] = [];
  */
 function __database_collection(string $config_path)
 {
-    register_shutdown_function('sprout\_database_collection_close');
+    register_shutdown_function(function () {
+        foreach ($GLOBALS['._sprout.database_collection.connections'] as $connection) {
+            if (null != $connection && 'SQL Server Connection' == get_resource_type($connection)) {
+                sqlsrv_close($connection);
+            }
+        }
+        $GLOBALS['._sprout.database_collection.connections'] = [];
+    });
     $GLOBALS['._sprout.database_collection.config_path'] = $config_path;
 }
 
@@ -72,19 +79,4 @@ function database_collection_open(string $name)
         }
     }
     return $GLOBALS['._sprout.database_collection.connections'][$name];
-}
-
-/**
- * Close all active database connections.
- *
- * @internal
- */
-function _database_collection_close()
-{
-    foreach ($GLOBALS['._sprout.database_collection.connections'] as $connection) {
-        if (null != $connection && 'SQL Server Connection' == get_resource_type($connection)) {
-            sqlsrv_close($connection);
-        }
-    }
-    $GLOBALS['._sprout.database_collection.connections'] = [];
 }
