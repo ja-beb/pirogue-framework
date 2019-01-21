@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * Primary dispatcher library.
+ * Primary error handler library.
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
