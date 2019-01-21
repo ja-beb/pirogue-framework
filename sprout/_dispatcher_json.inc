@@ -51,7 +51,7 @@ function _json_route(string $method, string $route, array $request_data, array $
         $_parts = explode('/', $route);
         $_module = array_shift($_parts);
 
-        $_file = "_json/{$_module}.inc";
+        $_file = implode( DIRECTORY_SEPARATOR, [ '_json', "{$_module}.inc"]);
         if (file_exists($_file)) {
             require $_file;
             $_func = sprintf('%s\%s_%s', $_module, $method, str_replace('-', '_', array_shift($_parts)));
