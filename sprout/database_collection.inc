@@ -22,9 +22,9 @@ $GLOBALS['._sprout.database_collection.config_path'] = null;
  * Collection of open database connections.
  *
  * @internal
- * @var array $GLOBALS['._sprout.database_collection.database_connections']
+ * @var array $GLOBALS['._sprout.database_collection.connections']
  */
-$GLOBALS['._sprout.database_collection.database_connections'] = [];
+$GLOBALS['._sprout.database_collection.connections'] = [];
 
 /**
  * Setup database collection library.
@@ -47,31 +47,31 @@ function __database_collection(string $config_path)
 function database_collection_open(string $name)
 {
     $name = strtolower($name);
-    if (false == array_key_exists($name, $GLOBALS['._sprout.database_collection.database_connections'])) {
+    if (false == array_key_exists($name, $GLOBALS['._sprout.database_collection.connections'])) {
         $file = sprintf('%s\sqlsrv-%s.ini', $GLOBALS['._sprout.database_collection.config_path'], $name);
         if (false == file_exists($file)) {
             throw new ErrorException("Unable to find database connection {$name}.");
         }
         $config = parse_ini_file($file, false);
-        $GLOBALS['._sprout.database_collection.database_connections'][$name] = sqlsrv_connect($config['name'] ?? '', $config['options'] ?? []);
+        $GLOBALS['._sprout.database_collection.connections'][$name] = sqlsrv_connect($config['name'] ?? '', $config['options'] ?? []);
 
-        if (false === $GLOBALS['._sprout.database_collection.database_connections'][$name]) {
+        if (false === $GLOBALS['._sprout.database_collection.connections'][$name]) {
             throw new ErrorException("Unable to open database connection {$name}.");
         }
     }
-    return $GLOBALS['._sprout.database_collection.database_connections'][$name];
+    return $GLOBALS['._sprout.database_collection.connections'][$name];
 }
 
 /**
- *
- * @internal Close all active database connections (cleanup function.
+ * Close all active database connections.
+ * @internal
  */
 function _database_collection_close()
 {
-    foreach ($GLOBALS['._sprout.database_collection.database_connections'] as $connection) {
+    foreach ($GLOBALS['._sprout.database_collection.connections'] as $connection) {
         if (null != $connection && 'SQL Server Connection' == get_resource_type($connection)) {
             sqlsrv_close($connection);
         }
     }
-    $GLOBALS['._sprout.database_collection.database_connections'] = [];
+    $GLOBALS['._sprout.database_collection.connections'] = [];
 }
