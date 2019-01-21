@@ -48,11 +48,15 @@ function __import(string $path, string $file_extension = 'inc')
  */
 function import(string $name)
 {
-    $file = sprintf("%s\%s.%s", $GLOBALS['._sprout.import.path'], $name, $GLOBALS['._sprout.import.file_extension']);
-    if (false == file_exists($file)) {
+    $file_name = sprintf('%s.%s', $name, $GLOBALS['._sprout.import.file_extension']);
+    $include_file = implode(DIRECTORY_SEPARATOR, [
+        $GLOBALS['._sprout.import.path'],
+        $file_name
+    ]);
+    if (false == file_exists($include_file)) {
         throw new ErrorException("Unable to find library: {$name}");
     }
-    include_once $file;
+    include_once $include_file;
 }
 
 
