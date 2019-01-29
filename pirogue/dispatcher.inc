@@ -48,7 +48,7 @@ $GLOBALS['._pirogue.dispatcher.cache_control'] = CACHE_CONTROL_TYPE_PUBLIC;
 $GLOBALS['._pirogue.dispatcher.cache_control_max_age'] = 0;
 
 /**
- * Dispatcher address.
+ * Dispatcher's base address.
  *
  * @var string $GLOBALS['.pirogue.dispatcher.address']
  */

@@ -32,7 +32,8 @@ use function pirogue\_json_route;
 // Send request headers (type for this dispatcher):
 header('Content-Type: application/json', true);
 
-define('_BASE_URI', __DIR__);
+define('_BASE_URI', 'C:\\inetpub\wwwroot\example-site');
+define('_BASE_PATH_CONTROLLER', sprintf('%s\_json', _BASE_URI));
 
 // Load & intialize pirogue framework:
 require '_include/pirogue/import.inc';

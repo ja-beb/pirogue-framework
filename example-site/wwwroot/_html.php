@@ -12,8 +12,8 @@ use function pirogue\dispatcher_set_cache_control;
  */
 
 // Declare base folders:
-define('_BASE_PATH', __DIR__);
-define('_BASE_PATH_CONTROLLER', sprintf('%s\_html', _BASE_PATH));
+define('_BASE_URI', 'C:\\inetpub\wwwroot\example-site');
+define('_BASE_PATH_CONTROLLER', sprintf('%s\_html', _BASE_URI));
 
 // Load & intialize pirogue framework:
 require '_include/pirogue/import.inc';
