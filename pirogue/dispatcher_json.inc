@@ -4,6 +4,8 @@ namespace pirogue;
 use Error;
 use Exception;
 
+
+
 /**
  * Base collection of JSON dispatcher functions.
  *
@@ -30,11 +32,11 @@ function _json_error($exception): string
  *
  * @return string
  */
-function _json_not_found(string $path): string
+function _json_not_found(string $type, string $path): string
 {
     http_response_code(HTTP_STATUS_NOT_FOUND);
     dispatcher_set_cache_control(CACHE_CONTROL_DISABLED);
-    return "Unable to find requested module: '{$path}.";
+    return "Unable to find requested {$type}: '{$path}.";
 }
 
 /**
@@ -53,16 +55,16 @@ function _json_route(string $method, string $route, array $request_data, array $
         $_module = array_shift($_parts);
 
         $_file = implode(DIRECTORY_SEPARATOR, [
-            '_json',
+            'controllers\json',
             sprintf('%s.inc', $_module)
         ]);
         
         if (file_exists($_file)) {
             require $_file;
             $_func = sprintf('%s\%s_%s', $_module, $method, str_replace('-', '_', array_shift($_parts)));
-            $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _json_not_found($route);
+            $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _json_not_found('page', $route);
         } else {
-            $_results = _json_not_found($route);
+            $_results = _json_not_found('module', $route);
         }
     } catch (Exception $_exception) {
         $_results = _json_error($_exception);

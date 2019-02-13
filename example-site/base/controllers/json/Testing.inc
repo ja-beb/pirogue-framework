@@ -1,5 +1,5 @@
 <?php
-namespace Testing;
+namespace controllers\Testing;
 
 /**
  * 
