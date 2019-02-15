@@ -1,10 +1,6 @@
 <?php
-namespace controllers\user\current;
+namespace controllers\user\lookup;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
 /**
  * 
  * @param string $path
@@ -14,3 +10,4 @@ namespace controllers\user\current;
 function get_status(string $path, array $request): array{
     return ['status' => 'awake' ];
 }
+
