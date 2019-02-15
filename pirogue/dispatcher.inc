@@ -118,6 +118,9 @@ function _dispatcher_send(string $content)
         echo $content;
     } elseif ($etag == $_SERVER['HTTP_IF_NONE_MATCH']) {
         http_response_code((200 == $http_status_code) ? 304 : $http_status_code);
+    } else {
+        http_response_code($http_status_code);
+        echo $content;
     }
     exit();
 }

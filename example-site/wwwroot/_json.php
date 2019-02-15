@@ -36,7 +36,10 @@ define('_BASE_URI', 'C:\\inetpub\example-site');
 
 // Load & intialize pirogue framework:
 require_once sprintf('%s\include\pirogue\import.inc', _BASE_URI);
-__import(sprintf('%s\include', _BASE_URI));
+__import(implode(DIRECTORY_SEPARATOR, [
+    _BASE_URI,
+    'include'
+]));
 
 // Import required libraries
 import('pirogue/http_status');
@@ -47,21 +50,11 @@ import('pirogue/database_collection');
 set_error_handler('pirogue\_error_handler');
 
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-$GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\controllers\json', _BASE_URI);
-
-
-// Possible "engines":
-// Load file only - file uses "return" to return data or ob_start is returned. Allows for n-level orginazation that directly reflects file system
-// Easiest pattern, uses just do require( '_json/%s', $path);
-// Does not allow path based variables.
-
-
-// route_register(string $pattern, function);
-// can use string match, regex or sscanf() functions. fastest and best for small amount of routes
-
-
-// Call function -> parse to {module file}/{function}
-// Defined routes -> Use either regex or normal string paths
+$GLOBALS['._pirogue.dispatcher.controller_path'] = implode(DIRECTORY_SEPARATOR, [
+    _BASE_URI,
+    'controllers',
+    'json'
+]);
 
 try {
     /* Initialize */
@@ -72,49 +65,81 @@ try {
     $_request_path = $_request_data['__execution_path'] ?? '';
     unset($_request_data['__execution_path']);
 
+    // Route path to controller file, function & path:
+    $_exec_data = $_request_data;
     $_parts = explode('/', $_request_path);
-    $_exec_app = array_shift($_parts);
 
-    $_exe_controller = sprintf('%s\%s.inc', $GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_app);
-    if (file_exists($_exe_controller)) {
-        require $_exe_controller;
-        $_exe_function = sprintf( '%s_%s', $_SERVER['REQUEST_METHOD'], (0 == count($_parts)) ? 'index' : array_shift($_parts));
-        if (function_exists($_exe_function)) {            
-            $_exe_path = implode('/', $_parts);            
-        } else {
-            require sprintf('%s\_site_errors.inc', $GLOBALS['._pirogue.dispatcher.controller_path']);
-            $_exe_method = 'route';
-            $_exe_path = '404';
+    // Get app file name:
+    $_exec_app = $GLOBALS['._pirogue.dispatcher.controller_path'];
+    $_exec_function = 'controllers';
+    while (0 < count($_parts)) {
+        $_current = array_shift($_parts);
+        $_exec_function = sprintf('%s\%s', $_exec_function, $_current);
+        $_exec_app = implode(DIRECTORY_SEPARATOR, [
+            $_exec_app,
+            $_current
+        ]);
+
+        if (file_exists("{$_exec_app}.inc")) {
+            $_exec_app = "{$_exec_app}.inc";
+            break;
+        } elseif (false == is_dir($_exec_app)) {
+            $_exec_function = '';
+            $_exec_app = null;
+            $_parts = [];
         }
+    }
+
+    // get controller function:
+    if ('' != $_exec_function) {
+        require ($_exec_app);
+        $_exec_function = sprintf('%s\%s_%s', $_exec_function, strtolower($_SERVER['REQUEST_METHOD']), (0 == count($_parts)) ? 'index' : array_shift($_parts));
+        if (false == function_exists($_exec_function)) {
+            $_exec_function = '';
+        }
+    }
+
+    // Check for 404 error:
+    if ('' == $_exec_function) {
+        $_exec_app = implode(DIRECTORY_SEPARATOR, [
+            $GLOBALS['._pirogue.dispatcher.controller_path'],
+            '_site_errors.inc'
+        ]);
+        $_exec_function = 'controllers\_site_errors\route';
+        $_exec_path = '404';
+        $_exec_data = [
+            'request_path' => $_request_path,
+            'request_data' => $_request_data
+        ];
     } else {
-        require sprintf('%s\_site_errors.inc', $GLOBALS['._pirogue.dispatcher.controller_path']);
-        $_exe_method = 'route';
-        $_exe_path = '404';
+        $_exec_path = implode('/', $_parts);
     }
 
     /* process request */
     try {
-        // $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _json_not_found('page', $route);
-        
-        // if method function does not exists but base function exists throw 405
-
-        $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _json_not_found('page', $route);
-
-        if (file_exists($_file)) {
-            require $_file;
-            $_func = sprintf('%s\%s_%s', $_module, $method, str_replace('-', '_', array_shift($_parts)));
-            $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _json_not_found('page', $route);
-        } else {
-            $_results = _json_not_found('module', $route);
-        }
+        $_json_data = call_user_func($_exec_function, $_exec_path, $_exec_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []);
     } catch (Exception $_exception) {
-        $_results = _json_error($_exception);
+        require (implode(DIRECTORY_SEPARATOR, [
+            $GLOBALS['._pirogue.dispatcher.controller_path'],
+            '_site_errors.inc'
+        ]));
+        $_json_data = controllers\_site_errors\route('500', [
+            $_exception->getMessage()
+        ]);
     } catch (Error $_exception) {
-        $_results = _json_error($_exception);
+        require (implode(DIRECTORY_SEPARATOR, [
+            $GLOBALS['._pirogue.dispatcher.controller_path'],
+            '_site_errors.inc'
+        ]));
+        $_json_data = controllers\_site_errors\route('500', [
+            $_exception
+        ]);
     }
 
     /* Route request and send results to client */
-    return _dispatcher_send(_json_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
+    echo json_encode($_json_data);
+    exit();
+    return _dispatcher_send(json_encode($_json_data));
 } catch (Error $_exception) {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
 } catch (Exception $_exception) {
