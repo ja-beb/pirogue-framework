@@ -27,7 +27,7 @@ function get_details(string $path, array $request): array{
     $db = database_collection_get('website');
     $data = \org\employee_fetch($db, _ORG_EMPLOYEE_FETCH_FILTER_ID, $path);    
     if ( empty($data ) ){
-        http_response_code(HTTP_STATUS_NOT_FOUND);        
+        http_response_code(404);        
     }
     return $data;
 }
