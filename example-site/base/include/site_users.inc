@@ -34,7 +34,7 @@ function lookup($sql_server, string $email): array
 
 function password_verify($sql_server, int $id, string $password): array
 {
-    return _fetch($sql_server, 'id=? AND [password]=site.password_encrypt(@password)', [
+    return _fetch($sql_server, 'id=? AND [password]=site.password_encrypt(?)', [
         $id,
         $password
     ]);

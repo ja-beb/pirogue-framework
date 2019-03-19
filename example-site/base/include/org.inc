@@ -2,6 +2,9 @@
 
 namespace org;
 
+define('_ORG_EMPLOYEE_FETCH_FILTER_ID', 'id=?');
+define('_ORG_EMPLOYEE_FETCH_FILTER_EMAIL', 'email_address=?');
+
 /**
  * get site user
  * @param resource $sql_server
@@ -15,4 +18,3 @@ function employee_fetch($sql_server, int $id): array
         $id
     ]);
 }
-
