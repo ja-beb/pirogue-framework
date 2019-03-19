@@ -8,5 +8,5 @@ namespace controllers\user\current;
  * @return array
  */
 function get_status(string $path, array $request): array{
-    return ['status' => 'awake' ];
+    return ['status' => 'awakish' ];
 }

@@ -8,6 +8,8 @@ namespace controllers\_site_errors;
  * @param array $request
  * @return array
  */
-function route_error(string $path, array $request): array{
+function route(string $path, array $request): array{
+    http_response_code($path); 
+    return [$path, $request, $request[0] ?? ''];
 }
 

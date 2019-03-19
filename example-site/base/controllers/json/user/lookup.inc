@@ -1,13 +1,34 @@
 <?php
 namespace controllers\user\lookup;
 
+use function pirogue\database_collection_get;
+use function pirogue\import;
+
 /**
- * 
+ *
  * @param string $path
  * @param array $request
  * @return array
  */
 function get_status(string $path, array $request): array{
     return ['status' => 'awake' ];
+}
+
+
+/**
+ *
+ * @param string $path
+ * @param array $request
+ * @return array
+ */
+function get_details(string $path, array $request): array{
+    import('org');
+    
+    $db = database_collection_get('website');
+    $data = \org\employee_fetch($db, _ORG_EMPLOYEE_FETCH_FILTER_ID, $path);    
+    if ( empty($data ) ){
+        http_response_code(HTTP_STATUS_NOT_FOUND);        
+    }
+    return $data;
 }
 
