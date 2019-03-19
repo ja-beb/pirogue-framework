@@ -5,6 +5,8 @@
  */
 namespace pirogue;
 
+use ErrorException;
+
 /**
  *
  * @var int
@@ -115,6 +117,25 @@ function _dispatcher_send(string $content)
         echo $content;
     }
     exit();
+}
+
+/**
+ * Translate PHP trigger errors into SPL ErrorException instance.
+ *
+ * @internal
+ * @param int $number
+ * @param string $message
+ * @param string $file
+ * @param int $line
+ * @throws ErrorException
+ * @return boolean
+ */
+function _dispatcher_error_handler(int $errno, string $errstr, string $errfile, int $errline): bool
+{
+    if ($errno & error_reporting()) {
+        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+    }
+    return false;
 }
 
 /**

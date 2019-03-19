@@ -42,10 +42,9 @@ __import(sprintf('%s\include', _BASE_FOLDER));
 // Import base required libraries
 import('pirogue\http_status');
 import('pirogue\dispatcher');
-import('pirogue\error_handler');
 import('pirogue\database_collection');
 
-set_error_handler('pirogue\_error_handler');
+set_error_handler('pirogue\_dispatcher_error_handler');
 
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
 $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\controllers\json', _BASE_FOLDER);
