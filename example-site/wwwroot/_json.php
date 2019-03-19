@@ -1,4 +1,5 @@
 <?php
+
 use function pirogue\__import;
 use function pirogue\import;
 use function pirogue\database_collection_open;
@@ -32,33 +33,26 @@ use function pirogue\_json_route;
 // Send request headers (type for this dispatcher):
 header('Content-Type: application/json', true);
 
-define('_BASE_URI', 'C:\\inetpub\example-site');
+define('_BASE_FOLDER', 'C:\\inetpub\example-site');
 
 // Load & intialize pirogue framework:
-require_once sprintf('%s\include\pirogue\import.inc', _BASE_URI);
-__import(implode(DIRECTORY_SEPARATOR, [
-    _BASE_URI,
-    'include'
-]));
+require_once sprintf('%s\include\pirogue\import.inc', _BASE_FOLDER);
+__import(sprintf('%s\include', _BASE_FOLDER));
 
-// Import required libraries
-import('pirogue/http_status');
-import('pirogue/dispatcher');
-import('pirogue/error_handler');
-import('pirogue/database_collection');
+// Import base required libraries
+import('pirogue\http_status');
+import('pirogue\dispatcher');
+import('pirogue\error_handler');
+import('pirogue\database_collection');
 
 set_error_handler('pirogue\_error_handler');
 
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-$GLOBALS['._pirogue.dispatcher.controller_path'] = implode(DIRECTORY_SEPARATOR, [
-    _BASE_URI,
-    'controllers',
-    'json'
-]);
+$GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\controllers\json', _BASE_FOLDER);
 
 try {
-    /* Initialize */
-    __database_collection(realpath('_config'));
+    /* Initialize libraries: */
+    __database_collection(sprintf('%s\config', _BASE_FOLDER));
 
     /* Parse request */
     $_request_data = $_GET;
@@ -105,6 +99,7 @@ try {
             $GLOBALS['._pirogue.dispatcher.controller_path'],
             '_site_errors.inc'
         ]);
+        require ($_exec_app);
         $_exec_function = 'controllers\_site_errors\route';
         $_exec_path = '404';
         $_exec_data = [
@@ -132,7 +127,7 @@ try {
             '_site_errors.inc'
         ]));
         $_json_data = controllers\_site_errors\route('500', [
-            $_exception
+            $_exception->getMessage()
         ]);
     }
     return _dispatcher_send(json_encode($_json_data));
