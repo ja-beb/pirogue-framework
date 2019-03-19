@@ -33,12 +33,16 @@ use function pirogue\_json_route;
 header('Content-Type: application/json', true);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
 define('_BASE_FOLDER', 'C:\\inetpub\example-site');
 
 // Load & intialize pirogue framework:
 require_once sprintf('%s\include\pirogue\import.inc', _BASE_FOLDER);
 __import(implode(DIRECTORY_SEPARATOR, [
     _BASE_FOLDER,
+<<<<<<< HEAD
 =======
 define('_BASE_URI', 'C:\\inetpub\example-site');
 
@@ -47,6 +51,8 @@ require_once sprintf('%s\include\pirogue\import.inc', _BASE_URI);
 __import(implode(DIRECTORY_SEPARATOR, [
     _BASE_URI,
 >>>>>>> master
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
     'include'
 ]));
 
@@ -59,20 +65,29 @@ import('pirogue/database_collection');
 set_error_handler('pirogue\_error_handler');
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
 // Global variables:
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
 $GLOBALS['._pirogue.dispatcher.controller_path'] = implode(DIRECTORY_SEPARATOR, [
     _BASE_FOLDER,
+<<<<<<< HEAD
 =======
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
 $GLOBALS['._pirogue.dispatcher.controller_path'] = implode(DIRECTORY_SEPARATOR, [
     _BASE_URI,
 >>>>>>> master
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
     'controllers',
     'json'
 ]);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
 function __route_clean(string $path): string
 {
     return str_replace([
@@ -170,6 +185,7 @@ try {
         ]));
         $_json_data = controllers\_site_errors\route_error('500', [
             'exception' => $_exception
+<<<<<<< HEAD
 =======
 try {
     /* Initialize */
@@ -249,15 +265,20 @@ try {
         $_json_data = controllers\_site_errors\route('500', [
             $_exception
 >>>>>>> master
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
         ]);
     }
 
     /* Route request and send results to client */
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     echo json_encode($_json_data);
     exit();
 >>>>>>> master
+=======
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
     return _dispatcher_send(json_encode($_json_data));
 } catch (Error $_exception) {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
@@ -269,10 +290,14 @@ try {
 http_response_code(500);
 if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
 <<<<<<< HEAD
+<<<<<<< HEAD
     echo json_encode(sprintf('%s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
 =======
     echo json_encode(sprintf('%s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_URI, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
 >>>>>>> master
+=======
+    echo json_encode(sprintf('%s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
+>>>>>>> 953d51ad9a4386e1bb4f3d00c7a2303c5ea49c20
 } else {
     echo json_encode('Unknown exception encountered');
 }
