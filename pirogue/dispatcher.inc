@@ -39,7 +39,7 @@ define('CACHE_CONTROL_STORE', 0x08);
  *
  * @var int $GLOBALS['._cache_control']
  */
-$GLOBALS['._pirogue.dispatcher.cache_control'] = CACHE_CONTROL_TYPE_PUBLIC;
+$GLOBALS['._pirogue.dispatcher.cache_control'] = CACHE_CONTROL_TYPE_PRIVATE;
 
 /**
  *
@@ -65,38 +65,30 @@ function __dispatcher(string $address)
 }
 
 /**
- * Send content to user then exit.
+ * Build cache control directive.
  *
  * @internal
- * @param string $content
+ * @param int $cache_control The cache control code to check.
+ * @param int $max_age The max age of the cache. If number is less than zero then the max age is set to one day (86400).
  */
-function _dispatcher_cache(): string
+function _dispatcher_cache(int $cache_control, int $max_age): string
 {
     // Cache control:
-    if (CACHE_CONTROL_DISABLED == $GLOBALS['._pirogue.dispatcher.cache_control']) {
+    if (CACHE_CONTROL_DISABLED == $cache_control) {
         return 'no-cache, no-store';
     }
 
-    $cache = (CACHE_CONTROL_TYPE_PRIVATE == ($GLOBALS['._pirogue.dispatcher.cache_control'] & CACHE_CONTROL_TYPE_PRIVATE)) ? 'public' : 'private';
+    $cache = (CACHE_CONTROL_TYPE_PRIVATE == ($cache_control & CACHE_CONTROL_TYPE_PRIVATE)) ? 'private' : 'public';
 
-    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $GLOBALS['._pirogue.dispatcher.cache_control'])) {
+    if (CACHE_CONTROL_REVALUATE == (CACHE_CONTROL_REVALUATE & $cache_control)) {
         $cache = "{$cache}, proxy-revalidate";
     }
 
-    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $GLOBALS['._pirogue.dispatcher.cache_control'])) {
+    if (CACHE_CONTROL_STORE == (CACHE_CONTROL_STORE & $cache_control)) {
         $cache = "{$cache}, no-store";
     }
 
-    switch ($GLOBALS['._pirogue.dispatcher.cache_control_max_age']) {
-        case - 1:
-            $max_age = ';max-age=86400';
-            break;
-
-        default:
-            $max_age = sprintf(';max-age=%d', $GLOBALS['._pirogue.dispatcher.cache_control_max_age']);
-            break;
-    }
-    return "{$cache}{$max_age}";
+    return sprintf('%s;max-age=%d', $cache, ( 0 > $max_age) ? 86400 : $max_age );
 }
 
 /**
@@ -108,7 +100,7 @@ function _dispatcher_cache(): string
 function _dispatcher_send(string $content)
 {
     // Cache control:
-    header(sprintf('Cache-Control: %s', _dispatcher_cache()));
+    header(sprintf('Cache-Control: %s', _dispatcher_cache($GLOBALS['._pirogue.dispatcher.cache_control'], $GLOBALS['._pirogue.dispatcher.cache_control_max_age'])));
 
     $etag = md5($content);
     header("ETAG: {$etag}");
@@ -132,14 +124,4 @@ function dispatcher_redirect(string $address, int $code = 301)
 {
     header("Location: {$address}", true, $code);
     exit();
-}
-
-/**
- *
- * @param int $code
- */
-function dispatcher_set_cache_control(int $code, int $max_age = 0)
-{
-    $GLOBALS['._pirogue.dispatcher.cache_control'] = $code;
-    $GLOBALS['._pirogue.dispatcher.cache_control_max_age'] = $max_age;
 }

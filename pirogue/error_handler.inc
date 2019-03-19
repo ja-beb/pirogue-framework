@@ -10,7 +10,6 @@ use ErrorException;
 
 /**
  * Translate PHP trigger errors into SPL ErrorException instance.
- * Assigned using set_error_handler()
  *
  * @internal
  * @param int $number

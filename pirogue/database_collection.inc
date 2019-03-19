@@ -58,20 +58,16 @@ function __database_collection(string $config_path)
 function database_collection_get(string $name)
 {
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
-        $file_include = implode(DIRECTORY_SEPARATOR, [
-            $GLOBALS['._pirogue.database_collection.config_path'],
-            sprintf('sqlserver-%s.ini', $GLOBALS['._pirogue.database_collection.prefix'], $name)
-        ]);
-
+        $file_include = sprintf('%s\sqlsrv-%s.ini', $GLOBALS['._pirogue.database_collection.config_path'], $name);
+        
         if (false == file_exists($file_include)) {
-            throw new ErrorException("Unable to find database connection {$name}.");
+            throw new ErrorException("Unable to find database connection '{$name}'.");
         }
 
-        $config = parse_ini_file($file_include, false);
+        $config = parse_ini_file($file_include, true);
         $GLOBALS['._pirogue.database_collection.connections'][$name] = sqlsrv_connect($config['name'] ?? '', $config['options'] ?? []);
-
         if (false === $GLOBALS['._pirogue.database_collection.connections'][$name]) {
-            throw new ErrorException("Unable to open database connection {$name}.");
+            throw new ErrorException("Unable to open database connection '{$name}'.");
         }
     }
     return $GLOBALS['._pirogue.database_collection.connections'][$name];
