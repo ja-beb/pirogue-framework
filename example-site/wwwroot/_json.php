@@ -1,16 +1,16 @@
 <?php
 
-require '_json\route-simple.inc';
 
 $GLOBALS['._json.dispatcher.start_time'] = microtime(true);
-use function pirogue\__import;
-use function pirogue\import;
-use function pirogue\database_collection_open;
-use function pirogue\_error_handler;
-use function pirogue\_dispatcher_send;
+
 use function pirogue\__database_collection;
-use function pirogue\dispatcher_set_cache_control;
-use function pirogue\_json_route;
+use function pirogue\__import;
+use function pirogue\_dispatcher_send;
+use function pirogue\_route_clean;
+use function pirogue\_route_parse_flat;
+use function pirogue\_route_parse_function;
+use function pirogue\import;
+
 
 /**
  * Main dispatcher for JSON content.
@@ -47,6 +47,7 @@ try {
     // Import base required libraries
     import('pirogue\dispatcher');
     import('pirogue\database_collection');
+    import('pirogue\route');
 
     set_error_handler('pirogue\_dispatcher_error_handler');
 
@@ -63,86 +64,25 @@ try {
 
     // Route path to controller file, function & path:
     $_exec_data = $_request_data;
+    
 
-    function _route_clean(string $value): string
-    {
-        return '' == $value ? '' : preg_replace('/^(_*)/', '', $value);
+    // execute 100 times:
+    $start = microtime(true);
+    for ($i = 0; $i < 1000; $i ++) {
+        _route_parse_function($GLOBALS['._pirogue.dispatcher.controller_path'], $_request_path);
     }
+    print_r((microtime(true) - $start) * 100000);
+    echo "\n";
+    echo "\n";
 
-    /*
-     * fastest & simplest (1x)
-     */
-    function route(string $base, array $path): array
-    {
-        return [
-            'file' => sprintf('%s\%s\%s.inc', $base, _route_clean($path[0] ?? ''), _route_clean($path[1] ?? '')),
-            'path' => implode('/', array_slice($path, 2))
-        ];
+    $start = microtime(true);
+    for ($i = 0; $i < 1000; $i ++) {
+        _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], $_request_path);
     }
-
-    /*
-     * fast (2x)
-     */
-    function route_2(string $base, array $path): array
-    {
-        return [
-            'file' => sprintf('%s\%s\%s.inc', $base, _route_clean($path[0] ?? ''), _route_clean($path[1] ?? '')),
-            'function' => sprintf('controllers\%s', _route_clean($path[2] ?? '')),
-            'path' => implode('/', array_slice($path, 3))
-        ];
-    }
-
-    /*
-     * slowest by far (50x)
-     */
-    function route_3(string $base, array $path): array
-    {
-        $_results = [
-            'file' => $base,
-            'function' => 'controllers',
-            'path' => implode('/', $path)
-        ];
-
-        while (0 < count($path)) {
-            $_current = array_shift($path);
-            $_results['function'] = sprintf('%s\%s', $_results['function'], $_current);
-            $_results['file'] = implode(DIRECTORY_SEPARATOR, [
-                $_results['file'],
-                $_current
-            ]);
-
-            if (file_exists("{$_results['file']}.inc")) {
-                $_results['file'] = "{$_results['file']}.inc";
-                break;
-            } elseif (false == is_dir($_results['file'])) {
-                $_results['function'] = '';
-                $_results['file'] = null;
-                $path = [];
-            }
-        }
-
-        $_results['function'] = sprintf('%s\%s', $_results['function'], array_shift($path));
-        $_results['path'] = implode('/', $path);
-        return $_results;
-    }
-
-    /*
-     * echo '<pre>';
-     * $_exec_path = explode('/', $_request_path);
-     *
-     * $start = microtime(true);
-     * print_r(route_2($GLOBALS['._pirogue.dispatcher.controller_path'],$_exec_path));
-     * print_r((microtime(true) - $start) * 100000);
-     *
-     * $start = microtime(true);
-     * print_r(route($GLOBALS['._pirogue.dispatcher.controller_path'],$_exec_path));
-     * print_r((microtime(true) - $start) * 100000);
-     * $start = microtime(true);
-     * print_r(route_3($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path));
-     * print_r((microtime(true) - $start) * 100000);
-     *
-     */
-
+    print_r((microtime(true) - $start) * 100000);
+    echo "\n";
+    echo "\n";
+    return 
     $_path = explode('/', $_request_path);
     $_route_base = sprintf('%s\%s', _route_clean($_path[0] ?? ''), _route_clean($_path[1] ?? ''));
 
@@ -177,11 +117,10 @@ try {
         $_exec_data
     ]);
 
-    header ( 'X-Powered-By: pirogue php' );
-    header(sprintf('X-Execute-Milliseconds: %f', ( microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000 ));
+    header('X-Powered-By: pirogue php');
+    header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));
     exit();
 
-    
     /* process request */
     try {
         $_json_data = call_user_func($_exec_function, $_exec_path, $_exec_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []);
