@@ -1,3 +1,0 @@
-/**
- * Base page Javascript include
- */
