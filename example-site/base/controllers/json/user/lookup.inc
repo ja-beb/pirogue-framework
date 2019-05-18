@@ -1,5 +1,5 @@
 <?php
-namespace controllers\user\lookup;
+namespace controllers\json\user\lookup;
 
 use function pirogue\database_collection_get;
 use function pirogue\import;
@@ -10,7 +10,7 @@ use function pirogue\import;
  * @param array $request
  * @return array
  */
-function get_status(string $path, array $request): array{
+function route_status(string $path, array $request): array{
     return ['status' => 'awake' ];
 }
 
@@ -21,7 +21,7 @@ function get_status(string $path, array $request): array{
  * @param array $request
  * @return array
  */
-function get_details(string $path, array $request): array{
+function route_details(string $path, array $request): array{
     import('org');
     
     $db = database_collection_get('website');

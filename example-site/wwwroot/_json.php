@@ -1,5 +1,8 @@
 <?php
 
+require '_json\route-simple.inc';
+
+$GLOBALS['._json.dispatcher.start_time'] = microtime(true);
 use function pirogue\__import;
 use function pirogue\import;
 use function pirogue\database_collection_open;
@@ -39,17 +42,17 @@ define('_BASE_FOLDER', 'C:\\inetpub\example-site');
 require_once sprintf('%s\include\pirogue\import.inc', _BASE_FOLDER);
 __import(sprintf('%s\include', _BASE_FOLDER));
 
-// Import base required libraries
-import('pirogue\http_status');
-import('pirogue\dispatcher');
-import('pirogue\database_collection');
-
-set_error_handler('pirogue\_dispatcher_error_handler');
-
-$GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-$GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\controllers\json', _BASE_FOLDER);
-
 try {
+
+    // Import base required libraries
+    import('pirogue\dispatcher');
+    import('pirogue\database_collection');
+
+    set_error_handler('pirogue\_dispatcher_error_handler');
+
+    $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
+    $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\controllers\json', _BASE_FOLDER);
+
     /* Initialize libraries: */
     __database_collection(sprintf('%s\config', _BASE_FOLDER));
 
@@ -60,55 +63,125 @@ try {
 
     // Route path to controller file, function & path:
     $_exec_data = $_request_data;
-    $_parts = explode('/', $_request_path);
 
-    // Get app file name:
-    $_exec_app = $GLOBALS['._pirogue.dispatcher.controller_path'];
-    $_exec_function = 'controllers';
-    while (0 < count($_parts)) {
-        $_current = array_shift($_parts);
-        $_exec_function = sprintf('%s\%s', $_exec_function, $_current);
-        $_exec_app = implode(DIRECTORY_SEPARATOR, [
-            $_exec_app,
-            $_current
-        ]);
-
-        if (file_exists("{$_exec_app}.inc")) {
-            $_exec_app = "{$_exec_app}.inc";
-            break;
-        } elseif (false == is_dir($_exec_app)) {
-            $_exec_function = '';
-            $_exec_app = null;
-            $_parts = [];
-        }
+    function _route_clean(string $value): string
+    {
+        return '' == $value ? '' : preg_replace('/^(_*)/', '', $value);
     }
 
-    // get controller function:
-    if ('' != $_exec_function) {
-        require ($_exec_app);
-        $_exec_function = sprintf('%s\%s_%s', $_exec_function, strtolower($_SERVER['REQUEST_METHOD']), (0 == count($_parts)) ? 'index' : array_shift($_parts));
+    /*
+     * fastest & simplest (1x)
+     */
+    function route(string $base, array $path): array
+    {
+        return [
+            'file' => sprintf('%s\%s\%s.inc', $base, _route_clean($path[0] ?? ''), _route_clean($path[1] ?? '')),
+            'path' => implode('/', array_slice($path, 2))
+        ];
+    }
+
+    /*
+     * fast (2x)
+     */
+    function route_2(string $base, array $path): array
+    {
+        return [
+            'file' => sprintf('%s\%s\%s.inc', $base, _route_clean($path[0] ?? ''), _route_clean($path[1] ?? '')),
+            'function' => sprintf('controllers\%s', _route_clean($path[2] ?? '')),
+            'path' => implode('/', array_slice($path, 3))
+        ];
+    }
+
+    /*
+     * slowest by far (50x)
+     */
+    function route_3(string $base, array $path): array
+    {
+        $_results = [
+            'file' => $base,
+            'function' => 'controllers',
+            'path' => implode('/', $path)
+        ];
+
+        while (0 < count($path)) {
+            $_current = array_shift($path);
+            $_results['function'] = sprintf('%s\%s', $_results['function'], $_current);
+            $_results['file'] = implode(DIRECTORY_SEPARATOR, [
+                $_results['file'],
+                $_current
+            ]);
+
+            if (file_exists("{$_results['file']}.inc")) {
+                $_results['file'] = "{$_results['file']}.inc";
+                break;
+            } elseif (false == is_dir($_results['file'])) {
+                $_results['function'] = '';
+                $_results['file'] = null;
+                $path = [];
+            }
+        }
+
+        $_results['function'] = sprintf('%s\%s', $_results['function'], array_shift($path));
+        $_results['path'] = implode('/', $path);
+        return $_results;
+    }
+
+    /*
+     * echo '<pre>';
+     * $_exec_path = explode('/', $_request_path);
+     *
+     * $start = microtime(true);
+     * print_r(route_2($GLOBALS['._pirogue.dispatcher.controller_path'],$_exec_path));
+     * print_r((microtime(true) - $start) * 100000);
+     *
+     * $start = microtime(true);
+     * print_r(route($GLOBALS['._pirogue.dispatcher.controller_path'],$_exec_path));
+     * print_r((microtime(true) - $start) * 100000);
+     * $start = microtime(true);
+     * print_r(route_3($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path));
+     * print_r((microtime(true) - $start) * 100000);
+     *
+     */
+
+    $_path = explode('/', $_request_path);
+    $_route_base = sprintf('%s\%s', _route_clean($_path[0] ?? ''), _route_clean($_path[1] ?? ''));
+
+    $_exec_file = "{$GLOBALS['._pirogue.dispatcher.controller_path']}\\{$_route_base}.inc";
+    $_exec_function = '';
+    if (false == file_exists($_exec_file)) {
+        $_exec_file = '';
+    } else {
+        require $_exec_file;
+        $_exec_function = sprintf('controllers\json\%s\route_%s', $_route_base, _route_clean($_path[2] ?? ''));
         if (false == function_exists($_exec_function)) {
             $_exec_function = '';
+        } else {
+            $_exec_path = implode('/', array_slice($_path, 3));
         }
     }
 
-    // Check for 404 error:
     if ('' == $_exec_function) {
-        $_exec_app = implode(DIRECTORY_SEPARATOR, [
-            $GLOBALS['._pirogue.dispatcher.controller_path'],
-            '_site_errors.inc'
-        ]);
-        require ($_exec_app);
-        $_exec_function = 'controllers\_site_errors\route';
-        $_exec_path = '404';
+        require "{$GLOBALS['._pirogue.dispatcher.controller_path']}\_site_errors.inc";
+        $_route_base = 'site_errors';
+        $_exec_function = 'controllers\_site_errors\route_error_404';
         $_exec_data = [
             'request_path' => $_request_path,
             'request_data' => $_request_data
         ];
-    } else {
-        $_exec_path = implode('/', $_parts);
     }
 
+    echo json_encode([
+        $_exec_file,
+        $_exec_function,
+        $_exec_path,
+        $_exec_data
+    ]);
+
+    header ( 'X-Powered-By: pirogue php' );
+    header(sprintf('X-Execute-Milliseconds: %f', ( microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000 ));
+    exit();
+
+    
     /* process request */
     try {
         $_json_data = call_user_func($_exec_function, $_exec_path, $_exec_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []);

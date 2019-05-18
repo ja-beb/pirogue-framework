@@ -1,5 +1,5 @@
 <?php
-namespace controllers\user\current;
+namespace controllers\json\user\current;
 
 /**
  * 
