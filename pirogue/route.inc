@@ -10,9 +10,14 @@ namespace pirogue;
  * @param string $value
  * @return array
  */
-function _route_clean(string $value): array
+function _route_clean(string $value): string
 {
-    return '' == $value ? [] : explode('/', preg_replace(['/^(_+)/', '/(\/_+)/'], ['','/'], $value));
+    return '' == $value ? '' : preg_replace(['/^(_+)/', '/(\/_+)/'], ['','/'], $value);
+}
+
+
+function _route_get_file(string $base, array $path): string{
+    return sprintf('%s.inc', implode(DIRECTORY_SEPARATOR, array_merge([$base], $path)));
 }
 
 /*
@@ -21,10 +26,10 @@ function _route_clean(string $value): array
  */
 function _route_parse_flat(string $base, string $path): array
 {
-    $_exec_path = _route_clean($path);
+    $_path_exec = explode('/', $path);
     return [
-        'file' => sprintf('%s\%s\%s.inc', $base, $_exec_path[0] ?? '', $_exec_path[1] ?? ''),
-        'path' => implode('/', array_slice($_exec_path, 2))
+        'file' => _route_get_file($base, array_slice($_path_exec,0,2)),
+        'path' => implode('/', array_slice($_path_exec, 2))
     ];
 }
 
@@ -32,11 +37,13 @@ function _route_parse_flat(string $base, string $path): array
  * fast (2x)
  */
 function _route_parse_function(string $base, string $path): array
-{
-    $_exec_path = _route_clean($path);
+{   
+    $_path_exec = explode('/', $path);
     return [
-        'file' => sprintf('%s\%s\%s.inc', $base, $_exec_path[0] ?? '', $_exec_path[1] ?? ''),
-        'function' => sprintf('controllers\%s', $_exec_path[2] ?? ''),
-        'path' => implode('/', array_slice($_exec_path, 3))
+        'file' => sprintf('%s\%s\%s.inc', $base, array_slice($_path_exec,0,2)),
+        'function' => sprintf('controllers\%s', $_path_exec[2] ?? ''),
+        'path' => implode('/', array_slice($_path_exec, 3))
     ];
 }
+
+
