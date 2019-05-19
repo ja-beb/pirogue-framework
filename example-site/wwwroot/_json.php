@@ -100,11 +100,13 @@ try {
         header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));
 
     } catch (Exception $_exception) {
+        $_error_message = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
         $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
-        $_json_data = _route_execute($_route['file'], '', [$_request_path, $_request_data, $_exception->getMessage()]);
+        $_json_data = _route_execute($_route['file'], '', [$_request_path, $_request_data, $_error_message]);
     } catch (Error $_exception) {
+        $_error_message = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
         $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
-        $_json_data = _route_execute($_route['file'], '', [$_request_path, $_request_data, $_exception->getMessage()]);
+        $_json_data = _route_execute($_route['file'], '', [$_request_path, $_request_data, $_error_message]);
     }
     return _dispatcher_send(json_encode($_json_data));
 } catch (Error $_exception) {
@@ -116,7 +118,7 @@ try {
 // Failsafe errors:
 http_response_code(500);
 if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
-    echo json_encode(sprintf('%s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
+    echo json_encode(sprintf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
 } else {
     echo json_encode('Unknown exception encountered');
 }
