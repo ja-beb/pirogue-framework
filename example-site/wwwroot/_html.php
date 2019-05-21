@@ -1,98 +1,150 @@
-<?php 
+<?php
+$GLOBALS['._html.dispatcher.start_time'] = microtime(true);
 
-use function pirogue\database_collection_open;
-use function pirogue\error_handler;
-use function pirogue\dispatcher_send;
 use function pirogue\__database_collection;
-use function pirogue\dispatcher_set_cache_control;
+use function pirogue\__import;
+use function pirogue\_dispatcher_send;
+use function pirogue\import;
 
 /**
  * Main dispatcher for HTML content.
+ *
+ * Processes user request and routes it to the proper function found the requested module file in _html/[ModuleName].inc - handles any REST method
+ * that the developer writes end point for.
+ *
+ * @example For any REST method:
+ *          site.url/module/function/function_data.html?data=my_data
+ *         
+ *          include(_html/module.inc);
+ *         
+ *          For GET REQUEST: module/GET_function(function_data, request_data);
+ *          For POST REQUEST: module/POST_function(function_data, request_data, post_data);
+ *          For PUT REQUEST: module/PUT_function(function_data, request_data, post_data);
+ *          For DELETE REQUEST: module/DELETE_function(function_data, request_data);
+ *          For OPTIONS REQUEST: module/DELETE_function(function_data, request_data);
+ *         
+ *         
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
 
-// Declare base folders:
-define('_BASE_URI', 'C:\\inetpub\wwwroot\example-site');
-define('_BASE_PATH_CONTROLLER', sprintf('%s\_html', _BASE_URI));
+/**
+ * Remove and preceding underscores from the path element.
+ *
+ * @param string $value
+ * @return array
+ */
+function _route_clean(string $value): string
+{
+    return ('' == $value) ? '' : preg_replace([
+        '/^(_+)/',
+        '/(\/_+)/'
+    ], [
+        '',
+        '/'
+    ], $value);
+}
+
+/*
+ * fastest & simplest (1x)
+ * Simply loads a flat file that will return data.
+ */
+function _route_parse(string $base, string $path): array
+{
+    $_path_exec = explode('/', $path);
+    return [
+        'file' => sprintf('%s.phtml', implode(DIRECTORY_SEPARATOR, array_merge([$base], array_slice($_path_exec, 0, 2)))),
+        'path' => implode('/', array_slice($_path_exec, 2))
+    ];
+}
+
+function _route_execute(string $file, string $path, array $data): string
+{
+    if (file_exists($file)) {
+        ob_start();
+        $GLOBALS['.pirogue.view.data'] = $data;
+        $GLOBALS['.pirogue.view.path'] = $path;
+        require $file;
+        $_html_content = ob_get_clean();
+
+        return $_html_content;
+    }
+    throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
+}
+
+define('_BASE_FOLDER', 'C:\\inetpub\example-site');
 
 // Load & intialize pirogue framework:
-require '_include/pirogue/import.inc';
-__import(sprintf('%s\_include', _BASE_PATH));
+require_once sprintf('%s\include\pirogue\import.inc', _BASE_FOLDER);
+__import(sprintf('%s\include', _BASE_FOLDER));
 
-// Import required libraries
-import('pirogue/dispatcher');
-import('pirogue/error_handler');
-import('pirogue/html_view');
-import('pirogue/database_collection');
+try {
 
-set_error_handler('pirogue\error_handler');
+    // Import base required libraries
+    import('pirogue\dispatcher');
+    import('pirogue\database_collection');
 
-/**
- * Send html error message to user.
- *
- * @param
- *            ErrorException | Error $exception
- * @return string
- */
-function _html_error($exception): string
-{
-    http_response_code(500);
-    error_handler_log(database_collection_open('website'), $exception->getMessage(), $exception->getFile(), $exception->getLine());
-    return $exception->getMessage();
-}
+    set_error_handler('pirogue\_dispatcher_error_handler');
 
-/**
- * Request not found (404).
- * string $path Requested resource.
- *
- * @return string
- */
-function _request_not_found(string $path): string
-{
-    http_response_code(404);
-    dispatcher_set_cache_control(CACHE_CONTROL_TYPE_PRIVATE, - 1);
-    return "Unable to find requested module: '{$path}.";
-}
+    $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
+    $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\view\html', _BASE_FOLDER);
 
-/**
- * Routes incoming request and return results.
- *
- * @param string $method
- * @param string $route
- * @param array $request_data
- * @param array $form_data
- * @return string
- */
-function _request_route(string $method, string $route, array $request_data, array $form_data): string
-{
-    try {
-        $_parts = explode('/', $route);
-        $_module = array_shift($_parts);
-        
-        $_file = "_html/{$_module}.inc";
-        if (file_exists($_file)) {
-            require $_file;
-            $_func = sprintf('%s\%s_%s', $_module, $method, array_shift($_parts));
-            $_results = function_exists($_func) ? call_user_func($_func, implode('/', $_parts), $request_data, $form_data) : _request_not_found($route);
-        } else {
-            $_results = _request_not_found($route);
-        }
-    } catch (Exception $_exception) {
-        $_results = _html_error($_exception);
-    } catch (Error $_exception) {
-        $_results = _html_error($_exception);
+    /* Initialize libraries: */
+    __database_collection(sprintf('%s\config', _BASE_FOLDER));
+
+    /* Parse request */
+    $_request_data = $_GET;
+    $_request_path = $_request_data['__execution_path'] ?? '';
+    unset($_request_data['__execution_path']);
+
+    // Route path to controller file, function & path:
+    $_exec_data = $_request_data;
+
+    $_exec_path = _route_clean($_request_path);
+    $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
+    $_html_content = '';
+
+    if (false == file_exists($_route['file'])) {
+        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/404');
+        $_exec_data = [$_request_path, $_request_data];
     }
-    
-    return $_results;
+
+    /* process request */
+    try {
+        ob_start();
+        $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
+        ob_clean();
+    } catch (Exception $_exception) {
+        http_response_code(500);
+        $_html_content = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
+    } catch (Error $_exception) {
+        http_response_code(500);
+        $_html_content = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
+    }
+
+    header('Content-Type: text/html');
+    header('X-Powered-By: pirogue php');
+    header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._html.dispatcher.start_time']) * 1000));
+    return _dispatcher_send($_html_content);
+} catch (Error $_exception) {
+    $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
+} catch (Exception $_exception) {
+    $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
 }
 
-/* Initialize */
-__database_collection(realpath('_config'));
+// Failsafe errors:
+header('Content-Type: text/html');
+header('X-Powered-By: pirogue php');
+header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._html.dispatcher.start_time']) * 1000));
+http_response_code(500);
 
-/* Parse request */
-$_request_data = $_GET;
-$_request_path = $_request_data['__execution_path'] ?? '';
-unset($_request_data['__execution_path']);
+if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
+    printf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine());
+} else {
+    echo 'Unknown exception encountered';
+}
 
-/* Route request and send results to client */
-dispatcher_send(_request_route($_SERVER['REQUEST_METHOD'], $_request_path, $_request_data, ('POST' == $_SERVER['REQUEST_METHOD']) ? $_POST : []));
+
+
+
+
+
