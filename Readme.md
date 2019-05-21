@@ -21,7 +21,7 @@
 - $GLOBALS['.namespace[::namespace].library.name'] = public variable (prefixed with '.')
 
 ### Local Variables
-- $_varaible_name = internal variable (prefixed with '_').
+- $\_varaible_name = internal variable (prefixed with '\_').
 - $varaible_name = public variable.
 
 ### Path 
