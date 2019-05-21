@@ -1,7 +1,7 @@
 ﻿<#
     Author_____: Sean Bourg <sean.bourg@gmail.com>
     Date_______: 2019-05-20
-    Description: Test org\pay_rates
+    Description: Test all registered org services
  #>
  
 using module ..\Modules\TestResults.psm1;
