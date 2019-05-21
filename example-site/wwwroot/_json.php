@@ -28,23 +28,21 @@ use function pirogue\import;
  *         
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
-
-
-
-function _route_execute(string $file, string $path, array $data): array{
-    if ( file_exists($file) )
-    {
+function _route_execute(string $file, string $path, array $data): array
+{
+    if (file_exists($file)) {
         ob_start();
         $GLOBALS['.pirogue.view.data'] = $data;
         $GLOBALS['.pirogue.view.path'] = $path;
         $_json_data = require $file;
         ob_get_clean();
-        
-        return is_array($_json_data) ? $_json_data : [$_json_data];
+
+        return is_array($_json_data) ? $_json_data : [
+            $_json_data
+        ];
     }
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
 }
-
 
 // Send request headers (type for this dispatcher):
 header('Content-Type: application/json', true);
@@ -80,34 +78,32 @@ try {
 
     $_exec_path = _route_clean($_request_path);
     $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
-    if (false == file_exists($_route['file'])) {
-        $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/404');
-        $_exec_data = [$_request_path, $_request_data];
-    }
 
-    
-    
     /* process request */
     try {
-        
-        ob_start();;
-        $_json_data = _route_execute($_route['file'], $_route['path'], $_exec_data);
-        ob_clean();
-    
-        
-        header('Content-Type: application/json');        
-        header('X-Powered-By: pirogue php');
-        header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));
 
+        if (file_exists($_route['file'])) {
+            ob_start();
+            $_json_data = _route_execute($_route['file'], $_route['path'], $_exec_data);
+            ob_clean();
+        } else {
+            http_response_code(404);
+        }
     } catch (Exception $_exception) {
-        $_error_message = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
-        $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
-        $_json_data = _route_execute($_route['file'], '', [$_request_path, $_request_data, $_error_message]);
+        http_response_code(500);
+        $_json_data = [
+            sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
+        ];
     } catch (Error $_exception) {
-        $_error_message = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
-        $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
-        $_json_data = _route_execute($_route['file'], '', [$_request_path, $_request_data, $_error_message]);
+        http_response_code(500);
+        $_json_data = [
+            sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
+        ];
     }
+
+    header('Content-Type: application/json');
+    header('X-Powered-By: pirogue php');
+    header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));
     return _dispatcher_send(json_encode($_json_data));
 } catch (Error $_exception) {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
@@ -116,12 +112,12 @@ try {
 }
 
 // Failsafe errors:
+header('Content-Type: application/json');
+header('X-Powered-By: pirogue php');
+header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));
 http_response_code(500);
 if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
-    echo json_encode(
-            sprintf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()),
-            JSON_INVALID_UTF8_IGNORE
-        );
+    echo json_encode(sprintf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()), JSON_INVALID_UTF8_IGNORE);
 } else {
     echo json_encode('Unknown exception encountered');
 }
