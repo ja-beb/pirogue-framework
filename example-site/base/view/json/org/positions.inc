@@ -17,6 +17,8 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = position_list(_get_database());
+}elseif ('list' === $GLOBALS['.pirogue.view.path']) {
+    $_results = position_list(_get_database());
 } elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $_results = position_fetch(_get_database(), intval($matches[1]));
 } elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
@@ -30,10 +32,12 @@ if ('' === $GLOBALS['.pirogue.view.path']) {
     $filter = null;
     switch ($matches[1]) {
         case 'payrate':
+        case 'payrate-id':
             $filter = 'payrate_id=?';
             break;
 
         case 'division':
+        case 'division-id':
             $filter = 'division_id=?';
             break;
     }

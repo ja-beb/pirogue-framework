@@ -38,12 +38,12 @@ $test += Test-Assert -Label $result.Url -TestResults ( [string]::IsNullOrEmpty($
 $test += Test-Assert -Label $result.Url -TestResults ( $null -eq $result.Data -or $result.Data.Count -eq 0 ) -Pass 'Request returned no data.' -Fail "Request returned result=$($result.Data).";
 
 ## search employee by employee_number 
-$result = [TestResults]::Execute( "org/employees/employee_number/$($testCase.employee_number)" );
+$result = [TestResults]::Execute( "org/employees/employee-number/$($testCase.employee_number)" );
 $test += Test-Assert -Label $result.Url -TestResults ( [string]::IsNullOrEmpty($result.ErrorMessage) ) -Fail "Request returned error = $($result.ErrorMessage)" -Pass 'Request returned no error.' ;
 $test += Test-Assert -Label $result.Url -TestResults ( $null -ne $result.Data -and $result.Data.Count -gt 0) -Fail 'Request returned no data.' -Pass "Request returned result=$($result.Data).";
 
 ## search employee by employee_number - invalid
-$result = [TestResults]::Execute( 'org/employees/employee_number/42' );
+$result = [TestResults]::Execute( 'org/employees/employee-number/42' );
 $test += Test-Assert -Label $result.Url -TestResults ( [string]::IsNullOrEmpty($result.ErrorMessage) -eq $false ) -Pass "Request returned error = $($result.ErrorMessage)" -Fail 'Request returned no error.';
 $test += Test-Assert -Label $result.Url -TestResults ( $null -eq $result.Data -or $result.Data.Count -eq 0) -Pass 'Request returned no data.' -Fail "Request returned result=$($result.Data).";
 

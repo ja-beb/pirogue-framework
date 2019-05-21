@@ -47,12 +47,12 @@ $test += Test-Assert -Label $result.Url -TestResults ( [string]::IsNullOrEmpty($
 $test += Test-Assert -Label $result.Url -TestResults ( $null -eq $result.Data -or $result.Data.Count -eq 0) -Pass 'Request returned no data.' -Fail "Request returned result=$($result.Data).";
 
 ## search by type_code
-$result = [TestResults]::Execute( "org/locations/type_code/$($testCase.type_code)" );
+$result = [TestResults]::Execute( "org/locations/type-code/$($testCase.type_code)" );
 $test += Test-Assert -Label $result.Url -TestResults ( [string]::IsNullOrEmpty($result.ErrorMessage) ) -Fail "Request returned error = $($result.ErrorMessage)" -Pass 'Request returned no error.' ;
 $test += Test-Assert -Label $result.Url -TestResults ( $null -ne $result.Data) -Fail 'Request returned no data.' -Pass "Request returned result, size=$($result.Data.Count).";
 
 ## search by type_code - invalid
-$result = [TestResults]::Execute( 'org/locations/type_code/100' );
+$result = [TestResults]::Execute( 'org/locations/type-code/100' );
 $test += Test-Assert -Label $result.Url -TestResults ( [string]::IsNullOrEmpty($result.ErrorMessage) ) -Fail "Request returned error = $($result.ErrorMessage)" -Pass 'Request returned no error.' ;
 $test += Test-Assert -Label $result.Url -TestResults ( $null -ne $result.Data) -Fail 'Request returned no data.' -Pass "Request returned result, size=$($result.Data.Count).";
 

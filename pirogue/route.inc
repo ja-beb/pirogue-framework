@@ -12,7 +12,7 @@ namespace pirogue;
  */
 function _route_clean(string $value): string
 {
-    return '' == $value ? '' : preg_replace(['/^(_+)/', '/(\/_+)/'], ['','/'], $value);
+    return ('' == $value) ? '' : preg_replace(['/^(_+)/', '/(\/_+)/'], ['','/'], $value);
 }
 
 

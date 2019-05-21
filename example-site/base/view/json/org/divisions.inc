@@ -17,6 +17,8 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = division_list(_get_database());
+} elseif ('list' === $GLOBALS['.pirogue.view.path']) {
+    $_results = division_list(_get_database());
 } elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $_results = division_fetch(_get_database(), intval($matches[1]));
 } elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {

@@ -17,7 +17,9 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = department_list(_get_database());
-} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+}elseif ('list' === $GLOBALS['.pirogue.view.path']) {
+    $_results = department_list(_get_database());
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {    
     $_results = department_fetch(_get_database(), intval($matches[1]));
 } elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $_results = department_fetch(_get_database(), intval($matches[1]));
@@ -25,7 +27,7 @@ if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = department_lookup(_get_database(), 'label=?', [
         $matches[1]
     ]);
-    $_results = ( 0 == count($_results) ) ? null : $_results[0];
+    $_results = (0 == count($_results)) ? null : $_results[0];
 } elseif (preg_match('/^(.+)\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
