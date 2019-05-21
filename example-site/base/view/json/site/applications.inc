@@ -24,13 +24,15 @@ if ('' === $GLOBALS['.pirogue.view.path']) {
 } elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $_results = applications_fetch(_get_database(), intval($matches[1]));
 } elseif (preg_match('/^name\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
-    $_results = user_lookup(_get_database(), 'application_name=?', [
+    $_results = applications_lookup(_get_database(), 'application_name=?', [
         $matches[1]
     ]);
+    $_results = $_results[0] ?? null;
 } elseif (preg_match('/^(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
-    $_results = user_lookup(_get_database(), 'application_name=?', [
+    $_results = applications_lookup(_get_database(), 'application_name=?', [
         $matches[1]
     ]);
+    $_results = $_results[0] ?? null;
 }
 
 if (null === $_results) {
