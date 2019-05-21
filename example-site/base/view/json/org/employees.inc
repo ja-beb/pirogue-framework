@@ -1,8 +1,9 @@
 <?php
 use function org\employees_list;
-use function org\employees_lookup;
+use function org\employees_fetch;
 use function pirogue\database_collection_get;
 use function pirogue\import;
+use function org\employees_lookup;
 
 import('org');
 
@@ -16,31 +17,21 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = employees_list(_get_database());
-} elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = employees_find(_get_database(), intval($GLOBALS['.pirogue.view.path']));
-} elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
-    $filter = null;
-    switch ($matches[1]) {
-        case 'id':
-            $filter = 'id=?';
-            break;
-
-        case 'label':
-            $filter = 'label=?';
-            break;
-
-        case 'parent_id':
-        case 'parent':
-            $filter = 'parent_id=?';
-            break;
-    }
-
-    if ($filter) {
-        $_results = employees_lookup(_get_database(), $filter, [
-            $matches[2]
-        ]);
-    }
-}
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = employees_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = employees_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^employee_number\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = employees_lookup(_get_database(), 'employee_number=?', [
+        $matches[1]
+    ]);
+    $_results = ( 0 == count($_results) ) ? null : $_results;
+} elseif (preg_match('/^email[_address]?\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = employees_lookup(_get_database(), 'email_address=?', [
+        $matches[1]
+    ]);
+    $_results = ( 0 == count($_results) ) ? null : $_results;
+} 
 
 if (null === $_results) {
     http_response_code(404);

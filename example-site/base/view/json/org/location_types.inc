@@ -17,25 +17,15 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = location_types_list(_get_database());
-} elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = location_types_fetch(_get_database(), intval($GLOBALS['.pirogue.view.path']));
-} elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
-    $filter = null;
-    switch ($matches[1]) {
-        case 'id':
-            $filter = 'id=?';
-            break;
-
-        case 'label':
-            $filter = 'label=?';
-            break;
-    }
-
-    if ($filter) {
-        $_results = location_types_lookup(_get_database(), $filter, [
-            $matches[2]
-        ]);
-    }
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_types_fetch(_get_database(), $matches[1]);
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_types_fetch(_get_database(), $matches[1]);
+} elseif (preg_match('/^label\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_types_lookup(_get_database(), 'label=?', [
+        $matches[1]
+    ]);
+    $_results = ( 0 == count($_results)) ? null : $_results;
 }
 
 if (null === $_results) {

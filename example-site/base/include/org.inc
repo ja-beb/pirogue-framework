@@ -50,7 +50,6 @@ function location_list($database_connection): array
  */
 function location_fetch($database_connection, int $id): ?array
 {
-    return ['select * from org.locations where id=?', $id];
     $_list = _org_fetch($database_connection, 'select * from org.locations where id=?', [
         $id
     ]);
@@ -362,7 +361,7 @@ function pay_rates_lookup($database_connection, string $filter, $params = null):
  */
 function employees_list($database_connection): array
 {
-    return _org_fetch($database_connection, 'select * from org.employees_details', []);
+    return _org_fetch($database_connection, 'select * from org.employee_details', []);
 }
 
 /**
@@ -374,7 +373,7 @@ function employees_list($database_connection): array
  */
 function employees_fetch($database_connection, int $id): ?array
 {
-    $_list = _org_fetch($database_connection, 'select * from org.employees_details where id=?', [
+    $_list = _org_fetch($database_connection, 'select * from org.employee_details where id=?', [
         $id
     ]);
     return $_list[0] ?? null;
@@ -389,7 +388,7 @@ function employees_fetch($database_connection, int $id): ?array
  */
 function employees_lookup($database_connection, string $filter, $params = null): array
 {
-    return _org_fetch($database_connection, sprintf('select * from org.employees_details where %s', $filter), $params);
+    return _org_fetch($database_connection, sprintf('select * from org.employee_details where %s', $filter), $params);
 }
 
 /**
@@ -427,6 +426,22 @@ function employment_history_records_list($database_connection): array
 {
     return _org_fetch($database_connection, 'select * from org.employment_history_records', []);
 }
+
+/**
+ * Fetch a employment history from database using id number.
+ *
+ * @param resource $database_connection
+ *            SQL Server database connection.
+ * @return array
+ */
+function employment_history_records_fetch($database_connection, int $id): ?array
+{
+    $_list = _org_fetch($database_connection, 'select * from org.employment_history_records where id=?', [
+        $id
+    ]);
+    return $_list[0] ?? null;
+}
+
 
 /**
  * Fetch list of employment history numbers from database using a filter.

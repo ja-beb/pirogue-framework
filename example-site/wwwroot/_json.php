@@ -118,7 +118,10 @@ try {
 // Failsafe errors:
 http_response_code(500);
 if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
-    echo json_encode(sprintf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
+    echo json_encode(
+            sprintf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()),
+            JSON_INVALID_UTF8_IGNORE
+        );
 } else {
     echo json_encode('Unknown exception encountered');
 }

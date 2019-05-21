@@ -17,9 +17,9 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = position_assignments_list(_get_database());
-} elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = position_assignments_fetch(_get_database(), intval($GLOBALS['.pirogue.view.path']));
-} elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = position_assignments_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^(.+)\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
         case 'id':
@@ -35,28 +35,13 @@ if ('' === $GLOBALS['.pirogue.view.path']) {
         case 'postion_id':
             $filter = 'postion_id=?';
             break;
-            
-        case 'pay_grade':
-        case 'pay_grade_id':
-            $filter = 'pay_grade_id=?';
-            break;
-            
-        case 'location':
-        case 'location_id':
-            $filter = 'location_id=?';
-            break;
-    
-        case 'department':
-        case 'department_id':
-            $filter = 'department_id=?';
-            break;
-            
     }
 
     if ($filter) {
         $_results = position_assignments_lookup(_get_database(), $filter, [
             $matches[2]
         ]);
+        $_results = (0 == count($_results)) ? null : $_results;
     }
 }
 

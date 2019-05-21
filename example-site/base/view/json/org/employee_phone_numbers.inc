@@ -17,7 +17,7 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = employee_phone_numbers_list(_get_database());
-} elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^(.+)\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
         case 'employee':
@@ -26,7 +26,8 @@ if ('' === $GLOBALS['.pirogue.view.path']) {
             break;
 
         case 'type':
-            $filter = 'type=?';
+        case 'type_id':
+            $filter = 'type_id=?';
             break;
     }
 

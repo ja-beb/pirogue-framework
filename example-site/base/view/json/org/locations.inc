@@ -1,7 +1,7 @@
 <?php
 use function org\location_list;
 use function org\location_lookup;
-use function org\location_pay_grades_fetch;
+use function org\location_fetch;
 use function pirogue\database_collection_get;
 use function pirogue\import;
 
@@ -17,29 +17,19 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = location_list(_get_database());
-} elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = location_fetch(_get_database(), intval($GLOBALS['.pirogue.view.path']));
-} elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
-    $filter = null;
-    switch ($matches[1]) {
-        case 'id':
-            $filter = 'id=?';
-            break;
-            
-        case 'label':
-            $filter = 'label=?';
-            break;
-
-        case 'type_code':
-            $filter = 'type_code=?';
-            break;
-    }
-
-    if ($filter) {
-        $_results = location_lookup(_get_database(), $filter, [
-            $matches[2]
-        ]);
-    }
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^label\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_lookup(_get_database(), 'label=?', [
+        $matches[1]
+    ]);
+    $_results = ( 0 == count($_results) ) ? null : $_results;
+} elseif (preg_match('/^type_code\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = location_lookup(_get_database(), 'type_code=?', [
+        $matches[1]
+    ]);
 }
 
 if (null === $_results) {

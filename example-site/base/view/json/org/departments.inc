@@ -1,6 +1,7 @@
 <?php
 use function org\department_list;
 use function org\department_lookup;
+use function org\department_fetch;
 use function pirogue\database_collection_get;
 use function pirogue\import;
 
@@ -16,19 +17,18 @@ $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
     $_results = department_list(_get_database());
-} elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = department_find(_get_database(), intval($GLOBALS['.pirogue.view.path']));
-} elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = department_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = department_fetch(_get_database(), intval($matches[1]));
+} elseif (preg_match('/^label\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+    $_results = department_lookup(_get_database(), 'label=?', [
+        $matches[1]
+    ]);
+    $_results = ( 0 == count($_results) ) ? null : $_results[0];
+} elseif (preg_match('/^(.+)\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
-        case 'id':
-            $filter = 'id=?';
-            break;
-
-        case 'label':
-            $filter = 'label=?';
-            break;
-
         case 'parent_id':
         case 'parent':
             $filter = 'parent_id=?';
