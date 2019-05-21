@@ -1,6 +1,7 @@
 <?php
-use function org\department_list;
-use function org\department_lookup;
+use function org\position_pay_grades_fetch;
+use function org\position_pay_grades_list;
+use function org\position_pay_grades_lookup;
 use function pirogue\database_collection_get;
 use function pirogue\import;
 
@@ -15,9 +16,9 @@ $_results = null;
 $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
-    $_results = department_list(_get_database());
+    $_results = position_pay_grades_list(_get_database());
 } elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = department_find(_get_database(), intval($GLOBALS['.pirogue.view.path']));
+    $_results = position_pay_grades_fetch(_get_database(), intval($GLOBALS['.pirogue.view.path']));
 } elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
@@ -28,15 +29,15 @@ if ('' === $GLOBALS['.pirogue.view.path']) {
         case 'label':
             $filter = 'label=?';
             break;
-
-        case 'parent_id':
-        case 'parent':
-            $filter = 'parent_id=?';
+            
+        case 'position':
+        case 'position_id':
+            $filter = 'position_id=?';
             break;
     }
 
     if ($filter) {
-        $_results = department_lookup(_get_database(), $filter, [
+        $_results = position_pay_grades_lookup(_get_database(), $filter, [
             $matches[2]
         ]);
     }

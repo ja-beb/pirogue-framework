@@ -1,13 +1,11 @@
 <?php
 use function org\position_list;
-use function org\position_fetch;
-use function org\position_find;
+use function org\position_lookup;
+use function org\position_pay_grades_fetch;
 use function pirogue\database_collection_get;
 use function pirogue\import;
-use function org\position_lookup;
 
 import('org');
-
 
 function _get_database()
 {
@@ -18,9 +16,9 @@ $_results = null;
 $matches = [];
 
 if ('' === $GLOBALS['.pirogue.view.path']) {
-    $_results = position_list(_get_database(), 'positions');
+    $_results = position_list(_get_database());
 } elseif (is_int($GLOBALS['.pirogue.view.path'])) {
-    $_results = position_find(_get_database(), intval($GLOBALS['.pirogue.view.path']));
+    $_results = position_pay_grades_fetch(_get_database(), intval($GLOBALS['.pirogue.view.path']));
 } elseif (preg_match('/^(.+)\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
