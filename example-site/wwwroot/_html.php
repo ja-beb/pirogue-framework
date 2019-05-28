@@ -107,7 +107,7 @@ try {
         $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/404');
         $_exec_data = [$_request_path, $_request_data];
     }
-
+    
     /* process request */
     try {
         ob_start();
