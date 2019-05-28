@@ -98,7 +98,6 @@ try {
 
     // Route path to controller file, function & path:
     $_exec_data = $_request_data;
-
     $_exec_path = _route_clean($_request_path);
     $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
     $_html_content = '';
@@ -115,10 +114,20 @@ try {
         ob_clean();
     } catch (Exception $_exception) {
         http_response_code(500);
-        $_html_content = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
+        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
+        $_exec_data = [$_request_path, $_request_data, $_exception];
+        
+        ob_start();
+        $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
+        ob_clean();
     } catch (Error $_exception) {
         http_response_code(500);
-        $_html_content = sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine());
+        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
+        $_exec_data = [$_request_path, $_request_data, $_exception];
+        
+        ob_start();
+        $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
+        ob_clean();
     }
 
     header('Content-Type: text/html');
