@@ -103,7 +103,7 @@ try {
     $_html_content = '';
 
     if (false == file_exists($_route['file'])) {
-        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/404');
+        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-404');
         $_exec_data = [$_request_path, $_request_data];
     }
     
@@ -114,7 +114,7 @@ try {
         ob_clean();
     } catch (Exception $_exception) {
         http_response_code(500);
-        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
+        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-500');
         $_exec_data = [$_request_path, $_request_data, $_exception];
         
         ob_start();
@@ -122,7 +122,7 @@ try {
         ob_clean();
     } catch (Error $_exception) {
         http_response_code(500);
-        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error/500');
+        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-500');
         $_exec_data = [$_request_path, $_request_data, $_exception];
         
         ob_start();
