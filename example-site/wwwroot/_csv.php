@@ -78,7 +78,7 @@ try {
 
     $_exec_path = _route_clean($_request_path);
     $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
-
+    $_csv_data = [];
     
     /* process request */
     try {
