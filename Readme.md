@@ -1,5 +1,10 @@
 # A PHP Micro Framework
 
+Adaptation of the original framework used for projects from 2005-2012. Designed to be provide a easy to learn, quick to deploy and update site foundation for projects. Used to allow beginning web developers quickly produce web applications with minimal training.
+
+Wouldn't recommend the usage of this beyond "quick and dirty" prototypes or learning. This does not support many of the features required in a modern enterprise application. This is more an exercise in how frameworks work and how an imperitive design could be used with the features of php 7.x (original framework was written in php 4/5).
+
+
 ## Project uses the following conventions:
 - 0TB - linux kernel variant (standard PHP).
 - file extensions: 
