@@ -5,27 +5,12 @@ use function pirogue\__database_collection;
 use function pirogue\__import;
 use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
-use function pirogue\_route_parse_flat;
+use function pirogue\_route_parse;
 use function pirogue\import;
 
 /**
  * Main dispatcher for JSON content.
- *
- * Processes user request and routes it to the proper function found the requested module file in _json/[ModuleName].inc - handles any REST method
- * that the developer writes end point for.
- *
- * @example For any REST method:
- *          site.url/module/function/function_data.json?data=my_data
- *         
- *          include(_json/module.inc);
- *         
- *          For GET REQUEST: module/GET_function(function_data, request_data);
- *          For POST REQUEST: module/POST_function(function_data, request_data, post_data);
- *          For PUT REQUEST: module/PUT_function(function_data, request_data, post_data);
- *          For DELETE REQUEST: module/DELETE_function(function_data, request_data);
- *          For OPTIONS REQUEST: module/DELETE_function(function_data, request_data);
- *         
- *         
+ * Processes user request and routes it to the proper module file in _json/[Module]/[Page].inc 
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
 function _route_execute(string $file, string $path, array $data): array
@@ -77,7 +62,7 @@ try {
     $_exec_data = $_request_data;
 
     $_exec_path = _route_clean($_request_path);
-    $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
+    $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
     $_json_data = [];
 
     /* process request */

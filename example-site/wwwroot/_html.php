@@ -5,58 +5,15 @@ use function pirogue\__database_collection;
 use function pirogue\__import;
 use function pirogue\_dispatcher_send;
 use function pirogue\import;
+use function pirogue\_route_clean;
+use function pirogue\_route_parse;
+
 
 /**
  * Main dispatcher for HTML content.
- *
- * Processes user request and routes it to the proper function found the requested module file in _html/[ModuleName].inc - handles any REST method
- * that the developer writes end point for.
- *
- * @example For any REST method:
- *          site.url/module/function/function_data.html?data=my_data
- *         
- *          include(_html/module.inc);
- *         
- *          For GET REQUEST: module/GET_function(function_data, request_data);
- *          For POST REQUEST: module/POST_function(function_data, request_data, post_data);
- *          For PUT REQUEST: module/PUT_function(function_data, request_data, post_data);
- *          For DELETE REQUEST: module/DELETE_function(function_data, request_data);
- *          For OPTIONS REQUEST: module/DELETE_function(function_data, request_data);
- *         
- *         
+ * Maps user request to the file in _html/[Module]/[Page].inc
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
-
-/**
- * Remove and preceding underscores from the path element.
- *
- * @param string $value
- * @return array
- */
-function _route_clean(string $value): string
-{
-    return ('' == $value) ? '' : preg_replace([
-        '/^(_+)/',
-        '/(\/_+)/'
-    ], [
-        '',
-        '/'
-    ], $value);
-}
-
-/*
- * fastest & simplest (1x)
- * Simply loads a flat file that will return data.
- */
-function _route_parse(string $base, string $path): array
-{
-    $_path_exec = explode('/', $path);
-    return [
-        'file' => sprintf('%s.phtml', implode(DIRECTORY_SEPARATOR, array_merge([$base], array_slice($_path_exec, 0, 2)))),
-        'path' => implode('/', array_slice($_path_exec, 2))
-    ];
-}
-
 function _route_execute(string $file, string $path, array $data): string
 {
     if (file_exists($file)) {
@@ -65,7 +22,6 @@ function _route_execute(string $file, string $path, array $data): string
         $GLOBALS['.pirogue.view.path'] = $path;
         require $file;
         $_html_content = ob_get_clean();
-
         return $_html_content;
     }
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
@@ -104,9 +60,12 @@ try {
 
     if (false == file_exists($_route['file'])) {
         $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-404');
-        $_exec_data = [$_request_path, $_request_data];
+        $_exec_data = [
+            $_request_path,
+            $_request_data
+        ];
     }
-    
+
     /* process request */
     try {
         ob_start();
@@ -115,16 +74,24 @@ try {
     } catch (Exception $_exception) {
         http_response_code(500);
         $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-500');
-        $_exec_data = [$_request_path, $_request_data, $_exception];
-        
+        $_exec_data = [
+            $_request_path,
+            $_request_data,
+            $_exception
+        ];
+
         ob_start();
         $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
         ob_clean();
     } catch (Error $_exception) {
         http_response_code(500);
         $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-500');
-        $_exec_data = [$_request_path, $_request_data, $_exception];
-        
+        $_exec_data = [
+            $_request_path,
+            $_request_data,
+            $_exception
+        ];
+
         ob_start();
         $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
         ob_clean();
