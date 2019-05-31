@@ -33,7 +33,9 @@ function _route_parse(string $base, string $path): array
 {
     $_path_exec = explode('/', $path);
     return [
-        'file' => _route_get_file($base, array_slice($_path_exec, 0, 2)),
+        'file' => implode(DIRECTORY_SEPARATOR, array_merge([
+            $base
+        ], array_slice($_path_exec, 0, 2))),
         'path' => implode('/', array_slice($_path_exec, 2))
     ];
 }
