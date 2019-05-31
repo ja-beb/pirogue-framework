@@ -1,0 +1,30 @@
+<?php
+
+// Use functions
+use function pirogue\import;
+use function pirogue\dispatcher_redirect;
+use function pirogue\dispatcher_create_url;
+
+// Import libraries
+import('pirogue\dispatcher');
+
+/**
+ * Prompt user to agree to site disclaimer.
+ */
+
+// Process post request using post id data & action
+if ('POST' == $_SERVER['REQUEST_METHOD'] && 'agree' == ($_POST['action'] ?? '')) {
+    // Set agree marker and continue
+    $_SESSION['.auth.login.terms'] = true;
+    return dispatcher_redirect();
+}
+
+?>
+<form id="" action="<?php echo dispatcher_create_url(); ?>"
+	method="post" class="">
+	<input type="hidden" name="" value="" />
+	<p class="">Access is for authorized users only.</p>
+
+	<input type="submit" value="agree" name="action" />
+</form>
+<pre><?php print_r($_SESSION); ?></pre>

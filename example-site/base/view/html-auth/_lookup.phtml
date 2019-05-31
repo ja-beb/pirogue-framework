@@ -1,0 +1,66 @@
+<?php
+
+// define constants
+
+// Use functions
+use function pirogue\database_collection_get;
+use function pirogue\import;
+use function pirogue\dispatcher_redirect;
+use function pirogue\dispatcher_create_url;
+
+// Import libraries
+import('pirogue\dispatcher');
+import('pirogue\database_collection');
+
+/**
+ * Prompt user for email and verify in database.
+ */
+
+// Initialize page variables
+unset($_SESSION['.auth.login.site_user']);
+$_email = $GLOBALS['.pirogue.view.data']['email'] ?? '';
+$_errors = [];
+
+// Process post request using post id data
+if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')) {
+    $_email = trim($_POST['email'] ?? '');
+    if ('' == trim($_email)) {
+        $_errors['email'] = 'Email is required.';
+    } else {
+        $_database = database_collection_get('example-site');
+        $_sql_statement = sqlsrv_query($_database, 'select id, email, status_code from site.users where email=?', [
+            $_email
+        ]);
+        $_sql_data = (null == $_sql_statement) ? null : sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC);
+        sqlsrv_free_stmt($_sql_statement);
+
+        if (null == $_sql_data) {
+            $_errors['email'] = 'Unable to find requested account.';
+        } elseif (SITE_USER_ACTIVE != (SITE_USER_ACTIVE & $_sql_data['status_code'])) {
+            $_errors['email'] = 'Account not active.';
+        } else {
+            // save user and move to next step
+            $_SESSION['.auth.login.site_user'] = $_sql_data;
+            dispatcher_redirect();
+        }
+    }
+}
+
+?>
+<form id="" action="<?php echo dispatcher_create_url(); ?>"
+	method="post" class="">
+	<input type="hidden" name="" value="" />
+	<div class="">
+		<div class="">
+			<label for="inputEmail">Email Address</label> <input id="inputEmail"
+				type="text" value="<?php echo $_email; ?>" name="email" />
+		</div>
+    	<?php if ( array_key_exists('email', $_errors) ): ?>
+    		<p class=""><?php echo $_errors['email']; ?></p>
+    	<?php endif; ?>
+	</div>
+	<div class="">
+		<input type="submit" value="lookup" name="action" />
+	</div>
+</form>
+<pre><?php print_r($_SESSION); ?></pre>
