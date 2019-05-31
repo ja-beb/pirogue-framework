@@ -5,27 +5,15 @@ use function pirogue\__database_collection;
 use function pirogue\__import;
 use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
-use function pirogue\_route_parse_flat;
+use function pirogue\_route_parse;
 use function pirogue\import;
+use function pirogue\__dispatcher;
+use function pirogue\__route;
 
 /**
  * Main dispatcher for JSON content.
+ * Processes user request and routes it to the proper module file in _json/[Module]/[Page].inc
  *
- * Processes user request and routes it to the proper function found the requested module file in _json/[ModuleName].inc - handles any REST method
- * that the developer writes end point for.
- *
- * @example For any REST method:
- *          site.url/module/function/function_data.json?data=my_data
- *         
- *          include(_json/module.inc);
- *         
- *          For GET REQUEST: module/GET_function(function_data, request_data);
- *          For POST REQUEST: module/POST_function(function_data, request_data, post_data);
- *          For PUT REQUEST: module/PUT_function(function_data, request_data, post_data);
- *          For DELETE REQUEST: module/DELETE_function(function_data, request_data);
- *          For OPTIONS REQUEST: module/DELETE_function(function_data, request_data);
- *         
- *         
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
 function _route_execute(string $file, string $path, array $data): array
@@ -63,10 +51,11 @@ try {
     set_error_handler('pirogue\_dispatcher_error_handler');
 
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-    $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\view\json', _BASE_FOLDER);
 
     /* Initialize libraries: */
+    __dispatcher(sprintf('%s://%s/example-site/auth', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
     __database_collection(sprintf('%s\config', _BASE_FOLDER));
+    __route(sprintf('%s\view\json', _BASE_FOLDER), 'inc');
 
     /* Parse request */
     $_request_data = $_GET;
@@ -77,7 +66,7 @@ try {
     $_exec_data = $_request_data;
 
     $_exec_path = _route_clean($_request_path);
-    $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
+    $_route = _route_parse($_exec_path);
     $_json_data = [];
 
     /* process request */
@@ -89,6 +78,7 @@ try {
             ob_clean();
         } else {
             http_response_code(404);
+            $_json_data = $_route;
         }
     } catch (Exception $_exception) {
         http_response_code(500);
