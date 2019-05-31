@@ -7,6 +7,8 @@ use function pirogue\_dispatcher_send;
 use function pirogue\import;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
+use function pirogue\__route;
+use function pirogue\__dispatcher;
 
 
 /**
@@ -38,14 +40,16 @@ try {
     // Import base required libraries
     import('pirogue\dispatcher');
     import('pirogue\database_collection');
+    import('pirogue\route');
 
     set_error_handler('pirogue\_dispatcher_error_handler');
 
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-    $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\view\html', _BASE_FOLDER);
 
     /* Initialize libraries: */
+    __dispatcher(sprintf('%s://%s/example-site/html', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
     __database_collection(sprintf('%s\config', _BASE_FOLDER));
+    __route(sprintf('%s\view\html', _BASE_FOLDER), 'phtml');
 
     /* Parse request */
     $_request_data = $_GET;
@@ -55,11 +59,11 @@ try {
     // Route path to controller file, function & path:
     $_exec_data = $_request_data;
     $_exec_path = _route_clean($_request_path);
-    $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
+    $_route = _route_parse($_exec_path);
     $_html_content = '';
 
     if (false == file_exists($_route['file'])) {
-        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-404');
+        $_route = _route_parse('_error-404');
         $_exec_data = [
             $_request_path,
             $_request_data
@@ -73,7 +77,7 @@ try {
         ob_clean();
     } catch (Exception $_exception) {
         http_response_code(500);
-        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-500');
+        $_route = _route_parse('_error-500');
         $_exec_data = [
             $_request_path,
             $_request_data,
@@ -85,7 +89,7 @@ try {
         ob_clean();
     } catch (Error $_exception) {
         http_response_code(500);
-        $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-500');
+        $_route = _route_parse('_error-500');
         $_exec_data = [
             $_request_path,
             $_request_data,
