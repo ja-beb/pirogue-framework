@@ -1,7 +1,60 @@
-<form action="" method="post" class="">
+<?php
+
+//
+define('SITE_USER_ACTIVE', 0x01);
+
+use function pirogue\database_collection_get;
+use function pirogue\dispatcher_redirect;
+
+/**
+ * Prompt user for email and verify in database.
+ */
+
+// Initialize page variables
+$_email = $GLOBALS['.pirogue.view.data']['email'] ?? '';
+$_errors = [];
+
+// Process post request using post id data
+if ('POST' == $_SERVER['REQUEST_METHOD']) {
+    if ('login' == ($_POST['action'] ?? '')) {
+        $_email = trim($_POST['email'] ?? '');
+        if ('' == trim($_email)) {
+            $_errors['email'] = 'Email is required.';
+        } else {
+            $_database = database_collection_get('example-site');
+            $_sql_statement = sqlsrv_query($_database, 'select id, email, status_code from site.users where email=?', [
+                $_email
+            ]);
+            $_sql_data = (null == $_sql_statement) ? null : sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC);
+            sqlsrv_free_stmt($_sql_statement);
+
+            if ( null == $_sql_data ) {
+                $_errors['email'] = 'Unable to find requested account.';
+            }elseif (SITE_USER_ACTIVE != ( SITE_USER_ACTIVE & $_sql_data['status_code']) ) {
+                $_errors['email'] = 'Account not active.';
+            } else {
+                // save user and move to next step
+                $_SESSION['.pirogue.auth.site_user'] = $_sql_data;
+                
+                // url
+                // url_create('/verify', []);
+                dispatcher_redirect();
+            }
+        }
+    }
+}
+
+?>
+<form id="" action="<?php echo $GLOBALS['.pirogue.dispatcher.address']; ?>" method="post" class="">
+	<input type="hidden" name="" value="" />
 	<div class="">
-		<label for="inputUsername" >Username</label>
-		<input id="inputUsername" type="text" value="<?php echo $GLOBALS['.pirogue.view.data']['username'] ?? null; ?>" />
+		<div class="">
+			<label for="inputEmail">Email Address</label> 
+			<input id="inputEmail" type="text" value="<?php echo $_email; ?>" name="email" />
+		</div>
+    	<?php if ( array_key_exists('email', $_errors) ): ?>
+    		<p class=""><?php echo $_errors['email']; ?></p>
+    	<?php endif; ?>
 	</div>
 	<div class="">
 		<input type="submit" value="login" name="action" />
