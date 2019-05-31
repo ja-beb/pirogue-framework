@@ -5,46 +5,29 @@ use function pirogue\__database_collection;
 use function pirogue\__import;
 use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
-use function pirogue\_route_parse_flat;
+use function pirogue\_route_parse;
 use function pirogue\import;
 
 /**
  * Main dispatcher for CSV content.
- *
- * Processes user request and routes it to the proper function found the requested module file in _csv/[ModuleName].inc - handles any REST method
- * that the developer writes end point for.
- *
- * @example For any REST method:
- *          site.url/module/function/function_data.csv?data=my_data
- *         
- *          include(_csv/module.inc);
- *         
- *          For GET REQUEST: module/GET_function(function_data, request_data);
- *          For POST REQUEST: module/POST_function(function_data, request_data, post_data);
- *          For PUT REQUEST: module/PUT_function(function_data, request_data, post_data);
- *          For DELETE REQUEST: module/DELETE_function(function_data, request_data);
- *          For OPTIONS REQUEST: module/DELETE_function(function_data, request_data);
- *         
- *         
+ * Processes user request and routes it to the proper file in _csv/[Module]/[Name].inc 
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
-
-
-
-function _route_execute(string $file, string $path, array $data): array{
-    if ( file_exists($file) )
-    {
+function _route_execute(string $file, string $path, array $data): array
+{
+    if (file_exists($file)) {
         ob_start();
         $GLOBALS['.pirogue.view.data'] = $data;
         $GLOBALS['.pirogue.view.path'] = $path;
         $_csv_data = require $file;
         ob_get_clean();
-        
-        return is_array($_csv_data) ? $_csv_data : [$_csv_data];
+
+        return is_array($_csv_data) ? $_csv_data : [
+            $_csv_data
+        ];
     }
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
 }
-
 
 // Send request headers (type for this dispatcher):
 define('_BASE_FOLDER', 'C:\\inetpub\example-site');
@@ -77,19 +60,19 @@ try {
     $_exec_data = $_request_data;
 
     $_exec_path = _route_clean($_request_path);
-    $_route = _route_parse_flat($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
+    $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
     $_csv_data = [];
-    
+
     /* process request */
     try {
-        
+
         if (file_exists($_route['file'])) {
             ob_start();
             $_csv_data = _route_execute($_route['file'], $_route['path'], $_exec_data);
             ob_clean();
-        }else{
+        } else {
             http_response_code(404);
-        }    
+        }
     } catch (Exception $_exception) {
         http_response_code(500);
         header(sprintf('X-Execute-Error: %s (%s: %d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine()));
@@ -101,10 +84,10 @@ try {
     header('Content-Type: application/csv', true);
     header('X-Powered-By: pirogue php');
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._csv.dispatcher.start_time']) * 1000));
-    
+
     // Write csv data to memory then transfer to string.
     $f = fopen('php://memory', 'r+');
-    foreach( $_csv_data as $_row ){
+    foreach ($_csv_data as $_row) {
         fputcsv($f, $_row);
     }
     rewind($f);
@@ -116,16 +99,11 @@ try {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
 }
 
-
 // Failsafe errors:
 header('X-Powered-By: pirogue php');
 header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._csv.dispatcher.start_time']) * 1000));
 http_response_code(500);
-header(sprintf('X-Error: %s (%s:%d)', 
-    $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), 
-    $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile(), 
-    $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()
-));
+header(sprintf('X-Error: %s (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile(), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine()));
 
 
 
