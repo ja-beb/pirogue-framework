@@ -1,11 +1,15 @@
 <?php 
 
     http_response_code(500);
-    $_resource = ( 0 == count($GLOBALS['.pirogue.view.data'][1]) )
-        ? $GLOBALS['.pirogue.view.data'][0]
-        : sprintf('%s/%s', $GLOBALS['.pirogue.view.data'][0], http_build_query($GLOBALS['.pirogue.view.data'][1]) );
-
+    $_request_path = $GLOBALS['.pirogue.view.data'][0] ?? '';
+    $_request_data = $GLOBALS['.pirogue.view.data'][1] ?? [];
+    $_exception = $GLOBALS['.pirogue.view.data'][2] ?? '';
+        
 ?>
-<p>Unable to find requested resource <?php echo $_resource; ?>.html.</p>
+<?php echo $_request_path; ?>
+<?php echo 0 == count($_request_data) ? '' : http_build_query($_request_data); ?>
+<pre><?php echo $_exception->getMessage(); ?></pre>
+<pre><?php echo $_exception->getFile(); ?></pre>
+<pre><?php echo $_exception->getLine(); ?></pre>
 
  
