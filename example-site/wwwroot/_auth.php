@@ -2,9 +2,11 @@
 $GLOBALS['._auth.dispatcher.start_time'] = microtime(true);
 
 use function pirogue\__database_collection;
+use function pirogue\__dispatcher;
 use function pirogue\__import;
 use function pirogue\_dispatcher_send;
 use function pirogue\import;
+use function pirogue\_route_clean;
 
 /**
  * Main dispatcher for AUTH content.
@@ -18,39 +20,6 @@ use function pirogue\import;
  *         
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
-
-/**
- * Remove and preceding underscores from the path element.
- *
- * @param string $value
- * @return array
- */
-function _route_clean(string $value): string
-{
-    return ('' == $value) ? '' : preg_replace([
-        '/^(_+)/',
-        '/(\/_+)/'
-    ], [
-        '',
-        '/'
-    ], $value);
-}
-
-/*
- * fastest & simplest (1x)
- * Simply loads a flat file that will return data.
- */
-function _route_parse(string $base, string $path): array
-{
-    $_path_exec = explode('/', $path);
-    return [
-        'file' => sprintf('%s.phtml', implode(DIRECTORY_SEPARATOR, array_merge([
-            $base
-        ], array_slice($_path_exec, 0, 2)))),
-        'path' => implode('/', array_slice($_path_exec, 2))
-    ];
-}
-
 function _route_execute(string $file, string $path, array $data): string
 {
     if (file_exists($file)) {
@@ -65,6 +34,13 @@ function _route_execute(string $file, string $path, array $data): string
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
 }
 
+function _route_parse(string $base, string $path): array
+{
+    $_route = pirogue\_route_parse($base, $path);
+    $_route['file'] = "{$_route['file']}.phtml";
+    return $_route;
+}
+
 define('_BASE_FOLDER', 'C:\\inetpub\example-site');
 
 // Load & intialize pirogue framework:
@@ -76,6 +52,7 @@ try {
     // Import base required libraries
     import('pirogue\dispatcher');
     import('pirogue\database_collection');
+    import('pirogue\route');
 
     set_error_handler('pirogue\_dispatcher_error_handler');
 
@@ -83,6 +60,7 @@ try {
     $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\view\html-auth', _BASE_FOLDER);
 
     /* Initialize libraries: */
+    __dispatcher(sprintf('%s://%s/example-site/auth', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
     __database_collection(sprintf('%s\config', _BASE_FOLDER));
 
     /* Parse request */
@@ -95,7 +73,7 @@ try {
     $_exec_path = _route_clean($_request_path);
     $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
     $_content = '';
-
+    
     if (false == file_exists($_route['file'])) {
         $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], '_error-404');
         $_exec_data = [
@@ -156,9 +134,4 @@ if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
 } else {
     echo 'Unknown exception encountered';
 }
-
-
-
-
-
 
