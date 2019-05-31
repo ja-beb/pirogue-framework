@@ -7,6 +7,8 @@ use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
 use function pirogue\import;
+use function pirogue\__route;
+use function pirogue\__dispatcher;
 
 /**
  * Main dispatcher for CSV content.
@@ -46,10 +48,11 @@ try {
     set_error_handler('pirogue\_dispatcher_error_handler');
 
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-    $GLOBALS['._pirogue.dispatcher.controller_path'] = sprintf('%s\view\csv', _BASE_FOLDER);
 
     /* Initialize libraries: */
+    __dispatcher(sprintf('%s://%s/example-site/auth', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
     __database_collection(sprintf('%s\config', _BASE_FOLDER));
+    __route(sprintf('%s\view\csv', _BASE_FOLDER), 'inc');
 
     /* Parse request */
     $_request_data = $_GET;
@@ -60,7 +63,7 @@ try {
     $_exec_data = $_request_data;
 
     $_exec_path = _route_clean($_request_path);
-    $_route = _route_parse($GLOBALS['._pirogue.dispatcher.controller_path'], $_exec_path);
+    $_route = _route_parse($_exec_path);
     $_csv_data = [];
 
     /* process request */
