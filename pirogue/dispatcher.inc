@@ -15,13 +15,30 @@ use ErrorException;
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
+ * Requested path.
+ *
+ * @var string $GLOBALS['.pirogue.dispatcher.request_path']
+ */
+$GLOBALS['.pirogue.dispatcher.request_path'] = '';
+
+/**
+ * Requested data.
+ *
+ * @var string $GLOBALS['.pirogue.dispatcher.request_data']
+ */
+$GLOBALS['.pirogue.dispatcher.request_data'] = '';
+
+/**
  * Setup dispatcher library.
  *
+ * @internal Caled from dispatcher only.
  * @param string $address
  */
-function __dispatcher(string $address)
+function __dispatcher(string $address, string $request_path, array $request_data)
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
+    $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
+    $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
 }
 
 /**
@@ -72,8 +89,32 @@ function _dispatcher_error_handler(int $errno, string $errstr, string $errfile, 
 /**
  * Redirect user to new address.
  */
-function dispatcher_redirect(string $address, int $code = 301)
+function dispatcher_redirect(string $address = '', int $code = 301)
 {
+    $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
     header("Location: {$address}", true, $code);
     exit();
+}
+
+/**
+ * Create url to resource relative to site base.
+ *
+ * @param string $path
+ * @param array $data
+ * @return string
+ * @uses _dispatcher_create_url
+ */
+function dispatcher_create_url(string $path = null, array $data = []): string
+{
+    // if no input provided use current request
+    if (0 == count(func_get_args())) {
+        $path = $GLOBALS['.pirogue.dispatcher.request_path'];
+        $data = $GLOBALS['.pirogue.dispatcher.request_data'];
+    }
+
+    $_url = sprintf(empty($path) ? '%s' : '%s/%s', $GLOBALS['.pirogue.dispatcher.address'], $path);
+    if (0 < count($data)) {
+        $_url = sprintf('%s?%s', $_url, http_build_query($data));
+    }
+    return $_url;
 }
