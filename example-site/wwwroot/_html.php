@@ -10,10 +10,10 @@ use function pirogue\_route_parse;
 use function pirogue\__route;
 use function pirogue\__dispatcher;
 
-
 /**
  * Main dispatcher for HTML content.
  * Maps user request to the file in _html/[Module]/[Page].inc
+ *
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
 function _route_execute(string $file, string $path, array $data): string
@@ -46,15 +46,15 @@ try {
 
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
 
-    /* Initialize libraries: */
-    __dispatcher(sprintf('%s://%s/example-site/html', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
-    __database_collection(sprintf('%s\config', _BASE_FOLDER));
-    __route(sprintf('%s\view\html', _BASE_FOLDER), 'phtml');
-
     /* Parse request */
     $_request_data = $_GET;
     $_request_path = $_request_data['__execution_path'] ?? '';
     unset($_request_data['__execution_path']);
+
+    /* Initialize libraries: */
+    __dispatcher(sprintf('%s://%s/example-site/auth', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']), $_request_path, $_request_data);
+    __database_collection(sprintf('%s\config', _BASE_FOLDER));
+    __route(sprintf('%s\view\html', _BASE_FOLDER), 'phtml');
 
     // Route path to controller file, function & path:
     $_exec_data = $_request_data;
