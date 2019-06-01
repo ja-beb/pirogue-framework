@@ -51,16 +51,16 @@ try {
     set_error_handler('pirogue\_dispatcher_error_handler');
 
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
-
-    /* Initialize libraries: */
-    __dispatcher(sprintf('%s://%s/example-site/auth', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
-    __database_collection(sprintf('%s\config', _BASE_FOLDER));
-    __route(sprintf('%s\view\json', _BASE_FOLDER), 'inc');
-
+    
     /* Parse request */
     $_request_data = $_GET;
     $_request_path = $_request_data['__execution_path'] ?? '';
     unset($_request_data['__execution_path']);
+    
+    /* Initialize libraries: */
+    __dispatcher(sprintf('%s://%s/example-site/auth', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']), $_request_path, $_request_data);    
+    __database_collection(sprintf('%s\config', _BASE_FOLDER));
+    __route(sprintf('%s\view\json', _BASE_FOLDER), 'inc');
 
     // Route path to controller file, function & path:
     $_exec_data = $_request_data;
