@@ -1,15 +1,18 @@
-<?php 
+<?php
+/**
+ * Display 500 error message.
+ */
+use function pirogue\dispatcher_create_url;
+use function pirogue\database_collection_get;
+use function pirogue\error_handler_log;
 
-    http_response_code(500);
-    $_request_path = $GLOBALS['.pirogue.view.data'][0] ?? '';
-    $_request_data = $GLOBALS['.pirogue.view.data'][1] ?? [];
-    $_exception = $GLOBALS['.pirogue.view.data'][2] ?? '';
-        
+http_response_code(500);
+error_handler_log(database_collection_get(), $GLOBALS['.pirogue.view.data']['exception']->getMessage(), $GLOBALS['.pirogue.view.data']['exception']->getFile(), $GLOBALS['.pirogue.view.data']['exception']->getLine());
+
 ?>
-<?php echo $_request_path; ?>
-<?php echo 0 == count($_request_data) ? '' : http_build_query($_request_data); ?>
-<pre><?php echo $_exception->getMessage(); ?></pre>
-<pre><?php echo $_exception->getFile(); ?></pre>
-<pre><?php echo $_exception->getLine(); ?></pre>
+<div class="">
+	<p>Request: <?php echo dispatcher_create_url( $GLOBALS['.pirogue.view.data']['path'], $GLOBALS['.pirogue.view.data']['data']); ?></p>
+	<pre><?php echo $GLOBALS['.pirogue.view.data']['exception']->getMessage(); ?></pre>
+	<pre><?php printf('%s (%d)', $GLOBALS['.pirogue.view.data']['exception']->getFile(), $GLOBALS['.pirogue.view.data']['exception']->getLine()); ?></pre>
+</div>
 
- 
