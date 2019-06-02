@@ -64,7 +64,7 @@ function _dispatcher_send(string $content)
         http_response_code($http_status_code);
         echo $content;
     }
-    exit();
+    _dispatcher_exit();
 }
 
 /**
@@ -93,7 +93,8 @@ function dispatcher_redirect(string $address = '', int $code = 301)
 {
     $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
     header("Location: {$address}", true, $code);
-    exit();
+    session_id() && session_write_close();
+    _dispatcher_exit();
 }
 
 /**
@@ -117,4 +118,15 @@ function dispatcher_create_url(string $path = null, array $data = []): string
         $_url = sprintf('%s?%s', $_url, http_build_query($data));
     }
     return $_url;
+}
+
+
+/**
+ * Exit dispatcher - close session if open.
+ * @internal
+ */
+function _dispatcher_exit()
+{
+    session_id() && session_write_close();
+    exit();
 }
