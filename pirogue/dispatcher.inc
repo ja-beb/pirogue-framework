@@ -5,8 +5,6 @@
  */
 namespace pirogue;
 
-use ErrorException;
-
 /**
  * Dispatcher's base address.
  *
@@ -70,25 +68,6 @@ function _dispatcher_send(string $content)
 }
 
 /**
- * Translate PHP trigger errors into SPL ErrorException instance.
- *
- * @internal
- * @param int $number
- * @param string $message
- * @param string $file
- * @param int $line
- * @throws ErrorException
- * @return boolean
- */
-function _dispatcher_error_handler(int $errno, string $errstr, string $errfile, int $errline): bool
-{
-    if ($errno & error_reporting()) {
-        throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-    }
-    return false;
-}
-
-/**
  * Redirect user to new address.
  */
 function dispatcher_redirect(string $address = '', int $code = 301)
@@ -122,9 +101,9 @@ function dispatcher_create_url(string $path = null, array $data = []): string
     return $_url;
 }
 
-
 /**
  * Exit dispatcher - close session if open.
+ *
  * @internal
  */
 function _dispatcher_exit()
