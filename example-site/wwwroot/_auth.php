@@ -2,12 +2,12 @@
 /**
  * Main dispatcher for AUTH content.
  *
- * Processes user request and routes it to the proper function found the requested module file in _auth/[ModuleName].inc - handles any REST method
+ * Processes user request and routes it to the proper function found the requested module file in view/html-auth/[ModuleName].inc - handles any REST method
  * that the developer writes end point for.
  *
  * @example For any HTTP method:
  *          site.url/auth/page.html?data=my_data
- *          include(_auth/page.inc);
+ *          include(html-auth/page.inc);
  *
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
