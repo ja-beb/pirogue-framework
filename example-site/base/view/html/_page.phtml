@@ -1,29 +1,78 @@
+<?php
+
+/**
+ * 
+ */
+use function pirogue\import;
+use function pirogue\user_session_current;
+use function pirogue\dispatcher_create_url;
+
+import('pirogue\user_session');
+$_user_session = user_session_current();
+
+?>
 <!doctype html>
 <html class="no-js" lang="">
-	<head>
-    	<meta charset="utf-8">
-    	<title></title>
-    	<meta name="description" content="">
-    	<meta name="viewport" content="width=device-width, initial-scale=1">
-    	<link rel="manifest" href="site.webmanifest">
-    	<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/normalize.css">
-    	<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page.css">
-    	<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page-site.css">
+<head>
+<meta charset="utf-8">
+<title></title>
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet"
+	href="<?php echo _SITE_URL; ?>/style/normalize.css">
+<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page.css">
+<link rel="stylesheet"
+	href="<?php echo _SITE_URL; ?>/style/page-site.css">
     	<?php $_files = array_unique($GLOBALS['.pirogue.view.style.files'] ?? []);?>
       	<?php foreach( $_files as $_file ): ?>
-      		<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/<?php echo $_file; ?>.css" />
+      		<link rel="stylesheet"
+	href="<?php echo _SITE_URL; ?>/style/<?php echo $_file; ?>.css" />
       	<?php endforeach; ?>
       	<?php echo $GLOBALS['.pirogue.view.style.inline'] ?? '' ?>
       	<meta name="theme-color" content="#fafafa">
-	</head>
-	<body id="<?php echo $GLOBALS['.pirogue.view.body.id'] ?? '' ?>" class="<?php echo $GLOBALS['.pirogue.view.body.class'] ?? '' ?>">
-        <!--[if IE]>
+</head>
+<body id="<?php echo $GLOBALS['.pirogue.view.body.id'] ?? '' ?>"
+	class="<?php echo $GLOBALS['.pirogue.view.body.class'] ?? '' ?>">
+	<!--[if IE]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-		<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
+	<div id="page-menubar">
+		<div class="">
+			<a href=""> <span class="">app menu</span>
+			</a>
+			<h1 id="" class="">
+				<a id="" class=""
+					href="<?php echo dispatcher_create_url('app/index'); ?>"><span
+					class="">App Title</span></a>
+			</h1>
+		</div>
+		<div class="">
+			<a id="" class="" href="<?php echo dispatcher_create_url('menu'); ?>"><span
+				class="">menu</span></a> <a id="" class="" href=""><span class="">user
+					menu</span></a>
+			<div id="" class="">
+				<p><?php echo $_user_session['display_name']; ?></p>
+				<p><?php echo $_user_session['position_name']; ?></p>
+				<p>
+    			<?php echo $_user_session['location_name']; ?>
+    			<?php echo $_user_session['department_name']; ?>
+    			</p>
+				<p><?php echo $_user_session['email_address']; ?></p>
+				<form id="" class="" method="post"
+					action="<?php echo dispatcher_create_url('session_end'); ?>">
+					<button class="" type="submit" name="action" value="session_end">
+						<span class="">Sign off</span>
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
 		<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
       	<?php foreach( $_files as $_file ): ?>
-      		<script src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
+      		<script
+		src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
       	<?php endforeach; ?>
       	<?php echo $GLOBALS['.pirogue.view.script.inline'] ?? '' ?>
 	</body>
