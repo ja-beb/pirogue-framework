@@ -1,11 +1,18 @@
-<?php 
+<?php
+/**
+ * Display 500 error message.
+ */
+use function pirogue\dispatcher_create_url;
+use function pirogue\database_collection_get;
+use function pirogue\error_handler_log;
 
-    http_response_code(500);
-    $_resource = ( 0 == count($GLOBALS['.pirogue.view.data'][1]) )
-        ? $GLOBALS['.pirogue.view.data'][0]
-        : sprintf('%s/%s', $GLOBALS['.pirogue.view.data'][0], http_build_query($GLOBALS['.pirogue.view.data'][1]) );
+http_response_code(500);
+error_handler_log(database_collection_get(), $GLOBALS['.pirogue.view.data']['exception']->getMessage(), $GLOBALS['.pirogue.view.data']['exception']->getFile(), $GLOBALS['.pirogue.view.data']['exception']->getLine());
 
 ?>
-<p>Unable to find requested resource <?php echo $_resource; ?>.html.</p>
+<div class="">
+	<p>Request: <?php echo dispatcher_create_url( $GLOBALS['.pirogue.view.data']['path'], $GLOBALS['.pirogue.view.data']['data']); ?></p>
+	<pre><?php echo $GLOBALS['.pirogue.view.data']['exception']->getMessage(); ?></pre>
+	<pre><?php printf('%s (%d)', $GLOBALS['.pirogue.view.data']['exception']->getFile(), $GLOBALS['.pirogue.view.data']['exception']->getLine()); ?></pre>
+</div>
 
- 
