@@ -26,18 +26,17 @@ use function pirogue\__database_collection;
 use function pirogue\__dispatcher;
 use function pirogue\__import;
 use function pirogue\__route;
+use function pirogue\__user_session;
 use function pirogue\_dispatcher_exit;
 use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
-use function pirogue\import;
 use function pirogue\_view_html_load;
 use function pirogue\_view_html_route_error;
-use function pirogue\__view_html;
-use function pirogue\__user_session;
-use function pirogue\user_session_current;
-use function pirogue\dispatcher_create_url;
 use function pirogue\dispatcher_redirect;
+use function pirogue\dispatcher_create_url;
+use function pirogue\import;
+use function pirogue\user_session_current;
 
 try {
 
@@ -73,7 +72,10 @@ try {
     // check for existing session.
     $_user_session = user_session_current();
     if (null != $_user_session) {
-        return dispatcher_redirect(_SITE_URL);
+        // build redirect request
+        $_path = $_request_data['redirect_path'] ?? 'index';
+        unset($_request_data['redirect_path']);
+        return dispatcher_redirect(sprintf(0 == count($_request_data) ? '%s/%s' : '%s/%s?%s', _SITE_URL, $_path, http_build_query($_request_data)));
     }
 
     // bootstrap dispatcher - import and initialize required libraries.
@@ -113,6 +115,11 @@ try {
     header('X-Powered-By: pirogue php');
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._auth.dispatcher.start_time']) * 1000));
     ob_end_clean();
+
+    $_route = _route_parse('_page');
+    $_content = _view_html_load($_route['file'], '', [
+        'content' => $_content
+    ]);
     return _dispatcher_send($_content);
 } catch (Error $_exception) {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
