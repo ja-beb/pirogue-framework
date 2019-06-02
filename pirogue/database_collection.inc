@@ -19,6 +19,8 @@ use ErrorException;
  */
 $GLOBALS['._pirogue.database_collection.config_path'] = null;
 
+$GLOBALS['._pirogue.database_collection.default'] = '';
+
 /**
  * Collection of open database connections.
  *
@@ -33,7 +35,7 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * @param string $config_path
  *            Configuration path folder - where the database connection settings can be found.
  */
-function __database_collection(string $config_path)
+function __database_collection(string $config_path, string $default = '')
 {
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
     register_shutdown_function(function () {
@@ -44,6 +46,7 @@ function __database_collection(string $config_path)
         }
         $GLOBALS['._pirogue.database_collection.connections'] = [];
     });
+    $GLOBALS['._pirogue.database_collection.default'] = $default;
 }
 
 /**
@@ -55,11 +58,12 @@ function __database_collection(string $config_path)
  * @param string $name
  * @return resource
  */
-function database_collection_get(string $name)
+function database_collection_get(string $name = null)
 {
+    $name = (null == $name) ? $GLOBALS['._pirogue.database_collection.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
         $file_include = sprintf('%s\sqlsrv-%s.ini', $GLOBALS['._pirogue.database_collection.config_path'], $name);
-        
+
         if (false == file_exists($file_include)) {
             throw new ErrorException("Unable to find database connection '{$name}'.");
         }
