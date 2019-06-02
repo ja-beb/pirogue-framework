@@ -59,7 +59,7 @@ function user_session_clear(string $label): array
     return $data;
 }
 
-function _user_session_start(array $user_data)
+function _user_session_start(?array $user_data)
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $user_data;
 }
