@@ -49,13 +49,18 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')
     }
 }
 
+$GLOBALS['.pirogue.view.body.id'] = 'auth-lookup';
+$GLOBALS['.pirogue.view.body.class'] = '';
+
+array_push($GLOBALS['.pirogue.view.script.files'], 'form');
+array_push($GLOBALS['.pirogue.view.script.files'], 'page');
 ?>
 <form id="" action="<?php echo dispatcher_create_url(); ?>"
 	method="post" class="" autocomplete="off">
 	<input type="hidden" name="" value="" />
 	<div class="">
 		<div class="">
-			<label for="inputEmail">Email Address</label> <input id="inputEmail"
+			<label for="inputEmail">Email Address</label> <input id="inputEmail" class="onload-focus"
 				type="text" value="<?php echo $_email; ?>" name="email" />
 		</div>
     	<?php if ( array_key_exists('email', $_errors) ): ?>
@@ -63,9 +68,9 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')
     	<?php endif; ?>
 	</div>
 	<div class="">
-		<a href="<?php echo dispatcher_create_url('reset', $GLOBALS['.pirogue.dispatcher.request_data']); ?>" class="">
-			<span class="">Cancel login</span>
-		</a>
-		<input type="submit" value="lookup" name="action" />
+		<a
+			href="<?php echo dispatcher_create_url('reset', $GLOBALS['.pirogue.dispatcher.request_data']); ?>"
+			class=""> <span class="">Cancel login</span>
+		</a> <input type="submit" value="lookup" name="action" />
 	</div>
 </form>

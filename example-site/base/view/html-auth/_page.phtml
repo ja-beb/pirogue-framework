@@ -1,28 +1,30 @@
 <!doctype html>
 <html class="no-js" lang="">
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="apple-touch-icon" href="icon.png">
-  <!-- Place favicon.ico in the root directory -->
-
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/main.css">
-
-  <meta name="theme-color" content="#fafafa">
-</head>
-
-<body>
-  <!--[if IE]>
-    <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-  <![endif]-->
-
-  
-
-</body>
-
+	<head>
+    	<meta charset="utf-8">
+    	<title></title>
+    	<meta name="description" content="">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<link rel="manifest" href="site.webmanifest">
+    	<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/normalize.css">
+    	<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page.css">
+    	<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page-auth.css">
+    	<?php $_files = array_unique($GLOBALS['.pirogue.view.style.files'] ?? []);?>
+      	<?php foreach( $_files as $_file ): ?>
+      		<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/<?php echo $_file; ?>.css" />
+      	<?php endforeach; ?>
+      	<?php echo $GLOBALS['.pirogue.view.style.inline'] ?? '' ?>
+      	<meta name="theme-color" content="#fafafa">
+	</head>
+	<body id="<?php echo $GLOBALS['.pirogue.view.body.id'] ?? '' ?>" class="<?php echo $GLOBALS['.pirogue.view.body.class'] ?? '' ?>">
+        <!--[if IE]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
+        <![endif]-->
+		<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
+		<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
+      	<?php foreach( $_files as $_file ): ?>
+      		<script src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
+      	<?php endforeach; ?>
+      	<?php echo $GLOBALS['.pirogue.view.script.inline'] ?? '' ?>
+	</body>
 </html>

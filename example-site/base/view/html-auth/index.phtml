@@ -13,8 +13,6 @@ use function pirogue\_user_session_start;
 import('pirogue\user_session');
 
 // look for action first:
-// $GLOBALS['.pirogue.view.data'];
-// $GLOBALS['.pirogue.view.path'];
 
 if (false == array_key_exists('.auth.login', $_SESSION)) {
     $_SESSION['.auth.login'] = [
