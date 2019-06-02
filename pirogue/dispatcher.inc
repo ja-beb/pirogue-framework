@@ -50,6 +50,7 @@ function __dispatcher(string $address, string $request_path, array $request_data
 function _dispatcher_send(string $content)
 {
     // Cache control:
+    ob_start('ob_gzhandler');
     header('Cache-Control: private, proxy-revalidate;max-age=0');
 
     $etag = md5($content);
@@ -64,6 +65,7 @@ function _dispatcher_send(string $content)
         http_response_code($http_status_code);
         echo $content;
     }
+    ob_end_flush();
     _dispatcher_exit();
 }
 
