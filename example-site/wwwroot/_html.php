@@ -1,4 +1,7 @@
 <?php
+
+
+ob_start();
 $GLOBALS['._html.dispatcher.start_time'] = microtime(true);
 
 use function pirogue\__database_collection;
@@ -8,26 +11,8 @@ use function pirogue\import;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
 use function pirogue\__route;
+use function pirogue\_view_html_load;
 use function pirogue\__dispatcher;
-
-/**
- * Main dispatcher for HTML content.
- * Maps user request to the file in _html/[Module]/[Page].inc
- *
- * @author Bourg, Sean P. <sean.bourg@gmail.com>
- */
-function _route_execute(string $file, string $path, array $data): string
-{
-    if (file_exists($file)) {
-        ob_start();
-        $GLOBALS['.pirogue.view.data'] = $data;
-        $GLOBALS['.pirogue.view.path'] = $path;
-        require $file;
-        $_html_content = ob_get_clean();
-        return $_html_content;
-    }
-    throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
-}
 
 define('_BASE_FOLDER', 'C:\\inetpub\example-site');
 
@@ -41,6 +26,7 @@ try {
     import('pirogue\dispatcher');
     import('pirogue\database_collection');
     import('pirogue\route');
+    import('pirogue\view_html');
 
     set_error_handler('pirogue\_dispatcher_error_handler');
 
@@ -72,9 +58,7 @@ try {
 
     /* process request */
     try {
-        ob_start();
-        $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
-        ob_clean();
+        $_html_content = _view_html_load($_route['file'], $_route['path'], $_exec_data);
     } catch (Exception $_exception) {
         http_response_code(500);
         $_route = _route_parse('_error-500');
@@ -84,9 +68,7 @@ try {
             $_exception
         ];
 
-        ob_start();
-        $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
-        ob_clean();
+        $_html_content = _view_html_load($_route['file'], $_route['path'], $_exec_data);
     } catch (Error $_exception) {
         http_response_code(500);
         $_route = _route_parse('_error-500');
@@ -96,11 +78,10 @@ try {
             $_exception
         ];
 
-        ob_start();
-        $_html_content = _route_execute($_route['file'], $_route['path'], $_exec_data);
-        ob_clean();
+        $_html_content = _view_html_load($_route['file'], $_route['path'], $_exec_data);
     }
 
+    ob_end_clean();
     header('Content-Type: text/html');
     header('X-Powered-By: pirogue php');
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._html.dispatcher.start_time']) * 1000));
