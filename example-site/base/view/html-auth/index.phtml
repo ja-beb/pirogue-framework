@@ -8,6 +8,9 @@ use function pirogue\database_collection_get;
 use function pirogue\import;
 use function pirogue\dispatcher_redirect;
 use function pirogue\dispatcher_create_url;
+use function pirogue\_user_session_start;
+
+import('pirogue\user_session');
 
 // look for action first:
 // $GLOBALS['.pirogue.view.data'];
@@ -25,7 +28,7 @@ if (false == $_SESSION['.auth.login']['terms']) {
     return include ('_disclaimer.phtml');
 } elseif (true == $_SESSION['.auth.login']['start']) {
     // start session
-    $_SESSION['._pirogue.site.user'] = $_SESSION['.auth.login']['user_data'];
+    _user_session_start($_SESSION['.auth.login']['user_data']);
     unset($_SESSION['.auth.login']);
 
     // build redirect request
