@@ -10,13 +10,19 @@ $GLOBALS['.pirogue.view.data'] = [];
 $GLOBALS['.pirogue.view.path'] = '';
 $GLOBALS['.pirogue.view.template'] = '';
 
+$GLOBALS['.pirogue.view.body.id'] = '';
+$GLOBALS['.pirogue.view.body.class'] = '';
+$GLOBALS['.pirogue.view.style.files'] = [];
+$GLOBALS['.pirogue.view.style.inline'] = '';
+$GLOBALS['.pirogue.view.script.files'] = [];
+$GLOBALS['.pirogue.view.script.inline'] = '';
+
 function _view_html_load(string $file, string $path, array $data): string
 {
     if (file_exists($file)) {
         ob_start();
         $GLOBALS['.pirogue.view.data'] = $data;
         $GLOBALS['.pirogue.view.path'] = $path;
-        $GLOBALS['.pirogue.view.template'] = '';
         require $file;
         $_content = ob_get_clean();
 
