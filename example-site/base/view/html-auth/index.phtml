@@ -9,9 +9,33 @@ use function pirogue\import;
 use function pirogue\dispatcher_redirect;
 use function pirogue\dispatcher_create_url;
 
-if (! ($_SESSION['.auth.login.terms'] ?? false)) {
+// look for action first:
+// $GLOBALS['.pirogue.view.data'];
+// $GLOBALS['.pirogue.view.path'];
+
+if (false == array_key_exists('.auth.login', $_SESSION)) {
+    $_SESSION['.auth.login'] = [
+        'terms' => false,
+        'user_data' => null,
+        'start' => false
+    ];
+}
+
+if (false == $_SESSION['.auth.login']['terms']) {
     return include ('_disclaimer.phtml');
-} elseif (null !== ($_SESSION['.auth.login.site_user'] ?? null)) {
+} elseif (true == $_SESSION['.auth.login']['start']) {
+    // start session
+    $_SESSION['._pirogue.site.user'] = $_SESSION['.auth.login']['user_data'];
+    unset($_SESSION['.auth.login']);
+
+    // build redirect request
+    $_request_data = $GLOBALS['.pirogue.view.data'];
+    $_path = $_request_data['redirect_path'] ?? 'index';
+    unset($_request_data['redirect_path']);
+
+    // redirect to main site
+    dispatcher_redirect(dispatcher_create_url("../{$_path}", $_request_data));
+} elseif (null !== $_SESSION['.auth.login']['user_data']) {
     return include ('_password.phtml');
 } else {
     return include ('_lookup.phtml');

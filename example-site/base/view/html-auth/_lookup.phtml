@@ -17,6 +17,9 @@ import('pirogue\database_collection');
  */
 
 // Initialize page variables
+$_SESSION['.auth.login']['user_data'] = null;
+$_SESSION['.auth.login']['start'] = false;
+
 unset($_SESSION['.auth.login.site_user']);
 $_email = $GLOBALS['.pirogue.view.data']['email'] ?? '';
 $_errors = [];
@@ -28,7 +31,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')
         $_errors['email'] = 'Email is required.';
     } else {
         $_database = database_collection_get('example-site');
-        $_sql_statement = sqlsrv_query($_database, 'select id, email, status_code from site.users where email=?', [
+        $_sql_statement = sqlsrv_query($_database, 'select id, email_address, status_code, display_name, position_name, location_name, department_name from site.user_details where email_address=?', [
             $_email
         ]);
         $_sql_data = (null == $_sql_statement) ? null : sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC);
@@ -40,7 +43,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')
             $_errors['email'] = 'Account not active.';
         } else {
             // save user and move to next step
-            $_SESSION['.auth.login.site_user'] = $_sql_data;
+            $_SESSION['.auth.login']['user_data'] = $_sql_data;
             dispatcher_redirect();
         }
     }
@@ -60,7 +63,9 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')
     	<?php endif; ?>
 	</div>
 	<div class="">
+		<a href="<?php echo dispatcher_create_url('reset', $GLOBALS['.pirogue.dispatcher.request_data']); ?>" class="">
+			<span class="">Cancel login</span>
+		</a>
 		<input type="submit" value="lookup" name="action" />
 	</div>
 </form>
-<pre><?php print_r($_SESSION); ?></pre>

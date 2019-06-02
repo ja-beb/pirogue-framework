@@ -1,0 +1,9 @@
+<?php
+use function pirogue\dispatcher_redirect;
+use function pirogue\dispatcher_create_url;
+
+/**
+ */
+
+unset($_SESSION['.auth.login'] );
+return dispatcher_redirect(dispatcher_create_url('', $GLOBALS['.pirogue.dispatcher.request_data']));

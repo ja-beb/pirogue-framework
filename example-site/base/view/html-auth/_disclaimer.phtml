@@ -12,10 +12,12 @@ import('pirogue\dispatcher');
  * Prompt user to agree to site disclaimer.
  */
 
+$_SESSION['.auth.login']['terms'] = false;
+
 // Process post request using post id data & action
 if ('POST' == $_SERVER['REQUEST_METHOD'] && 'agree' == ($_POST['action'] ?? '')) {
     // Set agree marker and continue
-    $_SESSION['.auth.login.terms'] = true;
+    $_SESSION['.auth.login']['terms'] = true;
     return dispatcher_redirect();
 }
 
@@ -24,7 +26,5 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'agree' == ($_POST['action'] ?? ''))
 	method="post" class="">
 	<input type="hidden" name="" value="" />
 	<p class="">Access is for authorized users only.</p>
-
 	<input type="submit" value="agree" name="action" />
 </form>
-<pre><?php print_r($_SESSION); ?></pre>
