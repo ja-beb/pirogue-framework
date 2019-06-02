@@ -5,5 +5,5 @@ use function pirogue\dispatcher_create_url;
 /**
  */
 
-unset($_SESSION['.auth.login.site_user']);
+$_SESSION['.auth.login']['user_data'] = null;
 return dispatcher_redirect(dispatcher_create_url('', $GLOBALS['.pirogue.dispatcher.request_data']));
