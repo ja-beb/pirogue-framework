@@ -10,70 +10,134 @@ use function pirogue\dispatcher_create_url;
 import('pirogue\user_session');
 $_user_session = user_session_current();
 
+
+$_menu_content = $GLOBALS['.pirogue.view.menu'];
+$_application_title = empty($GLOBALS['.pirogue.view.application.title']) ? 'Example Site' : $GLOBALS['.pirogue.view.application.title'];
+$_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatcher_create_url('') : $GLOBALS['.pirogue.view.application.url'];
+
 ?>
 <!doctype html>
 <html class="no-js" lang="">
-<head>
-<meta charset="utf-8">
-<title></title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="manifest" href="site.webmanifest">
-<link rel="stylesheet"
-	href="<?php echo _SITE_URL; ?>/style/normalize.css">
-<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page.css">
-<link rel="stylesheet"
-	href="<?php echo _SITE_URL; ?>/style/page-site.css">
+    <head>
+        <meta charset="utf-8">
+        <title><?php echo $_application_title; ?></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+        	@font-face {
+                	font-family: "Font Awesome 5 Brands";
+                	font-style: normal;
+                	font-weight: normal;
+                	font-display: auto;
+                	src: url(/webfonts/font-awesome/fa-brands-400.eot);
+                	src: url(/webfonts/font-awesome/fa-brands-400.eot?#iefix)
+                		format("embedded-opentype"), url(/webfonts/font-awesome/fa-brands-400.woff2)
+                		format("woff2"), url(/webfonts/font-awesome/fa-brands-400.woff) format("woff"),
+                		url(/webfonts/font-awesome/fa-brands-400.ttf) format("truetype"),
+                		url(/webfonts/font-awesome/fa-brands-400.svg#fontawesome) format("svg")
+                @font-face {
+                	font-family: "Font Awesome 5 Free";
+                	font-style: normal;
+                	font-weight: 400;
+                	font-display: auto;
+                	src: url(/webfonts/font-awesome/fa-regular-400.eot);
+                	src: url(/webfonts/font-awesome/fa-regular-400.eot?#iefix)
+                		format("embedded-opentype"), url(/webfonts/font-awesome/fa-regular-400.woff2)
+                		format("woff2"), url(/webfonts/font-awesome/fa-regular-400.woff) format("woff"),
+                		url(/webfonts/font-awesome/fa-regular-400.ttf) format("truetype"),
+                		url(/webfonts/font-awesome/fa-regular-400.svg#fontawesome) format("svg")
+                }
+                @font-face {
+                	font-family: "Font Awesome 5 Free";
+                	font-style: normal;
+                	font-weight: 900;
+                	font-display: auto;
+                	src: url(/webfonts/font-awesome/fa-solid-900.eot);
+                	src: url(/webfonts/font-awesome/fa-solid-900.eot?#iefix)
+                		format("embedded-opentype"), url(/webfonts/font-awesome/fa-solid-900.woff2)
+                		format("woff2"), url(/webfonts/font-awesome/fa-solid-900.woff) format("woff"),
+                		url(/webfonts/font-awesome/fa-solid-900.ttf) format("truetype"),
+                		url(/webfonts/font-awesome/fa-solid-900.svg#fontawesome) format("svg")
+                }
+                @font-face {
+                	font-family: "Roboto";
+                	font-style: normal;
+                	font-weight: normal;
+                	font-display: auto;
+                	src: url(/webfonts/roboto/Roboto-Regular.ttf) format("truetype");
+                }
+                
+                @font-face {
+                	font-family: "Roboto Slab";
+                	font-style: normal;
+                	font-weight: normal;
+                	font-display: auto;
+                	src: url(/webfonts/roboto-slab/RobotoSlab-Regular.ttf)
+                		format("truetype");
+            }        
+        </style>        <link rel="manifest" href="site.webmanifest">
+        <link rel="stylesheet"
+        	href="<?php echo _SITE_URL; ?>/style/normalize.css">
+        <link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page.css">
+        <link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/font-awesome.css">
+        <link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/page-site.css">
     	<?php $_files = array_unique($GLOBALS['.pirogue.view.style.files'] ?? []);?>
       	<?php foreach( $_files as $_file ): ?>
-      		<link rel="stylesheet"
-	href="<?php echo _SITE_URL; ?>/style/<?php echo $_file; ?>.css" />
+      		<link rel="stylesheet" href="<?php echo _SITE_URL; ?>/style/<?php echo $_file; ?>.css" />
       	<?php endforeach; ?>
       	<?php echo $GLOBALS['.pirogue.view.style.inline'] ?? '' ?>
       	<meta name="theme-color" content="#fafafa">
-</head>
-<body id="<?php echo $GLOBALS['.pirogue.view.body.id'] ?? '' ?>"
-	class="<?php echo $GLOBALS['.pirogue.view.body.class'] ?? '' ?>">
-	<!--[if IE]>
+	</head>
+	<body id="<?php echo $GLOBALS['.pirogue.view.body.id'] ?? '' ?>" class="<?php echo $GLOBALS['.pirogue.view.body.class'] ?? '' ?>">
+	   <!--[if IE]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
         <![endif]-->
-	<div id="page-menubar">
-		<div class="">
-			<a href=""> <span class="">app menu</span>
-			</a>
-			<h1 id="" class="">
-				<a id="" class=""
-					href="<?php echo dispatcher_create_url('app/index'); ?>"><span
-					class="">App Title</span></a>
-			</h1>
-		</div>
-		<div class="">
-			<a id="" class="" href="<?php echo dispatcher_create_url('menu'); ?>"><span
-				class="">menu</span></a> <a id="" class="" href=""><span class="">user
-					menu</span></a>
-			<div id="" class="">
-				<p><?php echo $_user_session['display_name']; ?></p>
-				<p><?php echo $_user_session['position_name']; ?></p>
-				<p>
-    			<?php echo $_user_session['location_name']; ?>
-    			<?php echo $_user_session['department_name']; ?>
-    			</p>
-				<p><?php echo $_user_session['email_address']; ?></p>
-				<form id="" class="" method="post"
-					action="<?php echo dispatcher_create_url('session_end'); ?>">
-					<button class="" type="submit" name="action" value="session_end">
-						<span class="">Sign off</span>
-					</button>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
-		<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
-      	<?php foreach( $_files as $_file ): ?>
-      		<script
-		src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
-      	<?php endforeach; ?>
-      	<?php echo $GLOBALS['.pirogue.view.script.inline'] ?? '' ?>
+		<nav id="page-menubar">
+    		<div id="page-application" class="">
+    			<span id="page-application-icon" class="">
+    				<?php if ( $_menu_content ): ?>
+    					<a href="" class="menu-button fas fa-bars"><span class="menu-button-label">app menu</span></a>
+    				<?php else: ?>
+    					<span class="menu-button">&nbsp;</span>
+    				<?php endif; ?>
+    			</span>
+    			<h1 id="page-application-title" class="">
+    				<a id="" class="" href="<?php echo $_application_url; ?>">
+    					<span class=""><?php echo $_application_title; ?></span>
+    				</a>
+    			</h1>
+    		</div>
+    		<div id="page-menu" class="">
+    			<a id="page-site-link" class="menu-button fas fa-th" href="<?php echo dispatcher_create_url('menu'); ?>">
+    				<span class="menu-button-label">menu</span>
+    			</a>
+    			<a id="page-user-link" class="menu-button fas fa-user-circle" href="<?php echo dispatcher_create_url('user'); ?>">
+    				<span class="menu-button-label"><?php echo $_user_session['display_name']; ?></span>
+    			</a>
+    			<div id="page-user-menu" class="">
+    				<div id="page-user-info-position">			
+    					<?php if ( array_key_exists('position_name', $_user_session) ): ?>
+    						<p><?php echo $_user_session['position_name']; ?></p>
+    						<p><?php echo $_user_session['location_name'], ' - ', $_user_session['department_name']; ?></p>
+    	    			<?php endif; ?>
+        			</div>
+        			<div id="page-user-info-email">
+    					<p><?php echo $_user_session['email_address']; ?></p>
+    				</div>
+    				<form id="page-user-logout" class="" method="post"
+    					action="<?php echo dispatcher_create_url('session_end'); ?>">
+    					<button class="fas fa-sign-out-alt" type="submit" name="action" value="session_end">
+    						<span class="">Sign off</span>
+    					</button>
+    				</form>
+    			</div>
+    		</div>
+    	</nav>
+    	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
+    	<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
+        <?php foreach( $_files as $_file ): ?>
+        	<script src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
+        <?php endforeach; ?>
+    	<?php echo $GLOBALS['.pirogue.view.script.inline'] ?? '' ?>
 	</body>
 </html>

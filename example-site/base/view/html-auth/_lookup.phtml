@@ -70,7 +70,10 @@ array_push($GLOBALS['.pirogue.view.script.files'], 'page');
 	<div class="">
 		<a
 			href="<?php echo dispatcher_create_url('reset', $GLOBALS['.pirogue.dispatcher.request_data']); ?>"
-			class=""> <span class="">Cancel login</span>
-		</a> <input type="submit" value="lookup" name="action" />
+			class="fas fa-times"> <span class="">Cancel login</span>
+		</a> 
+		<button type="submit" value="lookup" name="action" class="fas fa-arrow-right">
+			<span class="">Lookup Account</span>
+		</button>
 	</div>
 </form>

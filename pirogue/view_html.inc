@@ -17,6 +17,10 @@ $GLOBALS['.pirogue.view.style.inline'] = '';
 $GLOBALS['.pirogue.view.script.files'] = [];
 $GLOBALS['.pirogue.view.script.inline'] = '';
 
+$GLOBALS['.pirogue.view.menu'] = '';
+$GLOBALS['.pirogue.view.application.title'] = '';
+$GLOBALS['.pirogue.view.application.url'] = '';
+
 function _view_html_load(string $file, string $path, array $data): string
 {
     if (file_exists($file)) {

@@ -26,5 +26,7 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'agree' == ($_POST['action'] ?? ''))
 	method="post" class="">
 	<input type="hidden" name="" value="" />
 	<p class="">Access is for authorized users only.</p>
-	<input type="submit" value="agree" name="action" />
+	<button type="submit" value="agree" name="action" class="fas fa-check">
+		<span class="">I Agree</span>
+	</button>
 </form>
