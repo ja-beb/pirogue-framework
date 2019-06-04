@@ -134,7 +134,10 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     		</div>
     	</nav>
     	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
-    	<div class="" id="application-menu"><?php echo $_menu_content; ?></div>
+    	<?php if ( false == empty($_menu_content) ): ?>
+    		<div class="" id="application-menu"><?php echo $_menu_content; ?></div>
+    		<script src="<?php echo _SITE_URL; ?>/script/application-menu.js"></script>
+    	<?php endif; ?>
     	<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
         <?php foreach( $_files as $_file ): ?>
         	<script src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
