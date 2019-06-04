@@ -1,0 +1,61 @@
+<?php
+/**
+ * 
+ */
+use function pirogue\import;
+use function pirogue\user_session_current;
+use function pirogue\dispatcher_create_url;
+use function pirogue\database_collection_get;
+
+import('pirogue\user_session');
+$_user_session = user_session_current();
+
+?>
+<div id="" class="">
+	<h1 class="">User Details</h1>
+	<div class="">
+		<div class="">
+			<label class="" for="">Name</label>
+			<span class="" id=""><?php echo $_user_session['display_name']; ?></span>
+		</div>
+		<div class="">
+			<label class="" for="">Email</label>
+			<span class="" id=""><?php echo $_user_session['email_address']; ?></span>
+		</div>
+	</div>
+</div>
+<div id="" class="">
+	<h1 class="">Account Actions</h1>
+	<div id="" class="">
+		Reset password
+	</div>
+</div>
+<div id="" class="">
+	<h1 class="">Job Assignments</h1>
+	<div class="">
+		<?php 
+            $_sql_query = "select assignment_index, position_label=rtrim(positions.label) + iif(position_pay_grades.label is null, '', ' ' + rtrim(position_pay_grades.label))
+        		  , location_name=rtrim(locations.label), department_name=rtrim(departments.label), pay_rate=pay_rates.label
+                from org.position_assignments
+            		inner join org.positions on position_assignments.position_id=positions.id
+            		left join org.position_pay_grades on position_assignments.pay_grade_id=position_pay_grades.id
+            		inner join org.locations on position_assignments.location_id=locations.id
+            		inner join org.departments on position_assignments.department_id=departments.id
+            		inner join org.pay_rates on positions.payrate_id=pay_rates.id
+            	where employee_id=1
+            	order by assignment_index";
+            $_database = database_collection_get();
+            $_sql_statement = sqlsrv_query($_database, $_sql_query);		
+        ?>
+		<?php while ( $_sql_data = (null == $_sql_statement) ? null : sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC) ): ?>
+			<div id="<?php printf('job-assignment-%02d', $_sql_data['assignment_index']); ?>" class="">
+				<div id="" class=""><?php echo $_sql_data['position_label']; ?></div>
+				<div id="" class=""><?php echo $_sql_data['location_name']; ?></div>
+    	        <div id="" class=""><?php echo $_sql_data['department_name']; ?></div>
+				<div id="" class=""><?php echo $_sql_data['pay_rate']; ?></div>
+			</div>
+		<?php endwhile; ?>
+		<?php sqlsrv_free_stmt($_sql_statement); ?>
+	</div>
+</div>
+
