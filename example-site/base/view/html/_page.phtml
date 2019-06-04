@@ -96,7 +96,7 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     		<div id="page-application" class="">
     			<span id="page-application-icon" class="">
     				<?php if ( $_menu_content ): ?>
-    					<a href="" class="menu-button fas fa-bars"><span class="menu-button-label">app menu</span></a>
+    					<a href="#application-button" class="menu-button fas fa-bars"><span class="menu-button-label">app menu</span></a>
     				<?php else: ?>
     					<span class="menu-button">&nbsp;</span>
     				<?php endif; ?>
@@ -111,7 +111,7 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     			<a id="page-site-link" class="menu-button fas fa-th" href="<?php echo dispatcher_create_url('menu'); ?>">
     				<span class="menu-button-label">menu</span>
     			</a>
-    			<a id="page-user-link" class="menu-button fas fa-user-circle" href="<?php echo dispatcher_create_url('user'); ?>">
+    			<a id="page-user-link" class="menu-button fas fa-user-circle" href="<?php echo dispatcher_create_url('site-user/index.html'); ?>">
     				<span class="menu-button-label"><?php echo $_user_session['display_name']; ?></span>
     			</a>
     			<div id="page-user-menu" class="">
@@ -134,6 +134,7 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     		</div>
     	</nav>
     	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
+    	<div class="" id="application-menu"><?php echo $_menu_content; ?></div>
     	<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
         <?php foreach( $_files as $_file ): ?>
         	<script src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>

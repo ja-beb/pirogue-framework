@@ -35,6 +35,10 @@ h1, h2, h3, h4 {
 	display: inline-block;
 }
 
+#page-menubar #page-application .menu-button{
+	display: block;
+}
+
 #page-application, #page-menu {
 	flex: 1 1 .0625rem;
 	margin: 0 1ex;
@@ -140,4 +144,29 @@ h1, h2, h3, h4 {
 
 #page-content {
 	margin: 4em 6em;
+}
+
+
+
+/* application menu */
+#application-menu{
+	display: none;
+	position:absolute;
+	top: 0;
+	left: 0;
+	width: 40em;
+	display: block;
+	height: 100vh;
+	overflow:hidden;
+}
+.__application-menu-show {
+	height: 100vh;
+	overflow:hidden;
+}
+/* .__application-menu-show */
+#application-menu{
+	display: block;
+	background: #fcffff;
+	padding: 1em;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);	
 }
