@@ -149,24 +149,55 @@ h1, h2, h3, h4 {
 
 
 /* application menu */
+#page-cover{
+	background-color: rgba(54,54,54,.5);
+	display: none;
+	z-index: 10;
+	position:absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	overflow:hidden;
+	z-index: 20;
+}
 #application-menu{
 	display: none;
 	position:absolute;
 	top: 0;
 	left: 0;
 	width: 40em;
-	display: block;
 	height: 100vh;
 	overflow:hidden;
+	z-index: 20;
 }
 .__application-menu-show {
 	height: 100vh;
 	overflow:hidden;
 }
-/* .__application-menu-show */
-#application-menu{
+.__application-menu-show #page-cover{
+	display: block;
+}
+.__application-menu-show #application-menu{
 	display: block;
 	background: #fcffff;
 	padding: 1em;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);	
+}
+#application-menu-close span{
+	margin: 0 1ex;	
+}
+
+#application-menu-close:before{
+	margin: 0 1ex;	
+	display: inline-block;
+	height: 3em;
+	width: 3em;
+	color:inherit;
+}
+
+#application-menu-title{
+	line-height: 4em;
+	height: 4em;
+	display: block;
 }

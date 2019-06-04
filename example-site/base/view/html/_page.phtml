@@ -96,7 +96,7 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     		<div id="page-application" class="">
     			<span id="page-application-icon" class="">
     				<?php if ( $_menu_content ): ?>
-    					<a href="#application-button" class="menu-button fas fa-bars"><span class="menu-button-label">app menu</span></a>
+    					<a id="application-button" href="#application-button" class="menu-button fas fa-bars"><span class="menu-button-label">app menu</span></a>
     				<?php else: ?>
     					<span class="menu-button">&nbsp;</span>
     				<?php endif; ?>
@@ -135,7 +135,14 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     	</nav>
     	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.view.data']['content'] ?? '' ?></div>
     	<?php if ( false == empty($_menu_content) ): ?>
-    		<div class="" id="application-menu"><?php echo $_menu_content; ?></div>
+    		<div class="" id="page-cover">
+    			<div class="" id="application-menu">
+    				<h1 id="" class="">
+    					<a href="" class="fa fa-arrow-left" id="application-menu-close" title=""><span class=""><?php echo $_application_title; ?></span></a>
+    				</h1>
+    				<?php echo $_menu_content; ?>
+    			</div>
+    		</div>
     		<script src="<?php echo _SITE_URL; ?>/script/application-menu.js"></script>
     	<?php endif; ?>
     	<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
