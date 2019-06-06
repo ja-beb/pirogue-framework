@@ -16,6 +16,9 @@ use function pirogue\__route;
  *
  * @author Bourg, Sean P. <sean.bourg@gmail.com>
  */
+ob_start();
+
+
 function _route_execute(string $file, string $path, array $data): array
 {
     if (file_exists($file)) {
@@ -73,9 +76,7 @@ try {
     try {
 
         if (file_exists($_route['file'])) {
-            ob_start();
             $_json_data = _route_execute($_route['file'], $_route['path'], $_exec_data);
-            ob_clean();
         } else {
             http_response_code(404);
             $_json_data = $_route;
@@ -91,7 +92,7 @@ try {
             sprintf('%s - %s (%d).', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
         ];
     }
-
+    ob_end_clean();
     header('Content-Type: application/json');
     header('X-Powered-By: pirogue php');
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));
@@ -103,6 +104,7 @@ try {
 }
 
 // Failsafe errors:
+ob_end_clean();
 header('Content-Type: application/json');
 header('X-Powered-By: pirogue php');
 header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._json.dispatcher.start_time']) * 1000));

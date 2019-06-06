@@ -30,8 +30,11 @@ function _view_html_load(string $file, string $path, array $data): string
         require $file;
         $_content = ob_get_clean();
 
+        
         if (false == empty($GLOBALS['.pirogue.view.template'])) {}
 
+        // check for application menu.
+        
         return $_content;
     }
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
@@ -40,7 +43,19 @@ function _view_html_load(string $file, string $path, array $data): string
 function _view_html_route_error($exception, string $path, array $data): string
 {
     http_response_code(500);
-    $_route = _route_parse('_error-500');
+    $_route = _route_parse('_site-errors/500');
+    return _view_html_load($_route['file'], $_route['path'], [
+        'path' => $path,
+        'data' => $data,
+        'exception' => $exception
+    ]);
+}
+
+
+function _view_html_route_access_denied($exception, string $path, array $data): string
+{
+    http_response_code(403);
+    $_route = _route_parse('_site-errors/403');
     return _view_html_load($_route['file'], $_route['path'], [
         'path' => $path,
         'data' => $data,
