@@ -30,8 +30,11 @@ function _view_html_load(string $file, string $path, array $data): string
         require $file;
         $_content = ob_get_clean();
 
+        
         if (false == empty($GLOBALS['.pirogue.view.template'])) {}
 
+        // check for application menu.
+        
         return $_content;
     }
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));

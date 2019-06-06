@@ -96,7 +96,7 @@ try {
         $_content = '';
         // route not found, return 404 instead.
         if (false == file_exists($_route['file'])) {
-            $_route = _route_parse('_error-404');
+            $_route = _route_parse('_site-errors/404');
             $_exec_data = [
                 'path' => $_request_path,
                 'data' => $_request_data
