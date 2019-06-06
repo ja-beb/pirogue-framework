@@ -20,7 +20,7 @@ const xhr_build_query = o => Object.keys(o).reduce( (a, k) => {
  */
 const xhr_get = url => new Promise((resolve, reject) => {
 	  const xhr = new XMLHttpRequest();
-	  xhr.open('GET', url, true);
+	  xhr.open('GET', `http://invlabsserver/example-site/${url}`, true);
 	  xhr.onload = () => resolve(xhr.responseText);
 	  xhr.onerror = () => reject(xhr.statusText);
 	  xhr.send();
@@ -34,7 +34,7 @@ const xhr_get = url => new Promise((resolve, reject) => {
  */
 const xhr_post = (url,data) => new Promise((resolve, reject) => {
 	  const xhr = new XMLHttpRequest();
-	  xhr.open('POST', url, true);
+	  xhr.open('POST', `http://invlabsserver/example-site/${url}`, true);
 	  xhr.onload = () => resolve(xhr.responseText);
 	  xhr.onerror = () => reject(xhr.statusText);
 	  xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');

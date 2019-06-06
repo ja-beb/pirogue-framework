@@ -145,7 +145,6 @@ $_application_url = empty($GLOBALS['.pirogue.view.application.url'] ) ? dispatch
     		</div>
     		<script src="<?php echo _SITE_URL; ?>/script/application-menu.js"></script>
     	<?php endif; ?>
-    	<script src="<?php echo _SITE_URL; ?>/script/xhr.js"></script>
     	<?php $_files = array_unique($GLOBALS['.pirogue.view.script.files'] ?? []);?>
         <?php foreach( $_files as $_file ): ?>
         	<script src="<?php echo _SITE_URL; ?>/script/<?php echo $_file; ?>.js"></script>
