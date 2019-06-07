@@ -32,6 +32,7 @@ use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
 use function pirogue\_view_html_load;
+use function pirogue\view_html_route_not_found;
 use function pirogue\view_html_route_error;
 use function pirogue\dispatcher_redirect;
 use function pirogue\dispatcher_create_url;
