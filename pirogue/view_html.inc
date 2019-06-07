@@ -40,7 +40,7 @@ function _view_html_load(string $file, string $path, array $data): string
     throw new ErrorException(sprintf("Unable to find requested resource '$file'."));
 }
 
-function _view_html_route_error($exception, string $path, array $data): string
+function view_html_route_error($exception, string $path, array $data): string
 {
     http_response_code(500);
     $_route = _route_parse('_site-errors/500');
@@ -52,13 +52,22 @@ function _view_html_route_error($exception, string $path, array $data): string
 }
 
 
-function _view_html_route_access_denied($exception, string $path, array $data): string
+function view_html_route_access_denied(string $path, array $data): string
 {
     http_response_code(403);
     $_route = _route_parse('_site-errors/403');
     return _view_html_load($_route['file'], $_route['path'], [
         'path' => $path,
-        'data' => $data,
-        'exception' => $exception
+        'data' => $data
+    ]);
+}
+
+function view_html_route_not_found(string $path, array $data): string
+{
+    http_response_code(404);
+    $_route = _route_parse('_site-errors/404');
+    return _view_html_load($_route['file'], $_route['path'], [
+        'path' => $path,
+        'data' => $data
     ]);
 }
