@@ -32,7 +32,7 @@ use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
 use function pirogue\_view_html_load;
-use function pirogue\_view_html_route_error;
+use function pirogue\view_html_route_error;
 use function pirogue\dispatcher_redirect;
 use function pirogue\dispatcher_create_url;
 use function pirogue\import;
@@ -105,9 +105,9 @@ try {
 
         $_content = _view_html_load($_route['file'], $_route['path'], $_exec_data);
     } catch (Exception $_exception) {
-        $_content = _view_html_route_error($_exception, $_request_path, $_request_data);
+        $_content = view_html_route_error($_exception, $_request_path, $_request_data);
     } catch (Error $_exception) {
-        $_content = _view_html_route_error($_exception, $_request_path, $_request_data);
+        $_content = view_html_route_error($_exception, $_request_path, $_request_data);
     }
 
     // send resuts to user.
