@@ -32,7 +32,7 @@ use function pirogue\_dispatcher_send;
 use function pirogue\_route_clean;
 use function pirogue\_route_parse;
 use function pirogue\_view_html_load;
-use function pirogue\_view_html_route_error;
+use function pirogue\view_html_route_error;
 use function pirogue\dispatcher_redirect;
 use function pirogue\dispatcher_create_url;
 use function pirogue\import;
@@ -87,26 +87,18 @@ try {
 
     // process request.
     import('pirogue\view_html');
+    $_content = '';
     try {
         // route path to controller file, function & path.
         $_exec_data = $_request_data;
         $_exec_path = _route_clean($_request_path);
         $_route = _route_parse($_exec_path);
-        $_content = '';
-        // route not found, return 404 instead.
-        if (false == file_exists($_route['file'])) {
-            $_route = _route_parse('_site-errors/404');
-            $_exec_data = [
-                'path' => $_request_path,
-                'data' => $_request_data
-            ];
-        }
-
+        $_route = view_html_route_not_found($_request_path, $_request_data);
         $_content = _view_html_load($_route['file'], $_route['path'], $_exec_data);
     } catch (Exception $_exception) {
-        $_content = _view_html_route_error($_exception, $_request_path, $_request_data);
+        $_content = view_html_route_error($_exception, $_request_path, $_request_data);
     } catch (Error $_exception) {
-        $_content = _view_html_route_error($_exception, $_request_path, $_request_data);
+        $_content = view_html_route_error($_exception, $_request_path, $_request_data);
     }
 
     // send resuts to user.
