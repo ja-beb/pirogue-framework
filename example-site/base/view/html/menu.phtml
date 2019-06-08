@@ -26,6 +26,7 @@ if ( array_key_exists('search_term', $GLOBALS['.pirogue.view.data']) ){
 
 $_database = database_collection_get();
 $_sql_statement = sqlsrv_query($_database, "{$_query} order by label", $_params);
+$_view = $GLOBALS['.pirogue.view.data']['view'] ?? 'view-icon';
 
 ?>
 <?php ob_start(); ?>
@@ -85,9 +86,10 @@ $_sql_statement = sqlsrv_query($_database, "{$_query} order by label", $_params)
 	</style>
 <?php $GLOBALS['.pirogue.view.style.inline'] = ob_get_clean(); ?>
 
-<div id="menu-list" class="view-list">
+<div id="menu-list" class="<?php echo $_view; ?>">
     <div class="">
     	<form id="" class="" method="get" action="<?php echo dispatcher_create_url(); ?>">
+    		<input id="viewInput" type="hidden" name="view" value="<?php echo $_view; ?>"/>
     		<div class="">
     			<label for="menuSearch" title="">Search</label>
     			<input id="menuSearch" class="" title="" placeholder="Search menu..." value="<?php echo $_search_term; ?>" name="search_term"/>
@@ -111,15 +113,16 @@ $_sql_statement = sqlsrv_query($_database, "{$_query} order by label", $_params)
 <?php ob_start(); ?>
 	<script defer>
     	window.addEventListener('DOMContentLoaded', event => {
-        	const toggle = (el,bn) => (x,y) => {
+        	const toggle = (el,bn,ip) => (x,y) => {
         		el.classList.remove(x);
 				el.classList.add(y);
 				bn.classList.remove(x);
 				bn.classList.add(y);
+				ip.value = y;
         	};
 
         	const domList = document.getElementById('menu-list');
-        	const view_toggle = toggle( domList, document.getElementById('toggleButton') );
+        	const view_toggle = toggle( domList, document.getElementById('toggleButton'), document.getElementById('viewInput') );
         	
         	
         	document.getElementById('toggleButton').addEventListener('click', cEvent => {
