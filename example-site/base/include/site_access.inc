@@ -6,6 +6,8 @@
  */
 namespace site_access;
 
+$GLOBALS['pirogue.site_access.access_denied'] = false;
+
 /**
  * Execute SQL query and return results.
  * @param sqlsrv resource $database_connection
@@ -13,7 +15,7 @@ namespace site_access;
  * @param array $params
  * @return array
  */
-function _role_fetch($database_connection, string $query, array $params): array
+function _site_access_role_fetch($database_connection, string $query, array $params): array
 {
     $_data = [];
     $_sql_statement = sqlsrv_query($database_connection, $query, $params);
@@ -34,9 +36,9 @@ function _role_fetch($database_connection, string $query, array $params): array
  * @param string $role
  * @return bool
  */
-function role_has_access($sqlsrv, int $user_id, string $application, string $role): bool
+function site_access_has_role($sqlsrv, int $user_id, string $application, string $role): bool
 {
-    $_data = _role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?, @application_name=?, @role_name=?', [
+    $_data = _site_access_role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?, @application_name=?, @role_name=?', [
         $user_id,
         $application,
         $role
@@ -51,9 +53,9 @@ function role_has_access($sqlsrv, int $user_id, string $application, string $rol
  * @param string $application
  * @return array
  */
-function application_roles_fetch($sqlsrv, int $user_id, string $application): array
+function site_access_roles($sqlsrv, int $user_id, string $application): array
 {
-    return _role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?, @application_name=?', [
+    return _site_access_role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?, @application_name=?', [
         $user_id,
         $application
     ]);
@@ -65,9 +67,9 @@ function application_roles_fetch($sqlsrv, int $user_id, string $application): ar
  * @param int $user_id
  * @return array
  */
-function application_list($sqlsrv, int $user_id): array
+function site_access_list($sqlsrv, int $user_id): array
 {
-    return _role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?', [
+    return _site_access_role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?', [
         $user_id
     ]);
 }
