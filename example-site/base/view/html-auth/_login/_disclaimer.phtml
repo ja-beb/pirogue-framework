@@ -21,6 +21,9 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'agree' == ($_POST['action'] ?? ''))
     return dispatcher_redirect();
 }
 
+$GLOBALS['.pirogue.html.body.id'] = 'login';
+$GLOBALS['.pirogue.html.body.class'] = 'disclaimer';
+
 ?>
 <form id="" action="<?php echo dispatcher_create_url(); ?>"
 	method="post" class="">

@@ -21,7 +21,7 @@ $_SESSION['.auth.login']['user_data'] = null;
 $_SESSION['.auth.login']['start'] = false;
 
 unset($_SESSION['.auth.login.site_user']);
-$_email = $GLOBALS['.pirogue.view.data']['email'] ?? '';
+$_email = '';
 $_errors = [];
 
 // Process post request using post id data
@@ -49,19 +49,22 @@ if ('POST' == $_SERVER['REQUEST_METHOD'] && 'lookup' == ($_POST['action'] ?? '')
     }
 }
 
-$GLOBALS['.pirogue.view.body.id'] = 'auth-lookup';
-$GLOBALS['.pirogue.view.body.class'] = '';
+$GLOBALS['.pirogue.html.body.id'] = 'login';
+$GLOBALS['.pirogue.html.body.class'] = 'lookup';
 
-array_push($GLOBALS['.pirogue.view.script.files'], 'form');
-array_push($GLOBALS['.pirogue.view.script.files'], 'page');
+$GLOBALS['.pirogue.html.script.files'] = array_merge($GLOBALS['.pirogue.html.script.files'], [
+    'form',
+    'page'
+]);
 ?>
 <form id="" action="<?php echo dispatcher_create_url(); ?>"
 	method="post" class="" autocomplete="off">
 	<input type="hidden" name="" value="" />
 	<div class="">
 		<div class="">
-			<label for="inputEmail">Email Address</label> <input id="inputEmail" class="onload-focus"
-				type="text" value="<?php echo $_email; ?>" name="email" />
+			<label for="inputEmail">Email Address</label> <input id="inputEmail"
+				class="onload-focus" type="text" value="<?php echo $_email; ?>"
+				name="email" />
 		</div>
     	<?php if ( array_key_exists('email', $_errors) ): ?>
     		<p class=""><?php echo $_errors['email']; ?></p>
@@ -69,10 +72,11 @@ array_push($GLOBALS['.pirogue.view.script.files'], 'page');
 	</div>
 	<div class="">
 		<a
-			href="<?php echo dispatcher_create_url('reset', $GLOBALS['.pirogue.dispatcher.request_data']); ?>"
+			href="<?php echo dispatcher_create_url('reset', $GLOBALS['.pirogue.request.data']); ?>"
 			class="fas fa-times"> <span class="">Cancel login</span>
-		</a> 
-		<button type="submit" value="lookup" name="action" class="fas fa-arrow-right">
+		</a>
+		<button type="submit" value="lookup" name="action"
+			class="fas fa-arrow-right">
 			<span class="">Lookup Account</span>
 		</button>
 	</div>

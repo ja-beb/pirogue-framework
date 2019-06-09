@@ -1,12 +1,12 @@
-<?php 
-
-    http_response_code(404);
-    $_resource = ( 0 == count($GLOBALS['.pirogue.view.data']['data']) )
-        ? $GLOBALS['.pirogue.view.data']['path']
-        : sprintf('%s/%s', $GLOBALS['.pirogue.view.data']['path'], http_build_query($GLOBALS['.pirogue.view.data']['data']) );
+<?php
+/**
+ * Display 404 error message.
+ */
+http_response_code(404);
 
 ?>
-<h1>Resource Not Found</h1>
-<p>Unable to find requested resource <?php echo $_resource; ?>.html.</p>
+<div class="">
+	<h1>Unable to find Resource</h1>
+	<p>Request: <?php echo $GLOBALS['.pirogue.request.url'] ?? ''; ?></p>
+</div>
 
- 
