@@ -1,20 +1,18 @@
 <?php
-use function pirogue\import;
-use function site_access\role_has_access;
-use function pirogue\user_session_current;
 use function pirogue\database_collection_get;
-use function pirogue\view_html_route_access_denied;
+use function pirogue\import;
+use function pirogue\user_session_current;
+use function site_access\site_access_has_role;
+use function site_access\site_access_roles;
 
 import('site_access');
 import('pirogue\user_session');
-import('pirogue\view_html');
-
-ob_start();
-include ('_application-menu.phtml');
-$GLOBALS['.pirogue.view.menu'] = ob_get_clean();
 
 $_user_session = user_session_current();
 $_sqlsrv = database_collection_get();
-if (false == role_has_access($_sqlsrv, $_user_session['id'], 'application', 'user')) {
-    return view_html_route_access_denied();
+
+if (false == site_access_has_role($_sqlsrv, $_user_session['id'], $GLOBALS['.pirogue.request.applicaton'], 'user')) {
+    // how do we show a 403 page....?
+    $GLOBALS['pirogue.site_access.access_denied'] = true;
+    return;
 }

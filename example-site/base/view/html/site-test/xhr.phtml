@@ -1,7 +1,5 @@
 <?php
-
-  
-    array_push($GLOBALS['.pirogue.view.script.files'], 'xhr');
+array_push($GLOBALS['.pirogue.html.script.files'], 'xhr');
 
 ?>
 <p id="getXhr"></p>
@@ -20,4 +18,4 @@ xhr_post("site-test/post/1.json?and=this", {'id':1, 'name': 'yes'})
 	.catch(x => document.getElementById('postXhr').innerHTML = x);
 
 </script>
-<?php $GLOBALS['.pirogue.view.script.inline'] = ob_get_clean(); ?>
+<?php $GLOBALS['.pirogue.html.script.inline'] = ob_get_clean(); ?>
