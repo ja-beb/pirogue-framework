@@ -15,20 +15,20 @@ function _get_database()
 $_results = null;
 $matches = [];
 
-if ('' === $GLOBALS['.pirogue.view.path']) {
+if ('' === $GLOBALS['.pirogue.request.path']) {
     $_results = employees_list(_get_database());
-} elseif ('list' === $GLOBALS['.pirogue.view.path']) {
+} elseif ('list' === $GLOBALS['.pirogue.request.path']) {
     $_results = employees_list(_get_database());
-} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employees_fetch(_get_database(), intval($matches[1]));
-} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employees_fetch(_get_database(), intval($matches[1]));
-} elseif (preg_match('/^employee-number\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^employee-number\/(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employees_lookup(_get_database(), 'employee_number=?', [
         $matches[1]
     ]);
     $_results = (0 == count($_results)) ? null : $_results;
-} elseif (preg_match('/^email[-address]?\/(.+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^email[-address]?\/(.+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employees_lookup(_get_database(), 'email_address=?', [
         $matches[1]
     ]);
