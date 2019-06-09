@@ -14,50 +14,66 @@
 ob_start();
 
 // define global variables
-$GLOBALS['._auth.dispatcher.start_time'] = microtime(true);
+$GLOBALS['._pirogue.dispatcher.start_time'] = microtime(true);
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
 
-// define site contants.
-define('_BASE_FOLDER', 'C:\\inetpub\example-site');
-define('_SITE_URL', sprintf('%s://%s/example-site', ('off' == $_SERVER['HTTPS']) ? 'http' : 'https', $_SERVER['SERVER_NAME']));
-
-// define functions used
+// define use functions:
 use function pirogue\__database_collection;
 use function pirogue\__dispatcher;
 use function pirogue\__import;
-use function pirogue\__route;
 use function pirogue\__user_session;
-use function pirogue\_dispatcher_exit;
 use function pirogue\_dispatcher_send;
-use function pirogue\_route_clean;
-use function pirogue\_route_parse;
-use function pirogue\_view_html_load;
-use function pirogue\view_html_route_not_found;
-use function pirogue\view_html_route_error;
-use function pirogue\dispatcher_redirect;
 use function pirogue\dispatcher_create_url;
+use function pirogue\dispatcher_redirect;
 use function pirogue\import;
 use function pirogue\user_session_current;
 
+/**
+ * Load html view file into string buffer.
+ *
+ * @param string $path
+ * @param array $data
+ * @return string
+ */
+function _view_load(string $file, string $application, string $path, array $data): string
+{
+    if (false == file_exists($file)) {
+        throw new ErrorException('Unable to find requested view.');
+    }
+
+    // declare base request data
+    $GLOBALS['.pirogue.request.applicaton'] = $application;
+    $GLOBALS['.pirogue.request.path'] = $path;
+    $GLOBALS['.pirogue.request.data'] = $data;
+
+    // declare base view data (load from data file).
+    $GLOBALS['.pirogue.html.head'] = '';
+    $GLOBALS['.pirogue.html.head.title'] = '';
+    $GLOBALS['.pirogue.html.body.id'] = $application;
+    $GLOBALS['.pirogue.html.body.class'] = '';
+    $GLOBALS['.pirogue.html.css.files'] = [];
+    $GLOBALS['.pirogue.html.css.inline'] = '';
+    $GLOBALS['.pirogue.html.script.inline'] = '';
+    $GLOBALS['.pirogue.html.script.files'] = [];
+
+    ob_start();
+    require $file;
+    return ob_get_clean();
+}
+
 try {
 
-    // bootstrap dispatcher - load & intialize pirogue framework.
-    require_once sprintf('%s\include\pirogue\import.inc', _BASE_FOLDER);
-    __import(sprintf('%s\include', _BASE_FOLDER));
+    // bootstrap dispatcher
+    require_once 'C:\\inetpub\example-site\include\pirogue\import.inc';
+    __import('C:\\inetpub\example-site\include');
 
-    // import base disaptcher library.
-    import('pirogue\dispatcher');
     import('pirogue\error_handler');
+    import('pirogue\user_session');
+    import('pirogue\dispatcher');
 
-    // bootstrap dispatcher - error handler.
     set_error_handler('pirogue\_error_handler');
-
-    // bootstrap dispatcher - load config.
-    $_config = parse_ini_file(sprintf('%s\config\site.ini', _BASE_FOLDER));
-
-    // bootstrap dispatcher - start session & register callback.
     session_start([
-        'name' => $_config['session.name']
+        'name' => 'example-site'
     ]);
     register_shutdown_function('session_write_close');
 
@@ -66,70 +82,71 @@ try {
     $_request_path = $_request_data['__execution_path'] ?? '';
     unset($_request_data['__execution_path']);
 
-    // bootstrap dispatcher - initialize user session library.
-    import('pirogue\user_session');
-    __user_session($_config['user_session.label']);
+    // bootstrap dispatcher - initialize dispatcher & user session library.
+    __dispatcher('http://invlabsServer/example-site/auth', $_request_path, $_request_data);
+    __user_session('._example-site.user_session');
 
-    // check for existing session.
+    // check for existing session - if exists redirect to site.
     $_user_session = user_session_current();
     if (null != $_user_session) {
-        // build redirect request
-        $_path = $_request_data['redirect_path'] ?? 'index';
-        unset($_request_data['redirect_path']);
-        return dispatcher_redirect(sprintf(0 == count($_request_data) ? '%s/%s' : '%s/%s?%s', _SITE_URL, $_path, http_build_query($_request_data)));
+        return dispatcher_redirect(dispatcher_create_url($_request_data['redirect_path'] ?? 'index'));
     }
 
-    // bootstrap dispatcher - import and initialize required libraries.
+    // bootstrap dispatcher - import and initialize libraries used to build request content.
     import('pirogue\database_collection');
-    import('pirogue\route');
-
-    __route(sprintf('%s\view\html-auth', _BASE_FOLDER), 'phtml');
-    __dispatcher(sprintf('%s/auth', _SITE_URL), $_request_path, $_request_data);
-    __database_collection(sprintf('%s\config', _BASE_FOLDER), $_config['database.default']);
-
-    // process request.
-    import('pirogue\view_html');
-    $_content = '';
-    try {
-        // route path to controller file, function & path.
-        $_exec_data = $_request_data;
-        $_exec_path = _route_clean($_request_path);
-        $_route = _route_parse($_exec_path);
-        $_route = view_html_route_not_found($_request_path, $_request_data);
-        $_content = _view_html_load($_route['file'], $_route['path'], $_exec_data);
-    } catch (Exception $_exception) {
-        $_content = view_html_route_error($_exception, $_request_path, $_request_data);
-    } catch (Error $_exception) {
-        $_content = view_html_route_error($_exception, $_request_path, $_request_data);
-    }
+    __database_collection('C:\\inetpub\example-site\config', 'example-site');
 
     // send resuts to user.
     header('Content-Type: text/html');
     header('X-Powered-By: pirogue php');
-    header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._auth.dispatcher.start_time']) * 1000));
-    ob_end_clean();
+    header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._pirogue.dispatcher.start_time']) * 1000));
 
-    $_route = _route_parse('_page');
-    $_content = _view_html_load($_route['file'], '', [
-        'content' => $_content
-    ]);
-    return _dispatcher_send($_content);
+    // load page content into the page template
+    $GLOBALS['.pirogue.request.url'] = dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']);
+    
+    try {
+        // route parse: (application, page, path)
+        $_exec_path = explode('/', $_request_path);
+        
+        if (1 == count($_exec_path)) {
+            $_exec_application = '';
+            $_exec_page = preg_replace('/^(_+)/', '', $_exec_path[0] ?? '');
+        } else {
+            $_exec_application = preg_replace('/^(_+)/', '', $_exec_path[0] ?? '');
+            $_exec_page = preg_replace('/^(_+)/', '', $_exec_path[1] ?? '');
+        }
+        
+        $_exec_page = sprintf('C:\\inetpub\example-site\view\html-auth\%s\%s.phtml', empty($_exec_application) ? '_login' : $_exec_application, empty($_exec_page) ? 'index' : $_exec_page);
+        if (empty($_exec_page)) {
+            $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html-auth\_site-errors\404.phtml', '', '', []);
+        } else {
+            $GLOBALS['.pirogue.html.body.content'] =  _view_load($_exec_page, $_exec_application, implode('/', array_splice($_exec_path, 2)), $_request_data);
+        }
+    } catch (Exception $_exception) {
+        $GLOBALS['.pirogue.html.body.content'] =  _view_load('C:\\inetpub\example-site\view\html-auth\_site-errors\500.phtml', '', '', [
+            'error_message' => sprintf('%s at %s #%d.', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
+        ]);
+    } catch (Error $_exception) {
+        $GLOBALS['.pirogue.html.body.content'] =  _view_load('C:\\inetpub\example-site\view\html-auth\_site-errors\500.phtml', '', '', [
+            'error_message' => sprintf('%s at %s #%d.', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
+        ]);
+    }
+    
+    // load content into page
+    ob_start();
+    require 'C:\\inetpub\example-site\view\html-auth\_page.phtml';
+    $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
+    
+    // Clear any remaining buffers.
+    while ( 0 < ob_get_level() ){
+        ob_get_clean();
+    }
+    
+    return _dispatcher_send($GLOBALS['.pirogue.html.body.content']);
 } catch (Error $_exception) {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
 } catch (Exception $_exception) {
     $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = $_exception;
 }
 
-// failsafe errors.
-header('Content-Type: text/html');
-header('X-Powered-By: pirogue php');
-header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._auth.dispatcher.start_time']) * 1000));
-http_response_code(500);
-
-if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
-    printf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace(_BASE_FOLDER, '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine());
-} else {
-    echo 'Unknown exception encountered';
-}
-
-_dispatcher_exit();
+require '_html-fatal-error.inc';
