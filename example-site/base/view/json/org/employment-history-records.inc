@@ -15,15 +15,15 @@ function _get_database()
 $_results = null;
 $matches = [];
 
-if ('' === $GLOBALS['.pirogue.view.path']) {
+if ('' === $GLOBALS['.pirogue.request.path']) {
     $_results = employment_history_records_list(_get_database());    
-} elseif ('list' === $GLOBALS['.pirogue.view.path']) {
+} elseif ('list' === $GLOBALS['.pirogue.request.path']) {
     $_results = employment_history_records_list(_get_database());
-} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employment_history_records_fetch(_get_database(), $matches[1]);
-} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employment_history_records_fetch(_get_database(), $matches[1]);
-} elseif (preg_match('/^employee[-id]?\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^employee[-id]?\/(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = employment_history_records_lookup(_get_database(), 'employee_id=?', [
         $matches[1]
     ]);

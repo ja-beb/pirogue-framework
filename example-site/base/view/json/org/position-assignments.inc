@@ -15,15 +15,15 @@ function _get_database()
 $_results = null;
 $matches = [];
 
-if ('' === $GLOBALS['.pirogue.view.path']) {
+if ('' === $GLOBALS['.pirogue.request.path']) {
     $_results = position_assignments_list(_get_database());
-}elseif ('list' === $GLOBALS['.pirogue.view.path']) {
+}elseif ('list' === $GLOBALS['.pirogue.request.path']) {
     $_results = position_assignments_list(_get_database());
-} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = position_assignments_fetch(_get_database(), intval($matches[1]));
-} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^id\/(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $_results = position_assignments_fetch(_get_database(), intval($matches[1]));
-} elseif (preg_match('/^(.+)\/(\d+)$/', $GLOBALS['.pirogue.view.path'], $matches)) {
+} elseif (preg_match('/^(.+)\/(\d+)$/', $GLOBALS['.pirogue.request.path'], $matches)) {
     $filter = null;
     switch ($matches[1]) {
         case 'employee':
