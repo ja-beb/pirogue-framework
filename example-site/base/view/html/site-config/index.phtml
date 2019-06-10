@@ -2,8 +2,7 @@
 use function pirogue\database_collection_get;
 use function pirogue\import;
 use function pirogue\user_session_current;
-use function site_access\site_access_has_role;
-use function site_access\site_access_roles;
+use function site_access\site_user_require_access;
 
 import('site_access');
 import('pirogue\user_session');
@@ -11,8 +10,4 @@ import('pirogue\user_session');
 $_user_session = user_session_current();
 $_sqlsrv = database_collection_get();
 
-if (false == site_access_has_role($_sqlsrv, $_user_session['id'], $GLOBALS['.pirogue.request.applicaton'], 'user')) {
-    // how do we show a 403 page....?
-    $GLOBALS['pirogue.site_access.access_denied'] = true;
-    return;
-}
+site_user_require_access($_sqlsrv, $_user_session['id'], $GLOBALS['.pirogue.request.application'], 'user');

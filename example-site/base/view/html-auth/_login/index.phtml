@@ -30,7 +30,7 @@ if (false == $_SESSION['.auth.login']['terms']) {
     unset($_SESSION['.auth.login']);
 
     // build redirect request
-    $_request_data = $GLOBALS['.pirogue.view.data'];
+    $_request_data = $GLOBALS['.pirogue.request.data'];
     $_path = $_request_data['redirect_path'] ?? 'index';
     unset($_request_data['redirect_path']);
 

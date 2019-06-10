@@ -1,3 +1,7 @@
+<?php 
+
+    $_site_url = 'http://invlabsServer/example-site';
+?>
 <!doctype html>
 <html class="no-js" lang="">
     <head>
@@ -64,13 +68,13 @@
         		format("truetype");
         }
         </style>
-        <link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.request.url']; ?>/assets/style/normalize.css">
-        <link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.request.url']; ?>/assets/style/page.css">
-        <link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.request.url']; ?>/assets/style/page-auth.css">
-        <link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.request.url']; ?>/assets/style/font-awesome.css">		
+        <link rel="stylesheet" href="<?php echo $_site_url; ?>/assets/style/normalize.css">
+        <link rel="stylesheet" href="<?php echo $_site_url; ?>/assets/style/page.css">
+        <link rel="stylesheet" href="<?php echo $_site_url; ?>/assets/style/page-auth.css">
+        <link rel="stylesheet" href="<?php echo $_site_url; ?>/assets/style/font-awesome.css">		
 		<?php $_files = array_unique($GLOBALS['.pirogue.html.css.files'] ?? []);?>
       	<?php foreach( $_files as $_file ): ?>
-      		<link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.request.url']; ?>/style/<?php echo $_file; ?>.css" />
+      		<link rel="stylesheet" href="<?php echo $_site_url; ?>/style/<?php echo $_file; ?>.css" />
       	<?php endforeach; ?>
       	<?php echo $GLOBALS['.pirogue.html.css.inline'] ?? '' ?>
       	<meta name="theme-color" content="#fafafa">
@@ -83,7 +87,7 @@
 		<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.html.body.content'] ?? '' ?></div>
 		<?php $_files = array_unique($GLOBALS['.pirogue.html.script.files'] ?? []);?>
       	<?php foreach( $_files as $_file ): ?>
-      		<script src="<?php echo $GLOBALS['.pirogue.request.url']; ?>/assets/script/<?php echo $_file; ?>.js"></script>
+      		<script src="<?php echo $_site_url; ?>/assets/script/<?php echo $_file; ?>.js"></script>
       	<?php endforeach; ?>
       	<?php echo $GLOBALS['.pirogue.html.script.inline'] ?? '' ?>
 	</body>

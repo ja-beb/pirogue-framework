@@ -6,70 +6,62 @@
  */
 namespace site_access;
 
-$GLOBALS['pirogue.site_access.access_denied'] = false;
+use \UserAccessDeniedException;
 
 /**
- * Execute SQL query and return results.
- * @param sqlsrv resource $database_connection
- * @param string $query
- * @param array $params
+ * Fetch list of user's roles for given application
+ *
+ * @param resource $sqlsrv
+ *            SQL Server resource.
+ * @param int $user_id
+ * @param string $application
  * @return array
  */
-function _site_access_role_fetch($database_connection, string $query, array $params): array
+function site_access_fetch($sqlsrv, int $user_id, string $application = ''): array
 {
+    $_params = [
+        '@user_id=?' => $user_id
+    ];
+
+    if (false == empty($application)) {
+        $_params['@application_name=?'] = $application;
+    }
+
     $_data = [];
-    $_sql_statement = sqlsrv_query($database_connection, $query, $params);
+    $_sql_statement = sqlsrv_query($sqlsrv, sprintf("execute site.user_roles_fetch %s", implode(',', array_keys($_params))), array_values($_params));
     if ($_sql_statement) {
         while ($_sql_row = sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC)) {
-            array_push($_data, $_sql_row);
+            if (false == array_key_exists($_sql_row['application_id'], $_data)) {
+                $_data[$_sql_row['application_name']] = [];
+            }
+            array_push($_data[$_sql_row['application_name']], $_sql_row['role_name']);
         }
         sqlsrv_free_stmt($_sql_statement);
+        if (false == empty($application)) {
+            $_data = $_data[$application] ?? [];
+        }
     }
     return $_data;
 }
 
 /**
- * Check if user has access to a given role.
- * @param sqlsrv resource $sqlsrv
+ *
+ * @param resource $sqlsrv
  * @param int $user_id
  * @param string $application
  * @param string $role
- * @return bool
+ * @throws UserAccessDeniedException
  */
-function site_access_has_role($sqlsrv, int $user_id, string $application, string $role): bool
+function site_user_require_access($sqlsrv, int $user_id, string $application, string $role = '')
 {
-    $_data = _site_access_role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?, @application_name=?, @role_name=?', [
-        $user_id,
-        $application,
-        $role
-    ]);
-    return (0 < count($_data));
+    $_roles = site_access_fetch($sqlsrv, $user_id, $application);
+    if (empty($role)) {
+        if (0 == count($_roles)) {
+            throw new UserAccessDeniedException(false);
+        }
+    } elseif (false === array_search('user', $_roles)) {
+        throw new UserAccessDeniedException(0 < count($_roles));
+    }
 }
 
-/**
- * Fetch list of user's roles for given application
- * @param sqlsrv resource $sqlsrv
- * @param int $user_id
- * @param string $application
- * @return array
- */
-function site_access_roles($sqlsrv, int $user_id, string $application): array
-{
-    return _site_access_role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?, @application_name=?', [
-        $user_id,
-        $application
-    ]);
-}
 
-/**
- * Fetch list of user's applications
- * @param sqlsrv resource $sqlsrv
- * @param int $user_id
- * @return array
- */
-function site_access_list($sqlsrv, int $user_id): array
-{
-    return _site_access_role_fetch($sqlsrv, 'EXECUTE site.user_roles_fetch @user_id=?', [
-        $user_id
-    ]);
-}

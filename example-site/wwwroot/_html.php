@@ -17,7 +17,7 @@ ob_start();
 $GLOBALS['._pirogue.dispatcher.start_time'] = microtime(true);
 $GLOBALS['._pirogue.dispatcher.failsafe_exception'] = null;
 
-// define use functions:
+// define use functions:\
 use function pirogue\__database_collection;
 use function pirogue\__dispatcher;
 use function pirogue\__import;
@@ -27,8 +27,6 @@ use function pirogue\dispatcher_create_url;
 use function pirogue\dispatcher_redirect;
 use function pirogue\import;
 use function pirogue\user_session_current;
-use function site_access\site_access_roles;
-use function pirogue\database_collection_get;
 
 /**
  * Load html view file into string buffer.
@@ -44,7 +42,7 @@ function _view_load(string $file, string $application, string $path, array $data
     }
 
     // declare base request data
-    $GLOBALS['.pirogue.request.applicaton'] = $application;
+    $GLOBALS['.pirogue.request.application'] = $application;
     $GLOBALS['.pirogue.request.path'] = $path;
     $GLOBALS['.pirogue.request.data'] = $data;
 
@@ -67,6 +65,7 @@ function _view_load(string $file, string $application, string $path, array $data
 try {
 
     // bootstrap dispatcher
+    require_once 'C:\\inetpub\example-site\include\UserAccessDeniedException.inc';    
     require_once 'C:\\inetpub\example-site\include\pirogue\import.inc';
     __import('C:\\inetpub\example-site\include');
 
@@ -90,10 +89,14 @@ try {
     __dispatcher('http://invlabsServer/example-site', $_request_path, $_request_data);
     __user_session('._example-site.user_session');
 
+    $GLOBALS['.pirogue.request.url'] = dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']);
+
     // check for existing session - if exists redirect to site.
     $_user_session = user_session_current();
     if (null == $_user_session) {
-        return dispatcher_redirect(dispatcher_create_url($_request_data['redirect_path'] ?? 'index'));
+        return dispatcher_redirect(dispatcher_create_url('auth', [
+            'redirect_path' => $GLOBALS['.pirogue.request.url']
+        ]));
     }
 
     // bootstrap dispatcher - import and initialize libraries used to build request content.
@@ -106,7 +109,6 @@ try {
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._pirogue.dispatcher.start_time']) * 1000));
 
     // load page content into the page template
-    $GLOBALS['.pirogue.request.url'] = dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']);
 
     $_exec_path = '';
 
@@ -131,11 +133,10 @@ try {
             $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\404.phtml', '', '', []);
         } else {
             $GLOBALS['.pirogue.html.body.content'] = _view_load($_exec_page, $_exec_application, $_exec_path, $_request_data);
-            if ( $GLOBALS['pirogue.site_access.access_denied'] ) {
-                $_exec_application = ( 0 == count(site_access_roles(database_collection_get(), $_user_session['id'], $_exec_application)) ) ? '' : $_exec_application;
-                $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\403.phtml', $_exec_application, $_exec_path, $_request_data);
-            }
         }
+    } catch (UserAccessDeniedException $_exception) {
+        $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\403.phtml', '', '', ['has_application_access' => $_exception->hasApplicationAccess]);
+        $_exec_application = $_exception->hasApplicationAccess ? $_exec_application : '';
     } catch (Exception $_exception) {
         $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\500.phtml', '', '', [
             'error_message' => sprintf('%s at %s #%d.', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
@@ -149,7 +150,7 @@ try {
     // load content into page
     $_menu_view = sprintf('C:\\inetpub\example-site\view\html\%s\_menu.phtml', $_exec_application);
     $GLOBALS['.pirogue.html.body.menu'] = file_exists($_menu_view) ? _view_load($_menu_view, $_exec_application, $_exec_path, $_request_data) : '';
-    
+
     ob_start();
     require 'C:\\inetpub\example-site\view\html\_page.phtml';
     $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();

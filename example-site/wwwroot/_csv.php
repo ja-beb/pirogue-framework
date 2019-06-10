@@ -35,7 +35,7 @@ function _view_load(string $file, string $application, string $path, array $data
     }
 
     // declare base request data
-    $GLOBALS['.pirogue.request.applicaton'] = $application;
+    $GLOBALS['.pirogue.request.application'] = $application;
     $GLOBALS['.pirogue.request.path'] = $path;
     $GLOBALS['.pirogue.request.data'] = $data;
 

@@ -42,7 +42,7 @@ function _view_load(string $file, string $application, string $path, array $data
     }
 
     // declare base request data
-    $GLOBALS['.pirogue.request.applicaton'] = $application;
+    $GLOBALS['.pirogue.request.application'] = $application;
     $GLOBALS['.pirogue.request.path'] = $path;
     $GLOBALS['.pirogue.request.data'] = $data;
 
@@ -89,7 +89,9 @@ try {
     // check for existing session - if exists redirect to site.
     $_user_session = user_session_current();
     if (null != $_user_session) {
-        return dispatcher_redirect(dispatcher_create_url($_request_data['redirect_path'] ?? 'index'));
+        $_redirect = $_request_data['redirect_path'] ?? '';
+        $_redirect = preg_match('/^auth/', $_redirect) ? '' : $_redirect;
+        return dispatcher_redirect(dispatcher_create_url(empty($_redirect) ? '..' : $_redirect));
     }
 
     // bootstrap dispatcher - import and initialize libraries used to build request content.
