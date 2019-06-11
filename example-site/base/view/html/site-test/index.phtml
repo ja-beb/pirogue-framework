@@ -1,10 +1,17 @@
 <?php
+
+use function pirogue\database_collection_get;
 use function pirogue\dispatcher_create_url;
+use function pirogue\user_session_current;
+use function site_access\site_access_fetch;
 
 $_user_session = user_session_current();
 $_sqlsrv = database_collection_get();
-site_user_require_access($_sqlsrv, $_user_session['id'], $GLOBALS['.pirogue.request.application']);
 
+$_roles = site_access_fetch($_sqlsrv, $_user_session['id'], $GLOBALS['.pirogue.request.application']);
+if ( false == array_key_exists('users', $_roles) ){
+    return '';   
+}
 ?>
 <?php foreach( scandir(sprintf('%s\_list', __DIR__)) as $_file): ?>
 	<?php if ( false == is_dir($_file) ): ?>

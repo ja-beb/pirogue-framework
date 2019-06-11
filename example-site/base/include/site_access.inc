@@ -6,7 +6,8 @@
  */
 namespace site_access;
 
-use \UserAccessDeniedException;
+$GLOBALS['.pirogue.site_access.has_access'] = true;
+
 
 /**
  * Fetch list of user's roles for given application
@@ -42,26 +43,6 @@ function site_access_fetch($sqlsrv, int $user_id, string $application = ''): arr
         }
     }
     return $_data;
-}
-
-/**
- *
- * @param resource $sqlsrv
- * @param int $user_id
- * @param string $application
- * @param string $role
- * @throws UserAccessDeniedException
- */
-function site_user_require_access($sqlsrv, int $user_id, string $application, string $role = '')
-{
-    $_roles = site_access_fetch($sqlsrv, $user_id, $application);
-    if (empty($role)) {
-        if (0 == count($_roles)) {
-            throw new UserAccessDeniedException(false);
-        }
-    } elseif (false === array_search('user', $_roles)) {
-        throw new UserAccessDeniedException(0 < count($_roles));
-    }
 }
 
 

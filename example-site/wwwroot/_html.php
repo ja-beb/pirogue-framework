@@ -35,37 +35,67 @@ use function pirogue\user_session_current;
  * @param array $data
  * @return string
  */
-function _view_load(string $file, string $application, string $path, array $data): string
+function _view_load(string $file, string $application, string $path, array $data, array $view_data): string
 {
     if (false == file_exists($file)) {
         throw new ErrorException('Unable to find requested view.');
     }
 
     // declare base request data
-    $GLOBALS['.pirogue.request.application'] = $application;
+    $GLOBALS['.pirogue.view_data'] = $view_data;
     $GLOBALS['.pirogue.request.path'] = $path;
     $GLOBALS['.pirogue.request.data'] = $data;
 
     // declare base view data (load from data file).
-    $GLOBALS['.pirogue.html.head'] = '';
-    $GLOBALS['.pirogue.html.head.title'] = '';
-    $GLOBALS['.pirogue.html.body.id'] = $application;
-    $GLOBALS['.pirogue.html.body.class'] = '';
-    $GLOBALS['.pirogue.html.body.title'] = '';
-    $GLOBALS['.pirogue.html.css.files'] = [];
-    $GLOBALS['.pirogue.html.css.inline'] = '';
-    $GLOBALS['.pirogue.html.script.inline'] = '';
-    $GLOBALS['.pirogue.html.script.files'] = [];
+    $GLOBALS['.pirogue.view_data'] = $view_data;
 
     ob_start();
     require $file;
     return ob_get_clean();
 }
 
+/**
+ * Load html view file into string buffer.
+ *
+ * @param string $path
+ * @param array $data
+ * @return string
+ */
+function _view_create(string $application, string $path, array $data): array
+{
+    // declare base request data
+    return [
+        'request' => [
+            'application' => $application,
+            'path' => $path,
+            'data' => $data
+        ],
+        'html' => [
+            'head' => [
+                'title' => '',
+                'content' => ''
+            ],
+            'body' => [
+                'id' => $application,
+                'class' => '',
+                'title' => ''
+            ],
+            'css' => [
+                'files' => '',
+                'inline' => '',
+            ],
+            'script' => [
+                'files' => '',
+                'inline' => '',
+            ]            
+        ],
+        'menu_file' => ''
+    ];
+}
+
 try {
 
     // bootstrap dispatcher
-    require_once 'C:\\inetpub\example-site\include\UserAccessDeniedException.inc';    
     require_once 'C:\\inetpub\example-site\include\pirogue\import.inc';
     __import('C:\\inetpub\example-site\include');
 
@@ -109,9 +139,6 @@ try {
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._pirogue.dispatcher.start_time']) * 1000));
 
     // load page content into the page template
-
-    $_exec_path = '';
-
     try {
         // route parse: (application, page, path)
         $_path = explode('/', $_request_path);
@@ -133,10 +160,10 @@ try {
             $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\404.phtml', '', '', []);
         } else {
             $GLOBALS['.pirogue.html.body.content'] = _view_load($_exec_page, $_exec_application, $_exec_path, $_request_data);
+
+            // check for 404 error:
+            $GLOBALS['.pirogue.site_access.has_access'] = false;
         }
-    } catch (UserAccessDeniedException $_exception) {
-        $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\403.phtml', '', '', ['has_application_access' => $_exception->hasApplicationAccess]);
-        $_exec_application = $_exception->hasApplicationAccess ? $_exec_application : '';
     } catch (Exception $_exception) {
         $GLOBALS['.pirogue.html.body.content'] = _view_load('C:\\inetpub\example-site\view\html\_site-errors\500.phtml', '', '', [
             'error_message' => sprintf('%s at %s #%d.', $_exception->getMessage(), $_exception->getFile(), $_exception->getLine())
@@ -147,11 +174,20 @@ try {
         ]);
     }
 
-    // load content into page
-    $_menu_view = sprintf('C:\\inetpub\example-site\view\html\%s\_menu.phtml', $_exec_application);
-    $GLOBALS['.pirogue.html.body.menu'] = file_exists($_menu_view) ? _view_load($_menu_view, $_exec_application, $_exec_path, $_request_data) : '';
+    // load menu
+    if (file_exists($GLOBALS['.pirogue.html.body.menu_file'])) {
+        ob_start();
+        require $GLOBALS['.pirogue.html.body.menu_file'];
+        $GLOBALS['.pirogue.html.body.menu'] = ob_get_clean();
+    } else {
+        $GLOBALS['.pirogue.html.body.menu'] = '';
+    }
 
+    // load content into page
     ob_start();
+    $GLOBALS['.pirogue.request.application'] = $_exec_application;
+    $GLOBALS['.pirogue.request.path'] = $_exec_path;
+    $GLOBALS['.pirogue.request.data'] = $_exec_page;
     require 'C:\\inetpub\example-site\view\html\_page.phtml';
     $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
 
