@@ -18,6 +18,7 @@ header('X-Powered-By: pirogue php');
 header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._pirogue.dispatcher.start_time']) * 1000));
 http_response_code(500);
 
+echo 'fatal error';
 if ($GLOBALS['._pirogue.dispatcher.failsafe_exception']) {
     printf('ERROR %s: (%s:%d)', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getMessage(), str_replace('C:\\inetpub\example-site\view', '', $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getFile()), $GLOBALS['._pirogue.dispatcher.failsafe_exception']->getLine());
 } else {

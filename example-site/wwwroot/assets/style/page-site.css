@@ -149,6 +149,9 @@ h1, h2, h3, h4 {
 
 
 /* application menu */
+#application-menu-overlay{
+	
+}
 #page-cover{
 	background-color: rgba(54,54,54,.5);
 	display: none;
@@ -169,7 +172,7 @@ h1, h2, h3, h4 {
 	width: 40em;
 	height: 100vh;
 	overflow:hidden;
-	z-index: 20;
+	z-index: 30;
 }
 .__application-menu-show {
 	height: 100vh;
