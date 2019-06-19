@@ -1,0 +1,13 @@
+<?php
+/**
+ * Display 500 error message.
+ */
+
+http_response_code(500);
+
+?>
+<div class="">
+	<p>Request: <?php echo $GLOBALS['.pirogue.request.url']; ?></p>
+	<pre><?php echo $GLOBALS['.pirogue.request.data']['error_message'] ?? ''; ?></pre>
+</div>
+
