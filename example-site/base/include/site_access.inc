@@ -46,28 +46,3 @@ function site_access_fetch($sqlsrv, int $user_id, string $application = ''): arr
     return $_data;
 }
 
-function site_access_set(string $application, array $roles)
-{
-    $GLOBALS['.pirogue.site_access.application'] = $application;
-    $GLOBALS['.pirogue.site_access.roles'] = $roles;
-}
-
-function site_access_get_application(): string
-{
-    return $GLOBALS['.pirogue.site_access.application'];
-}
-
-function site_access_get_roles(): array
-{
-    return $GLOBALS['.pirogue.site_access.roles'];
-}
-
-function site_access_denied()
-{
-    $GLOBALS['.pirogue.site_access.has_access'] = false;
-}
-
-function site_access_get(): bool
-{
-    return $GLOBALS['.pirogue.site_access.has_access'];
-}
