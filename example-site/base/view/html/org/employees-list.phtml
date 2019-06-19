@@ -1,0 +1,80 @@
+<?php
+use function pirogue\database_collection_get;
+use function pirogue\dispatcher_create_url;
+use function pirogue\user_session_current;
+use function site_access\site_access_fetch;
+
+if (false === array_search('admin', $GLOBALS['.pirogue.site_access.roles'])) {
+    $GLOBALS['.pirogue.site_access.has_access'] = false;
+    return;
+}
+
+// Base data (site_access).
+$GLOBALS['.pirogue.site_access.has_access'];
+$GLOBALS['.pirogue.site_access.application'];
+$GLOBALS['.pirogue.site_access.roles'];
+
+// Base data (request).
+$GLOBALS['.pirogue.request.data'];
+$GLOBALS['.pirogue.request.application'];
+$GLOBALS['.pirogue.request.path'];
+
+// Base data (html).
+$GLOBALS['.pirogue.html.body.menu_file'];
+$GLOBALS['.pirogue.html.head'];
+$GLOBALS['.pirogue.html.head.title'];
+$GLOBALS['.pirogue.html.body.id'];
+$GLOBALS['.pirogue.html.body.class'];
+$GLOBALS['.pirogue.html.css.files'];
+$GLOBALS['.pirogue.html.css.inline'];
+$GLOBALS['.pirogue.html.script.inline'];
+$GLOBALS['.pirogue.html.script.files'];
+
+$_sql_filter = [];
+$_sql_filter_params = [];
+$_sql_query = 'select id, employee_number, name=dbo.name_format(name_surname, name_given, name_middle, name_generation_qualifier, name_title), email_address, [status]
+	from org.employee_details';
+
+$_sql_query = (0 == count($_sql_filter)) ? $_sql_query : sprintf('%s where %s', $_sql_query, implode(' and ', $_sql_filter));
+
+$_sql_order_field = 'id';
+$_sql_order_dir = 'asc';
+$_sql_page_size = 50;
+$_sql_page_number = max(1, intval($GLOBALS['.pirogue.request.data']['page'] ?? 1) );
+$_sql_page_offset = ( $_sql_page_number - 1 ) * $_sql_page_size;
+
+$_sql_query = "{$_sql_query} 
+    order by {$_sql_order_field} {$_sql_order_dir}
+    offset {$_sql_page_offset} rows
+    fetch next {$_sql_page_size} rows only";
+
+$_sqlsrv = database_collection_get();
+$_sql_statement = sqlsrv_query($_sqlsrv, $_sql_query, $_sql_filter_params );
+
+?>
+<?php if ( $_sql_statement ): ?>
+	<a href="<?php echo dispatcher_create_url("org/employees-create.html"); ?>" class="" title=""><span class="">create</span></a>
+	<table>
+		<thead>
+		</thead>
+		<tbody>
+			<?php while ($_sql_data = sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC) ): ?>
+				<tr>
+					<td><?php echo $_sql_data['employee_number']; ?></td>
+					<td><?php echo $_sql_data['name']; ?></td>
+					<td><?php echo $_sql_data['email_address']; ?></td>
+					<td><?php echo $_sql_data['status']; ?></td>
+					<td><a href="<?php echo dispatcher_create_url("org/employees-edit/{$_sql_data['id']}.html"); ?>" class="" title=""><span class="">edit</span></a></td>					
+					<td><a href="<?php echo dispatcher_create_url("org/employees-delete/{$_sql_data['id']}.html"); ?>" class="" title=""><span class="">delete</span></a></td>
+				</tr>
+			<?php endwhile; ?>
+		</tbody>
+		<tfoot>
+		</tfoot>
+	</table>
+	<?php sqlsrv_free_stmt($_sql_statement); ?>
+<?php else: ?>
+	<p class="">Query failed.</p>
+	<pre><?php echO $_sql_query; ?></pre>
+	<pre><?php print_r(sqlsrv_errors()); ?></pre>
+<?php endif; ?>

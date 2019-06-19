@@ -87,6 +87,10 @@ try {
     __dispatcher('http://invlabsServer/example-site', $GLOBALS['.pirogue.request.path'], $GLOBALS['.pirogue.request.data']);
     __user_session('._example-site.user_session');
 
+
+    // load page content into the page template
+    $GLOBALS['.pirogue.request.url'] = dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']);
+    
     // check for existing session - if exists redirect to site.
     $_user_session = user_session_current();
     if (null == $_user_session) {
@@ -106,9 +110,6 @@ try {
     // send resuts to user.
     header('Content-Type: text/html');
     header('X-Powered-By: pirogue php');
-
-    // load page content into the page template
-    $GLOBALS['.pirogue.request.url'] = dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']);
 
     try {
         // route parse: (application, page, path)
