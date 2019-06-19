@@ -1,0 +1,137 @@
+<?php
+
+use function pirogue\database_collection_get;
+use function pirogue\dispatcher_create_url;
+use function pirogue\import;
+use function pirogue\user_session_current;
+
+import('pirogue\user_session');
+$_user_session = user_session_current();
+
+$_query = 'select label, title, path, class_name
+	from site.menu_items
+	where id in (
+		select menu_id
+			from site.user_role_assignments
+				inner join site.menu_item_roles on user_role_assignments.role_id=menu_item_roles.role_id
+			where user_role_assignments.[user_id]=?
+	)';
+
+$_params = [$_user_session['id']];
+$_search_term = '';
+if ( array_key_exists('search_term', $GLOBALS['.pirogue.request.data']) ){
+    $_search_term = $GLOBALS['.pirogue.request.data']['search_term'];
+    $_query = sprintf('%s and label like ?', $_query);
+    array_push($_params, "%{$_search_term}%");
+}
+
+$_database = database_collection_get();
+$_sql_statement = sqlsrv_query($_database, "{$_query} order by label", $_params);
+$_view = $GLOBALS['.pirogue.request.data']['view'] ?? 'view-icon';
+
+?>
+<?php ob_start(); ?>
+	<style>
+        #menu-list{}        
+        #menu-list.view-icon .menu-entry{
+	        display:inline-block;
+	        text-align:center;
+	        vertical-align: middle;
+	        background: #fcffff;
+	        padding: 1em;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            text-decoration:none;
+        }
+        #menu-list.view-icon .menu-entry:before{
+            display:block;
+            font-size: 2em;
+            height: 2em;
+            width: 100%;
+            display: inline-block;
+            line-height: 2em;
+            text-align:center;
+            vertical-align: middle;
+        }
+        #menu-list.view-icon .menu-entry .menu-entry-label{
+            display:block;            
+        }
+        
+        /* menu list view */
+        #menu-list.view-list .menu-entry{
+            background: #fcffff;
+	        padding: 1em;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+            text-decoration:none;
+            display: block;
+        }
+        #menu-list.view-list .menu-entry + .menu-entry{
+            margin-top: .25em;
+        }
+        #menu-list.view-list .menu-entry:before{
+            display: inline-block;
+            padding: .25em;
+        }
+        #menu-list.view-list .menu-entry .menu-entry-label{
+            display: inline-block;
+            text-decoration:underline;
+        }        
+        #menu-list .menu-entry:hover span,
+        #menu-list .menu-entry:hover{
+            color: #fcffff;
+            background: rgba(147, 73, 72, 1);
+        }
+        #menu-list.view-list #toggleButton{}
+        #menu-list.view-icon #toggleButton{}
+	</style>
+<?php $GLOBALS['.pirogue.html.css.inline'] = ob_get_clean(); ?>
+
+<div id="menu-list" class="<?php echo $_view; ?>">
+    <div class="">
+    	<form id="" class="" method="get" action="<?php echo dispatcher_create_url(); ?>">
+    		<input id="viewInput" type="hidden" name="view" value="<?php echo $_view; ?>"/>
+    		<div class="">
+    			<label for="menuSearch" title="">Search</label>
+    			<input id="menuSearch" class="" title="" placeholder="Search menu..." value="<?php echo $_search_term; ?>" name="search_term"/>
+    			<button class="fa fa-search" id="button button-icon" type="submit">
+    				<span class="button-label">Search</span>
+    			</button>
+    		</div>
+    	</form>
+    	<a href="#toggleButton" id="toggleButton" class="button fa fa-list" title="Click to toggle view"><span class="button-label">Toggle</span></a>
+    </div>
+	<?php while ( $_sql_data = (null == $_sql_statement) ? null : sqlsrv_fetch_array($_sql_statement, SQLSRV_FETCH_ASSOC) ): ?>
+	    <a href="<?php echo dispatcher_create_url($_sql_data['path']); ?>" class="menu-entry <?php echo $_sql_data['class_name']; ?>" title="<?php echo $_sql_data['title']; ?>">
+    		<span class="menu-entry-label">
+				<?php echo preg_replace(sprintf('/(%s)/', preg_quote($_search_term)), sprintf('<mark>%s</mark>', $_search_term), $_sql_data['label']); ?>
+			</span>
+    	</a>
+	<?php endwhile; ?>
+</div>
+<?php sqlsrv_free_stmt($_sql_statement); ?>
+
+<?php ob_start(); ?>
+	<script defer>
+    	window.addEventListener('DOMContentLoaded', event => {
+        	const toggle = (el,bn,ip) => (x,y) => {
+        		el.classList.remove(x);
+				el.classList.add(y);
+				bn.classList.remove(x);
+				bn.classList.add(y);
+				ip.value = y;
+        	};
+
+        	const domList = document.getElementById('menu-list');
+        	const view_toggle = toggle( domList, document.getElementById('toggleButton'), document.getElementById('viewInput') );
+        	
+        	
+        	document.getElementById('toggleButton').addEventListener('click', cEvent => {
+            	cEvent.preventDefault();
+				if ( domList.classList.contains('view-icon') ){
+					view_toggle('view-icon', 'view-list');	    
+			    }else{
+			    	view_toggle('view-list','view-icon');
+				}
+            });    		
+    	});
+	</script>
+<?php $GLOBALS['.pirogue.html.script.inline'] = ob_get_clean(); ?>
