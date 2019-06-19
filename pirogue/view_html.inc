@@ -25,7 +25,6 @@ function __view_html(string $path){
  * Initialize base html view variables.
  */
 function _view_html_clear(string $id, array $options){
-    // declare base view data (load from data file).
     $GLOBALS['.pirogue.html.head'] = $options['html.head'] ?? '';
     $GLOBALS['.pirogue.html.head.title'] = $options['html.head.title'] ?? '';
     $GLOBALS['.pirogue.html.body.id'] = $id;

@@ -58,7 +58,7 @@ function _view_html_handle_exception($exception)
 
     _view_html_clear($GLOBALS['.pirogue.request.application'], []);
     ob_start();
-    require _view_html_get_path('_site-errors\500.phtml');
+    require _view_html_get_path('site\_500.phtml');
     $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
 }
 
@@ -129,7 +129,7 @@ try {
         // verify application access.
         $_view_file = '';
         $GLOBALS['.pirogue.request.page'] = empty($GLOBALS['.pirogue.request.page']) ? 'index' : $GLOBALS['.pirogue.request.page'];
-        $_view_application = empty($GLOBALS['.pirogue.request.application']) ? '_site' : $GLOBALS['.pirogue.request.application'];
+        $_view_application = empty($GLOBALS['.pirogue.request.application']) ? 'site' : $GLOBALS['.pirogue.request.application'];
         
         // load presentation file
         $GLOBALS['.pirogue.html.body.menu_file'] = _view_html_get_path("{$_view_application}\_menu.phtml");       
@@ -151,7 +151,7 @@ try {
             $GLOBALS['.pirogue.request.application'] = '';
             $GLOBALS['.pirogue.request.path'] = '';
             $GLOBALS['.pirogue.html.body.menu_file'] = '';
-            $_view_file = _view_html_get_path('_site-errors\403.phtml');
+            $_view_file = _view_html_get_path('site\_403.phtml');
         } else {
             $_view_path = sprintf('%s\%s.phtml', $_view_application, $GLOBALS['.pirogue.request.page']);
             $_view_file = _view_html_get_path($_view_path);
@@ -168,16 +168,24 @@ try {
                 ];
                 $GLOBALS['.pirogue.request.application'] = '';
                 $GLOBALS['.pirogue.request.path'] = '';
-                $_view_file = _view_html_get_path('_site-errors\404.phtml');
+                $_view_file = _view_html_get_path('site\_404.phtml');
+                
             }
         }
-
-        $_menu_file = $GLOBALS['.pirogue.html.body.menu'] = '';
         
+        $GLOBALS['.pirogue.site_access.has_access'] = true;
         _view_html_clear($GLOBALS['.pirogue.request.application'], []);
         ob_start();
         require $_view_file;
         $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
+        
+        // Access denied.
+        if ( false == $GLOBALS['.pirogue.site_access.has_access'] ){
+            _view_html_clear($GLOBALS['.pirogue.request.application'], []);
+            ob_start();
+            require _view_html_get_path('site\_403.phtml');
+            $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
+        }
     } catch (Exception $_exception) {
         _view_html_handle_exception($_exception);
     } catch (Error $_exception) {
@@ -194,7 +202,7 @@ try {
 
     // load content into page
     ob_start();
-    require _view_html_get_path('_site\page.phtml');
+    require _view_html_get_path('site\_page.phtml');
     $_content = ob_get_clean();
 
     // Clear any remaining buffers.

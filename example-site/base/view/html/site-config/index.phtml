@@ -1,8 +1,29 @@
 <?php
+
 use function pirogue\database_collection_get;
 use function pirogue\dispatcher_create_url;
 use function pirogue\user_session_current;
 use function site_access\site_access_fetch;
 
 
-1/0;
+$_roles = site_access_get_roles();
+if ( false === array_search('admin', $_roles )) {
+    return site_access_denied();
+}
+
+
+
+
+
+$GLOBALS['.pirogue.request.data'];
+$GLOBALS['.pirogue.request.application'];
+$GLOBALS['.pirogue.request.path'];
+$GLOBALS['.pirogue.html.body.menu_file'];
+$GLOBALS['.pirogue.html.head'];
+$GLOBALS['.pirogue.html.head.title'];
+$GLOBALS['.pirogue.html.body.id'];
+$GLOBALS['.pirogue.html.body.class'];
+$GLOBALS['.pirogue.html.css.files'];
+$GLOBALS['.pirogue.html.css.inline'];
+$GLOBALS['.pirogue.html.script.inline'];
+$GLOBALS['.pirogue.html.script.files'];
