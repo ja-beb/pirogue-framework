@@ -7,7 +7,7 @@
 namespace test;
 
 
-// Test __database_collection(strign $config_path);
+// Testdatabase_collection_init(string $config_path);
 // Setup database library with non-existant folder
 // Setup database library with empty folder
 // Setup database library with file

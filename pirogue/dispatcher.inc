@@ -29,10 +29,10 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = '';
 /**
  * Setup dispatcher library.
  *
- * @internal Caled from dispatcher only.
+ * @internal Called from dispatcher only.
  * @param string $address
  */
-function __dispatcher(string $address, string $request_path, array $request_data)
+function dispatcher_init(string $address, string $request_path, array $request_data)
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
@@ -86,7 +86,7 @@ function dispatcher_redirect(string $address = '', int $code = 301)
  * @return string
  * @uses _dispatcher_create_url
  */
-function dispatcher_create_url(string $path = null, array $data = []): string
+function dispatcher_create_url(string $path = null, array $data = [], bool $is_absolute = true): string
 {
     // if no input provided use current request
     if (0 == count(func_get_args())) {
@@ -94,7 +94,12 @@ function dispatcher_create_url(string $path = null, array $data = []): string
         $data = $GLOBALS['.pirogue.dispatcher.request_data'];
     }
 
-    $_url = sprintf(empty($path) ? '%s' : '%s/%s', $GLOBALS['.pirogue.dispatcher.address'], $path);
+    if ( $is_absolute ){
+        $_url = sprintf(empty($path) ? '%s' : '%s/%s', $GLOBALS['.pirogue.dispatcher.address'], $path);
+    }else{
+        $_url = sprintf(empty($path) ? '%s' : '%s/%s', $GLOBALS['.pirogue.dispatcher.address'], $path);
+    }
+    
     if (0 < count($data)) {
         $_url = sprintf('%s?%s', $_url, http_build_query($data));
     }

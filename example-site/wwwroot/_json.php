@@ -28,7 +28,7 @@ use function pirogue\user_session_current;
  * @param array $data
  * @return mixed
  */
-function _view_load(string $file, string $application, string $path, array $data)
+function _json_load(string $file, string $application, string $path, array $data)
 {
     if (false == file_exists($file)) {
         throw new ErrorException("Unable to find requested resource: {$file}");
@@ -53,7 +53,7 @@ try {
     
     // bootstrap dispatcher
     require_once 'C:\\inetpub\example-site\include\pirogue\import.inc';
-    __import('C:\\inetpub\example-site\include');
+    import_init('C:\\inetpub\example-site\include');
 
     import('pirogue\error_handler');
     import('pirogue\user_session');
@@ -71,8 +71,8 @@ try {
     unset($_request_data['__execution_path']);
 
     // bootstrap dispatcher - initialize dispatcher & user session library.
-    __dispatcher('http://invlabsServer/example-site', $_request_path, $_request_data);
-    __user_session('._example-site.user_session');
+    dispatcher_init('http://invlabsServer/example-site', $_request_path, $_request_data);
+    user_session_init('._example-site.user_session');
 
     // check for existing session - if exists redirect to site.
     $_user_session = user_session_current();
@@ -83,7 +83,7 @@ try {
 
     // bootstrap dispatcher - import and initialize libraries used to build request content.
     import('pirogue\database_collection');
-    __database_collection('C:\\inetpub\example-site\config', 'example-site');
+    database_collection_init('C:\\inetpub\example-site\config', 'example-site');
 
     // send resuts to user.
     header(sprintf('X-Execute-Milliseconds: %f', (microtime(true) - $GLOBALS['._pirogue.dispatcher.start_time']) * 1000));
@@ -109,7 +109,7 @@ try {
             http_response_code(404);
             $GLOBALS['.pirogue.json.data'] = null;
         } else {
-            $GLOBALS['.pirogue.json.data'] = _view_load($_exec_page, $_exec_application, implode('/', array_splice($_exec_path, 2)), $_request_data);
+            $GLOBALS['.pirogue.json.data'] = _json_load($_exec_page, $_exec_application, implode('/', array_splice($_exec_path, 2)), $_request_data);
         }
     } catch (Exception $_exception) {
         http_response_code(500);

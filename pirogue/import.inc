@@ -25,7 +25,7 @@ $GLOBALS['._pirogue.import.path'] = '';
  * @param string $file_extension
  *            The file extension for library files.
  */
-function __import(string $path)
+function import_init(string $path)
 {
     $GLOBALS['._pirogue.import.path'] = $path;
 }

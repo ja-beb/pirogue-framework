@@ -22,10 +22,10 @@ use function pirogue\__database_collection;
 use function pirogue\__dispatcher;
 use function pirogue\__import;
 use function pirogue\__user_session;
-use function pirogue\__view_html;
+use function pirogue\__html;
 use function pirogue\_dispatcher_send;
-use function pirogue\_view_html_clear;
-use function pirogue\_view_html_get_path;
+use function pirogue\_html_clear;
+use function pirogue\_html_get_path;
 use function pirogue\dispatcher_create_url;
 use function pirogue\dispatcher_redirect;
 use function pirogue\import;
@@ -38,9 +38,9 @@ use function site_access\site_access_fetch;
  * dispatcher's exception handler.
  * @param Exception $exception
  */
-function _view_html_handle_exception($exception)
+function _html_handle_exception($exception)
 {
-    _view_html_clear($GLOBALS['.pirogue.request.application'], [
+    _html_clear($GLOBALS['.pirogue.request.application'], [
         'body.class' => 'error-500'
     ]);
 
@@ -56,9 +56,9 @@ function _view_html_handle_exception($exception)
     $GLOBALS['.pirogue.request.application'] = '';
     $GLOBALS['.pirogue.request.path'] = '';
 
-    _view_html_clear($GLOBALS['.pirogue.request.application'], []);
+    _html_clear($GLOBALS['.pirogue.request.application'], []);
     ob_start();
-    require _view_html_get_path('site\_500.phtml');
+    require _html_get_path('site\_500.phtml');
     $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
 }
 
@@ -66,7 +66,7 @@ try {
 
     // bootstrap dispatcher
     require_once 'C:\\inetpub\example-site\include\pirogue\import.inc';
-    __import('C:\\inetpub\example-site\include');
+    import_init('C:\\inetpub\example-site\include');
 
     import('pirogue\error_handler');
     import('pirogue\dispatcher');
@@ -84,8 +84,8 @@ try {
     unset($GLOBALS['.pirogue.request.data']['__execution_path']);
 
     // bootstrap dispatcher - initialize dispatcher & user session library.
-    __dispatcher('http://invlabsServer/example-site', $GLOBALS['.pirogue.request.path'], $GLOBALS['.pirogue.request.data']);
-    __user_session('._example-site.user_session');
+    dispatcher_init('http://invlabsServer/example-site', $GLOBALS['.pirogue.request.path'], $GLOBALS['.pirogue.request.data']);
+    user_session_init('._example-site.user_session');
 
 
     // load page content into the page template
@@ -101,11 +101,11 @@ try {
 
     // bootstrap dispatcher - import and initialize libraries used to build request content.
     import('pirogue\database_collection');
-    import('pirogue\view_html');
+    import('pirogue\html');
     import('site_access');
 
-    __database_collection('C:\\inetpub\example-site\config', 'example-site');
-    __view_html('C:\\inetpub\example-site\view\html');
+    database_collection_init('C:\\inetpub\example-site\config', 'example-site');
+    html_init('C:\\inetpub\example-site\view\html');
 
     // send resuts to user.
     header('Content-Type: text/html');
@@ -133,7 +133,7 @@ try {
         $_view_application = empty($GLOBALS['.pirogue.request.application']) ? 'site' : $GLOBALS['.pirogue.request.application'];
         
         // load presentation file
-        $GLOBALS['.pirogue.html.body.menu_file'] = _view_html_get_path("{$_view_application}\_menu.phtml");       
+        $GLOBALS['.pirogue.html.body.menu_file'] = _html_get_path("{$_view_application}\_menu.phtml");       
         
         $_sqlsrv = database_collection_get();
         $GLOBALS['.pirogue.site_access.roles'] = site_access_fetch($_sqlsrv, $_user_session['id'], $_view_application);
@@ -152,15 +152,15 @@ try {
             $GLOBALS['.pirogue.request.application'] = '';
             $GLOBALS['.pirogue.request.path'] = '';
             $GLOBALS['.pirogue.html.body.menu_file'] = '';
-            $_view_file = _view_html_get_path('site\_403.phtml');
+            $_view_file = _html_get_path('site\_403.phtml');
         } else {
             $_view_path = sprintf('%s\%s.phtml', $_view_application, $GLOBALS['.pirogue.request.page']);
-            $_view_file = _view_html_get_path($_view_path);
+            $_view_file = _html_get_path($_view_path);
 
             if (empty($_view_file)) {
                 // does the application exists? if not clear out requested application too.
                 $GLOBALS['.pirogue.request.data'] = [
-                    'error_message' => ('' == _view_html_get_path($_view_application)) ? "Unable to find application {$_view_application}" : "Unable to find view {$_view_path}",
+                    'error_message' => ('' == _html_get_path($_view_application)) ? "Unable to find application {$_view_application}" : "Unable to find view {$_view_path}",
                     'request' => [
                         'application' => $GLOBALS['.pirogue.request.application'],
                         'path' => $GLOBALS['.pirogue.request.path'],
@@ -169,28 +169,28 @@ try {
                 ];
                 $GLOBALS['.pirogue.request.application'] = '';
                 $GLOBALS['.pirogue.request.path'] = '';
-                $_view_file = _view_html_get_path('site\_404.phtml');
+                $_view_file = _html_get_path('site\_404.phtml');
                 
             }
         }
         
         $GLOBALS['.pirogue.site_access.has_access'] = true;
-        _view_html_clear($GLOBALS['.pirogue.request.application'], []);
+        _html_clear($GLOBALS['.pirogue.request.application'], []);
         ob_start();
         require $_view_file;
         $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
         
         // Access denied.
         if ( false == $GLOBALS['.pirogue.site_access.has_access'] ){
-            _view_html_clear($GLOBALS['.pirogue.request.application'], []);
+            _html_clear($GLOBALS['.pirogue.request.application'], []);
             ob_start();
-            require _view_html_get_path('site\_403.phtml');
+            require _html_get_path('site\_403.phtml');
             $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
         }
     } catch (Exception $_exception) {
-        _view_html_handle_exception($_exception);
+        _html_handle_exception($_exception);
     } catch (Error $_exception) {
-        _view_html_handle_exception($_exception);
+        _html_handle_exception($_exception);
     }
 
     // load menu file.
@@ -203,7 +203,7 @@ try {
 
     // load content into page
     ob_start();
-    require _view_html_get_path('site\_page.phtml');
+    require _html_get_path('site\_page.phtml');
     $_content = ob_get_clean();
 
     // Clear any remaining buffers.

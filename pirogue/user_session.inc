@@ -9,7 +9,7 @@ namespace pirogue;
 $GLOBALS['._pirogue.user_session.label_user'] = '';
 $GLOBALS['._pirogue.user_session.label_data'] = '';
 
-function __user_session(string $label)
+function user_session_init(string $label)
 {
     $GLOBALS['._pirogue.user_session.label_user'] = "{$label}.user";
     $GLOBALS['._pirogue.user_session.label_data'] = "{$label}.data";

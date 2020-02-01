@@ -35,7 +35,7 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * @param string $config_path
  *            Configuration path folder - where the database connection settings can be found.
  */
-function __database_collection(string $config_path, string $default = '')
+function database_collection_init(string $config_path, string $default = '')
 {
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
     register_shutdown_function(function () {

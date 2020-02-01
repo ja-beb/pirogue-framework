@@ -31,7 +31,7 @@ $GLOBALS['._pirogue.site_notices.index'] = '';
  * Setup site notices.
  * @param string $index Session array index for site notices.
  */
-function __site_notices(string $index)
+function site_notices_init(string $index)
 {
     $GLOBALS['._pirogue.site_notices.index'] = $index;
     if ( false == array_key_exists($GLOBALS['._pirogue.site_notices.index'], $_SESSION) ){

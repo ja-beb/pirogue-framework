@@ -15,18 +15,18 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 
 ## Naming conventions
 ### Functions
-- __library_name() = library setup function
-- _function_name() = internal function
-	+ This should only be used by library (exception being the main dispatchers since they are considered part of the main library).
 - function_name() = public function	
+- library_init() = library setup function
+- _function_name() = "protected" internal function, used within dispatcher and library only. 
+- __library_name() = "private" library function, do not call outside of library file.
+
+### Local Variables
+- $\_varaible_name =  variable is scoped to current code block (file or function depending on scope). 
+- $varaible_name = public variable, visible outside of scope. Avoid using between files - use a registered global instead (see "Global Variables" section).
 
 ### Global Variables
 - $GLOBALS['.\_namespace[::namespace].library.name'] = internal variable (prefixed with '.\_').
 - $GLOBALS['.namespace[::namespace].library.name'] = public variable (prefixed with '.')
-
-### Local Variables
-- $\_varaible_name = internal variable (prefixed with '\_').
-- $varaible_name = public variable.
 
 ### Path 
 Any parts of a path that are prefixed with a '_' character are considered "protected" - meaning the client can not be routed directly to them by requesting them. The dispatcher is repsonsible for removing these special character prefixes. They can be accessed via internal calls though.

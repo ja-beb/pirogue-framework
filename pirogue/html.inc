@@ -17,14 +17,14 @@ $GLOBALS['._pirogue.view.path'] = '';
  * initialize view folder.
  * @param string $path
  */
-function __view_html(string $path){
+function html_init(string $path){
     $GLOBALS['._pirogue.view.path'] = $path;
 }
 
 /**
  * Initialize base html view variables.
  */
-function _view_html_clear(string $id, array $options){
+function _html_clear(string $id, array $options){
     $GLOBALS['.pirogue.html.head'] = $options['html.head'] ?? '';
     $GLOBALS['.pirogue.html.head.title'] = $options['html.head.title'] ?? '';
     $GLOBALS['.pirogue.html.body.id'] = $id;
@@ -40,7 +40,7 @@ function _view_html_clear(string $id, array $options){
  * @param string $file HTML view path relative to view base.
  * @return string
  */
-function _view_html_get_path(string $file): string{
+function _html_get_path(string $file): string{
     $_view_file = "{$GLOBALS['._pirogue.view.path']}\\{$file}";
     return file_exists($_view_file) ? $_view_file : '';
 }

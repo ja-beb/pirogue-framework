@@ -4,7 +4,7 @@ namespace test;
 // Test dispatcher_set_cache_control(int $code, int $max_age = 0)
 
 
-// Test __dispatcher(string $address)
+// Test dispatcher_init(string $address)
 
 // Test _dispatcher_cache(): string
 
