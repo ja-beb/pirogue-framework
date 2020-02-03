@@ -15,9 +15,9 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 
 ## Naming conventions
 ### Functions
-- function_name() = public function	
+- library_name() = public function	
 - library_init() = library setup function
-- _function_name() = "protected" internal function, used within dispatcher and library only. 
+- _library_name() = "protected" internal function, used within dispatcher and library only. 
 - __library_name() = "private" library function, do not call outside of library file.
 
 ### Local Variables
