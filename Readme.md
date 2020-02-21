@@ -5,7 +5,7 @@ Adaptation of the a small framework that was originally used for projects from 2
 I would not recommend the usage of this beyond "quick and dirty" prototypes or learning. This does not support many of the features required in a modern enterprise application. This is more an exercise in how frameworks work and how an imperitive design could be used with the features of php 7.x (original framework was written in php 4/5). It is also an experiment in a non-MVC design paradign.
 
 ## Project uses the following conventions:
-- 0TB - linux kernel variant (standard PHP).
+- 1TBS - linux kernel variant (standard PHP).
 - file extensions: 
 	+ .inc = php include file.
 	+ .php = php executable.
