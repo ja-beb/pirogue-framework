@@ -1,3 +1,5 @@
 *.gitattributes
 *.ini
-!example-*.ini
+.env
+!example-*.inipirogue/.env
+pirogue/.env
