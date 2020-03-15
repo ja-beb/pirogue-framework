@@ -1,14 +1,15 @@
-#!/bin/bash
+# Connect Database Container to Public Network
+```bash
+$ docker network connect pirogue_app-network pirogue-database
+```
 
-docker network connect pirogue_app-network pirogue-database
-#!/bin/bash
+# Rebuild Containers
+```bash
+$ docker system prune -fa 
+$ docker-compose build
+```
 
-docker system prune -fa 
-docker-compose build
-#!/bin/bash
-
-docker-compose down 
-docker system prune -fa
-#!/bin/bash
-
+# Start Containers with PHP Container at Scale
+```bash
 docker-compose up --scale php=5 -d
+```
