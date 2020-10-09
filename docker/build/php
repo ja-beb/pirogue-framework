@@ -1,6 +1,0 @@
-FROM php:7.4-fpm-alpine
-
-# RUN apk add php7-mysqli php7-mysqlnd
-RUN docker-php-ext-install mysqli \
-    && apk add php7-xdebug
-
