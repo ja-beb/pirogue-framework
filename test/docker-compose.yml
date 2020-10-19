@@ -1,4 +1,5 @@
 # Docker compose file for testing.
+# Three tier web server container for testing. Includes webserver, fpm and database.
 version: "3.3"
 services:
     site:
