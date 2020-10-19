@@ -4,4 +4,5 @@
 **/.env
 **/.vscode
 **/ssl
+**/*.env
 .DS_Store
