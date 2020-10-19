@@ -1,5 +1,7 @@
-*.gitattributes
-*.ini
-.env
-!example-*.inipirogue/.env
-pirogue/.env
+**/log
+**/data
+**/var
+**/.env
+**/.vscode
+**/ssl
+.DS_Store
