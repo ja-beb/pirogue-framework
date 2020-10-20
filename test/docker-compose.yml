@@ -29,11 +29,11 @@ services:
             - ./app/html:/var/www/html:ro
             - ./app/include:/var/www/include:ro
             - ./app/config:/var/www/config:ro
-            depends_on:
-                - database
-            links:
-                - database
-            restart: always
+        depends_on:
+            - database
+        links:
+            - database
+        restart: always
 
     database:
         image: mariadb:latest
