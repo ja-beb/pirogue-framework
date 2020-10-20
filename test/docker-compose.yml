@@ -12,10 +12,8 @@ services:
             - ./app/html:/var/www/html:ro
         depends_on:
             - php-fpm
-            - database
         links:
             - php-fpm
-            - database
         ports:
             - 80:80
             - 443:443
@@ -24,14 +22,18 @@ services:
     php-fpm:
         build:
             context: ./dockerfile
-            dockerfile: php
+            dockerfile: php-7.4
         container_name: php-fpm
         volumes:
             - ./etc/config.ini:/usr/local/etc/php/conf.d/config.ini:ro
             - ./app/html:/var/www/html:ro
             - ./app/include:/var/www/include:ro
             - ./app/config:/var/www/config:ro
-        restart: always
+            depends_on:
+                - database
+            links:
+                - database
+            restart: always
 
     database:
         image: mariadb:latest
