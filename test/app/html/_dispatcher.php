@@ -1,8 +1,6 @@
 <?php 
-    //     $_database = mysqli_connect('database','website','password','website');
-
-
-
+    
+    
     set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline){
             if ($errno & error_reporting()) {
                 throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
