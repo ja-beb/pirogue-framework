@@ -28,6 +28,7 @@ services:
             - ./etc/config.ini:/usr/local/etc/php/conf.d/config.ini:ro
             - ./app/html:/var/www/html:ro
             - ./app/include:/var/www/include:ro
+            - ./app/view:/var/www/view:ro
             - ./app/config:/var/www/config:ro
         depends_on:
             - database
