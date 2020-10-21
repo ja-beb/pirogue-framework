@@ -20,7 +20,7 @@ $GLOBALS['._pirogue.import.path'] = '';
  *
  * @param string $path Base path that contains PHP *.inc files.
  */
-function import_init(string $path)
+function import_init(string $path): void
 {
     $GLOBALS['._pirogue.import.path'] = $path;
 }
@@ -32,7 +32,7 @@ function import_init(string $path)
  * 
  * @param string $name Name of library being loaded (translates to the filename without extension).
  */
-function import(string $name)
+function import(string $name): void
 {
     $include_file = sprintf('%s\%s.inc', $GLOBALS['._pirogue.import.path'], $name);
     if (false == file_exists($include_file)) {
