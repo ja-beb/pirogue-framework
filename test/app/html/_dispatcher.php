@@ -12,6 +12,15 @@
 
     // Initialize config for database
     // Set current
+    $GLOBALS['.pirogue.html.body.id'] = '';    
+$GLOBALS['.pirogue.html.head'] = '';
+$GLOBALS['.pirogue.html.head.title'] = '';
+$GLOBALS['.pirogue.html.body.class'] = '';
+$GLOBALS['.pirogue.html.css.files'] = '';
+$GLOBALS['.pirogue.html.css.inline'] = '';
+$GLOBALS['.pirogue.html.script.inline'] = '';
+$GLOBALS['.pirogue.html.script.files'] = '';
+
 
     try {
 
