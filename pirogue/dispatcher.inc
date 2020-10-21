@@ -6,23 +6,17 @@
 namespace pirogue;
 
 /**
- * Dispatcher's base address.
- *
- * @var string $GLOBALS['.pirogue.dispatcher.address']
+ * @var string $GLOBALS['.pirogue.dispatcher.address'] The site's base address.
  */
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
- * Requested path.
- *
- * @var string $GLOBALS['.pirogue.dispatcher.request_path']
+ * @var string $GLOBALS['.pirogue.dispatcher.request_path'] The path the the client's current requested resource.
  */
 $GLOBALS['.pirogue.dispatcher.request_path'] = '';
 
 /**
- * Requested data.
- *
- * @var string $GLOBALS['.pirogue.dispatcher.request_data']
+ * @var string $GLOBALS['.pirogue.dispatcher.request_data'] The client's requested data.
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = '';
 
@@ -30,9 +24,12 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = '';
  * Setup dispatcher library.
  *
  * @internal Called from dispatcher only.
- * @param string $address
+ *
+ * @param string $address The base address for the site.
+ * @param string $request_path String containing the path the the client's requested resource.
+ * @param array $request_data Array containing the request data passed from the client.
  */
-function dispatcher_init(string $address, string $request_path, array $request_data)
+function dispatcher_init(string $address, string $request_path, array $request_data): void
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
@@ -40,12 +37,14 @@ function dispatcher_init(string $address, string $request_path, array $request_d
 }
 
 /**
- * Send content to user then exit.
- *
+ * Send content to user and exit.
+ * 
  * @internal Called from dispatcher only.
- * @param string $content
+ * @uses pirogue\_dispatcher_exit
+ *
+ * @param string $content The content that will be sent to the client.
  */
-function _dispatcher_send(string $content)
+function _dispatcher_send(string $content): void
 {
     // Cache control:
     ob_start('ob_gzhandler');
@@ -69,11 +68,19 @@ function _dispatcher_send(string $content)
 
 /**
  * Redirect user to new address.
+ * 
+ * @param string $address The address to redirect too. If no address is specified the page is refreshed.
+ * @param ing $status_code The http status code to use in the redirect process.
+ * 
+ * @uses pirogue\_dispatcher_exit
  */
-function dispatcher_redirect(string $address = '', int $code = 301)
+function dispatcher_redirect(string $address = '', int $status_code = 301): void
 {
-    $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
-    header("Location: {$address}", true, $code);
+    header(
+        sprintf('Location: %s', empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address)
+            , true
+            , $status_code
+    );
     session_id() && session_write_close();
     _dispatcher_exit();
 }
@@ -81,29 +88,21 @@ function dispatcher_redirect(string $address = '', int $code = 301)
 /**
  * Create url to resource relative to site base.
  *
- * @param string $path
+ * @param string $path The path to the resource.
  * @param array $data
  * @return string
  * @uses _dispatcher_create_url
  */
-function dispatcher_create_url(string $path = null, array $data = [], bool $is_absolute = true): string
+function dispatcher_create_url(string $path, array $data): string
 {
-    // if no input provided use current request
-    if (0 == count(func_get_args())) {
-        $path = $GLOBALS['.pirogue.dispatcher.request_path'];
-        $data = $GLOBALS['.pirogue.dispatcher.request_data'];
-    }
+    $base_url = sprintf(empty($path) ? '%s' : '%s/%s'
+        , $GLOBALS['.pirogue.dispatcher.address']
+        , $path
+    );    
 
-    if ( $is_absolute ){
-        $_url = sprintf(empty($path) ? '%s' : '%s/%s', $GLOBALS['.pirogue.dispatcher.address'], $path);
-    }else{
-        $_url = sprintf(empty($path) ? '%s' : '%s/%s', $GLOBALS['.pirogue.dispatcher.address'], $path);
-    }
-    
-    if (0 < count($data)) {
-        $_url = sprintf('%s?%s', $_url, http_build_query($data));
-    }
-    return $_url;
+    return (0 == count($data)) 
+        ? $base_url 
+        : sprintf('%s?%s', $base_url, http_build_query($data));
 }
 
 /**
