@@ -110,7 +110,7 @@ function dispatcher_create_url(string $path, array $data): string
  *
  * @internal
  */
-function _dispatcher_exit()
+function _dispatcher_exit(): void
 {
     session_id() && session_write_close();
     exit();
