@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Import library files.
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -17,13 +16,9 @@ use ErrorException;
 $GLOBALS['._pirogue.import.path'] = '';
 
 /**
- * Setup import library - needed before import function can be called.
+ * Initialize the import library.
  *
- * @param string $path
- *            Base path that contains library files.
- *            
- * @param string $file_extension
- *            The file extension for library files.
+ * @param string $path Base path that contains PHP *.inc files.
  */
 function import_init(string $path)
 {
@@ -33,9 +28,9 @@ function import_init(string $path)
 /**
  * Import library file.
  *
- * @param string $name
- *            Name of library being loaded without file extension.
  * @throws ErrorException Error thrown if the requested library file is not found.
+ * 
+ * @param string $name Name of library being loaded (translates to the filename without extension).
  */
 function import(string $name)
 {
@@ -45,6 +40,3 @@ function import(string $name)
     }
     include_once $include_file;
 }
-
-
-
