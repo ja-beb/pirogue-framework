@@ -1,21 +1,23 @@
 <?php 
 
-    function _html_load(string $id, string $filename): string
+    function _html_reset(): variant_mod
     {
         $GLOBALS['.html.head'] = '';
         $GLOBALS['.html.head.title'] = '';
         $GLOBALS['.html.css.files'] = '';
         $GLOBALS['.html.css.inline'] = '';
+        $GLOBALS['.html.body.content'] = '';
         $GLOBALS['.html.body.class'] = '';
-        $GLOBALS['.html.body.id'] = $id;
+        $GLOBALS['.html.body.id'] = '';
         $GLOBALS['.html.script.inline'] = '';
-        $GLOBALS['.html.script.files'] = '';
+        $GLOBALS['.html.script.files'] = '';    
+    }
 
+    function _html_load_template(string $filename): string
+    {
         ob_start();
         require($_view_file);
-        $content = ob_get_clean();
-
-        return $content;
+        return ob_get_clean();
     }
 
     
@@ -30,6 +32,17 @@
 
     // Initialize config for database
 
+
+    // Initialize view variables
+    $GLOBALS['.html.head'] = '';
+    $GLOBALS['.html.head.title'] = '';
+    $GLOBALS['.html.css.files'] = '';
+    $GLOBALS['.html.css.inline'] = '';
+    $GLOBALS['.html.body.content'] = '';
+    $GLOBALS['.html.body.class'] = '';
+    $GLOBALS['.html.body.id'] = $id;
+    $GLOBALS['.html.script.inline'] = '';
+    $GLOBALS['.html.script.files'] = '';
 
     try {
 
@@ -59,27 +72,18 @@
                 $_view_file = sprintf('%s/_404.phtml', $GLOBALS['.view_path']);
             }
 
-            ob_start();
-            require($_view_file);
-            $GLOBALS['.html.body.content'] = ob_get_clean();
+            _html_reset()
+            $GLOBALS['.html.body.content'] = _html_load_template($_view_file);
 
         } catch (Exception $exception) {
-            $_view_file = sprintf('%s/_500.phtml', $GLOBALS['.view_path']);
-            
-            ob_start();
-            require($_view_file);
-            $GLOBALS['.html.body.content'] = ob_get_clean();
+            _html_reset()
+            $GLOBALS['.html.body.content'] = _html_load_template(sprintf('%s/_500.phtml', $GLOBALS['.view_path']));
         } catch (Error $error) {
-            $_view_file = sprintf('%s/_500.phtml', $GLOBALS['.view_path']);
-            
-            ob_start();
-            require($_view_file);
-            $GLOBALS['.html.body.content'] = ob_get_clean();
+            _html_reset()
+            $GLOBALS['.html.body.content'] = _html_load_template(sprintf('%s/_500.phtml', $GLOBALS['.view_path']));
         }
-        
-        ob_start();
-        require( sprintf('%s/_page.phtml', $GLOBALS['.view_path']) );
-        $_content = ob_get_clean();
+
+        $_content = _html_load_template('', sprintf('%s/_page.phtml', $GLOBALS['.view_path']));
 
         echo $_content;
 
