@@ -1,6 +1,6 @@
 <?php 
 
-    function _html_reset(): variant_mod
+    function _html_reset()
     {
         $GLOBALS['.html.head'] = '';
         $GLOBALS['.html.head.title'] = '';
