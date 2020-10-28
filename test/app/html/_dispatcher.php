@@ -1,5 +1,23 @@
 <?php 
-    
+
+    function _html_load(string $id, string $filename): string
+    {
+        $GLOBALS['.html.head'] = '';
+        $GLOBALS['.html.head.title'] = '';
+        $GLOBALS['.html.css.files'] = '';
+        $GLOBALS['.html.css.inline'] = '';
+        $GLOBALS['.html.body.class'] = '';
+        $GLOBALS['.html.body.id'] = $id;
+        $GLOBALS['.html.script.inline'] = '';
+        $GLOBALS['.html.script.files'] = '';
+
+        ob_start();
+        require($_view_file);
+        $content = ob_get_clean();
+
+        return $content;
+    }
+
     
     set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline){
             if ($errno & error_reporting()) {
@@ -11,15 +29,6 @@
     // Start sessions & error handling
 
     // Initialize config for database
-    // Set current
-    $GLOBALS['.pirogue.html.body.id'] = '';    
-$GLOBALS['.pirogue.html.head'] = '';
-$GLOBALS['.pirogue.html.head.title'] = '';
-$GLOBALS['.pirogue.html.body.class'] = '';
-$GLOBALS['.pirogue.html.css.files'] = '';
-$GLOBALS['.pirogue.html.css.inline'] = '';
-$GLOBALS['.pirogue.html.script.inline'] = '';
-$GLOBALS['.pirogue.html.script.files'] = '';
 
 
     try {
@@ -52,20 +61,20 @@ $GLOBALS['.pirogue.html.script.files'] = '';
 
             ob_start();
             require($_view_file);
-            $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
+            $GLOBALS['.html.body.content'] = ob_get_clean();
 
         } catch (Exception $exception) {
             $_view_file = sprintf('%s/_500.phtml', $GLOBALS['.view_path']);
             
             ob_start();
             require($_view_file);
-            $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
+            $GLOBALS['.html.body.content'] = ob_get_clean();
         } catch (Error $error) {
             $_view_file = sprintf('%s/_500.phtml', $GLOBALS['.view_path']);
             
             ob_start();
             require($_view_file);
-            $GLOBALS['.pirogue.html.body.content'] = ob_get_clean();
+            $GLOBALS['.html.body.content'] = ob_get_clean();
         }
         
         ob_start();

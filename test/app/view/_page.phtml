@@ -6,7 +6,7 @@
 
 
 $_application_url = '';
-$_application_title = empty($GLOBALS['.pirogue.html.body.title']) ? 'Example Site' : $GLOBALS['.pirogue.html.body.title'];
+$_application_title = empty($GLOBALS['.html.body.title']) ? 'Example Site' : $GLOBALS['.html.body.title'];
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 ?>
@@ -14,7 +14,7 @@ $GLOBALS['.pirogue.dispatcher.address'] = '';
 <html class="no-js" lang="">
     <head>
         <meta charset="utf-8">
-        <title><?php echo $GLOBALS['.pirogue.html.head.title'] ?? $_application_title; ?></title>
+        <title><?php echo $GLOBALS['.html.head.title'] ?? $_application_title; ?></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<style>
@@ -72,14 +72,14 @@ $GLOBALS['.pirogue.dispatcher.address'] = '';
         <link rel="manifest" href="site.webmanifest">
         <link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.dispatcher.address'] ?? ''; ?>/assets/style/normalize.css">
         <link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.dispatcher.address'] ?? ''; ?>/assets/style/base.css">
-		<?php foreach( array_unique($GLOBALS['.pirogue.html.css.files'] ?? []) as $_file ): ?>
+		<?php foreach( array_unique($GLOBALS['.html.css.files'] ?? []) as $_file ): ?>
       		<link rel="stylesheet" href="<?php echo $GLOBALS['.pirogue.dispatcher.address']; ?>/assets/style/<?php echo $_file; ?>.css" />
       	<?php endforeach; ?>
-      	<?php echo $GLOBALS['.pirogue.html.css.inline'] ?? '' ?>
+      	<?php echo $GLOBALS['.html.css.inline'] ?? '' ?>
       	<meta name="theme-color" content="#fafafa">
-      	<?php echo $GLOBALS['.pirogue.html.head'] ?? ''; ?>
+      	<?php echo $GLOBALS['.html.head'] ?? ''; ?>
 	</head>
-	<body id="<?php echo $GLOBALS['.pirogue.html.body.id'] ?? '' ?>" class="<?php echo $GLOBALS['.pirogue.html.body.class'] ?? '' ?>">
+	<body id="<?php echo $GLOBALS['.html.body.id'] ?? '' ?>" class="<?php echo $GLOBALS['.html.body.class'] ?? '' ?>">
 		<nav id="page-menubar">
     		<div id="page-application" class="">
     			<h1 id="page-application-title" class="">
@@ -89,11 +89,11 @@ $GLOBALS['.pirogue.dispatcher.address'] = '';
     			</h1>
     		</div>
     	</nav>
-    	<div class="" id="page-content"><?php echo $GLOBALS['.pirogue.html.body.content'] ?? '' ?></div>
-    	<?php $_files = array_unique($GLOBALS['.pirogue.html.script.files'] ?? []);?>
+    	<div class="" id="page-content"><?php echo $GLOBALS['.html.body.content'] ?? '' ?></div>
+    	<?php $_files = array_unique($GLOBALS['.html.script.files'] ?? []);?>
         <?php foreach( $_files as $_file ): ?>
         	<script src="<?php echo $GLOBALS['.pirogue.dispatcher.address']; ?>/assets/script/<?php echo $_file; ?>.js"></script>
         <?php endforeach; ?>
-    	<?php echo $GLOBALS['.pirogue.html.script.inline'] ?? '' ?>
+    	<?php echo $GLOBALS['.html.script.inline'] ?? '' ?>
 	</body>
 </html>
