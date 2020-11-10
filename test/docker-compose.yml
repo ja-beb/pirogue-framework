@@ -28,11 +28,10 @@ services:
             - ./etc/config.ini:/usr/local/etc/php/conf.d/config.ini:ro
             - ./log:/var/log/php-fpm/:rw
             - ./app/html:/var/www/html:ro
-            - ./app/include/preload.inc:/var/www/include/preload.inc:ro
-            - ./app/include/testing:/var/www/include/testing:ro
-            - ../pirogue:/var/www/include/pirogue:ro            
+            - ./app/include:/var/www/include/ro
             - ./app/view:/var/www/view:ro
             - ./app/config:/var/www/config:ro
+            - ../pirogue:/var/www/pirogue:ro            
         depends_on:
             - database
         links:
