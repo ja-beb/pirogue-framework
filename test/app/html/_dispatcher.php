@@ -1,4 +1,10 @@
 <?php 
+    use function pirogue\import_init;
+    use function pirogue\import;
+    use function pirogue\dispatcher_init;
+    use function pirogue\_dispatcher_send;
+    use function pirogue\_dispatcher_exit;
+
 
     set_error_handler(function(int $errno, string $errstr, string $errfile, int $errline){
             if ($errno & error_reporting()) {
@@ -13,12 +19,18 @@
     try {
 
         try{
+
+            import_init('/var/www/include');
+
+
             $GLOBALS['.view_path'] = '/var/www/view';
             $GLOBALS['.config_path'] = '/var/www/config';
 
             $GLOBALS['.request_data'] = $_GET;
             $GLOBALS['.request_path'] = $GLOBALS['.request_data']['__execution_path'] ?? '';
             unset($GLOBALS['.request_data']['__execution_path']);
+
+            dispatcher_init('https://invlabsserver.local', $GLOBALS['.request_path'], $GLOBALS['.request_data']);
 
             // Get controller file.
             $_path = array_map(function ($v) {
