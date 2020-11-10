@@ -22,7 +22,7 @@ services:
     php-fpm:
         build:
             context: ./dockerfile
-            dockerfile: php-7.4
+            dockerfile: php-8.0
         container_name: php-fpm
         volumes:
             - ./etc/config.ini:/usr/local/etc/php/conf.d/config.ini:ro
