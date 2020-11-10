@@ -26,6 +26,7 @@ services:
         container_name: php-fpm
         volumes:
             - ./etc/config.ini:/usr/local/etc/php/conf.d/config.ini:ro
+            - ./log:/var/log/php-fpm/:rw
             - ./app/html:/var/www/html:ro
             - ./app/include:/var/www/include:ro
             - ./app/view:/var/www/view:ro
