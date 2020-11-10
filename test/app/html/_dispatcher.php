@@ -40,10 +40,10 @@
             // Initialize view variables
             $GLOBALS['.html.head'] = '';
             $GLOBALS['.html.head.title'] = '';
-            $GLOBALS['.html.css.files'] = '';
+            $GLOBALS['.html.css.files'] = [];
             $GLOBALS['.html.css.inline'] = '';
             $GLOBALS['.html.script.inline'] = '';
-            $GLOBALS['.html.script.files'] = '';
+            $GLOBALS['.html.script.files'] = [];
             $GLOBALS['.html.body.class'] = '';
             $GLOBALS['.html.body.id'] = '';       
             
