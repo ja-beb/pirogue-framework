@@ -22,7 +22,6 @@
 
             import_init('/var/www/include');
 
-
             $GLOBALS['.view_path'] = '/var/www/view';
             $GLOBALS['.config_path'] = '/var/www/config';
 
@@ -66,10 +65,12 @@
 
         } catch (Exception $exception) {
             ob_start();
+            $GLOBALS['.error.exception'] = $exception;
             require(sprintf('%s/_500.phtml', $GLOBALS['.view_path']));
             $GLOBALS['.html.body.content'] = ob_get_clean();
         } catch (Error $error) {
             ob_start();
+            $GLOBALS['.error.exception'] = $error;
             require(sprintf('%s/_500.phtml', $GLOBALS['.view_path']));
             $GLOBALS['.html.body.content'] = ob_get_clean();
         }
@@ -79,7 +80,7 @@
         $_content = ob_get_clean();
 
         // Send content to user
-        echo $_content;
+        _dispatcher_send($_content);
 
     } catch (Exception $exception) {
         // Fatal error, unrecoverable:

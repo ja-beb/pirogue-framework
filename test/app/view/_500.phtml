@@ -3,3 +3,9 @@
     http_response_code(500);
 ?>
 Error occurred
+
+<?php if ( null != $GLOBALS['.error.exception'] ?? null ): ?>
+    <?php echo $GLOBALS['.error.exception']->getMessage(); ?>
+    <?php echo $GLOBALS['.error.exception']->getFile(); ?>
+    <?php echo $GLOBALS['.error.exception']->getLine(); ?>
+<?php endif; ?>

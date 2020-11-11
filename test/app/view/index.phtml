@@ -1,7 +1,21 @@
 <?php
-
-    1/0;
-    
+    use function pirogue\dispatcher_create_url;
 ?>
 
+<?php ob_start(); ?>
+    <style>
+        .site-menu{}
+        .site-menu-entry{display: block;}
+        .site-menu-entry{}
+    </style>
+<?php $GLOBALS['.html.css.inline'] = ob_get_clean(); ?>
+
 <p>This is the default landing page.</p>
+
+<div class="site-menu">
+    <a class="site-menu-entry" href="<?php echo dispatcher_create_url('', []); ?>"><span class="link-label">Home</span></a>
+    <a class="site-menu-entry" href="<?php echo dispatcher_create_url('info', []); ?>"><span class="link-label">Info</span></a>
+    <a class="site-menu-entry" href="<?php echo dispatcher_create_url('not-found', []); ?>"><span class="link-label">Dead Link (404 - Not Found Error)</span></a>
+    <a class="site-menu-entry" href="<?php echo dispatcher_create_url('testing-error_handler', []); ?>"><span class="link-label">Test Error Handler</span></a>
+    <a class="site-menu-entry" href="<?php echo dispatcher_create_url('testing-dispatcher', []); ?>"><span class="link-label">Test Dispatcher</span></a>
+</div>
