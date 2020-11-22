@@ -48,8 +48,6 @@ function _dispatcher_send(string $content): void
 {
     // Cache control:
     ob_start('ob_gzhandler');
-    header('Cache-Control: private, proxy-revalidate;max-age=0');
-
     $etag = md5($content);
     header("ETAG: {$etag}");
     $http_status_code = http_response_code();
