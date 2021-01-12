@@ -8,6 +8,8 @@ services:
         volumes:   
             - ./etc/ssl:/etc/ssl/private:ro            
             - ./etc/nginx.conf:/etc/nginx/conf.d/default.conf:ro            
+            - ./etc/self-signed.conf:/etc/nginx/conf.d/self-signed.conf:ro            
+            - ./etc/ssl-params.conf:/etc/nginx/conf.d/ssl-params.conf:ro            
             - ./log:/var/log/nginx:rw
             - ./app/html:/var/www/html:ro
         depends_on:
