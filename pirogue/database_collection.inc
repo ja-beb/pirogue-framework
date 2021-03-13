@@ -33,18 +33,19 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * Initialize database collection library.
  *
  * @param string $config_path
- *              Configuration path folder - where the database connection settings files can be found.
- * @param string $default 
- *              The name of the default database connection, used when there is no value passed to the get function.
+ *            Configuration path folder - where the database connection settings files can be found.
+ * @param string $default
+ *            The name of the default database connection, used when there is no value passed to the get function.
  */
 function database_collection_init(string $config_path, string $default): void
 {
+    $GLOBALS['._pirogue.database_collection.connections'] = [];
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
     $GLOBALS['._pirogue.database_collection.default'] = $default;
 
     register_shutdown_function(function () {
         foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
-            if ('mysqli' == get_class($_database)) {
+            if ('mysqli' == get_class($connection)) {
                 mysqli_close($connection);
             }
         }
@@ -59,27 +60,20 @@ function database_collection_init(string $config_path, string $default): void
  * which contain the attributes for 'name' and 'options' as defined by the sqlsrv_connect() function.
  *
  * @param string $name
- * @return mysqli item
+ * @return \Mysqli item
  */
-function database_collection_get(string $name = null): ?mysqli
+function database_collection_get(string $name = null): \Mysqli
 {
     $name = (null == $name) ? $GLOBALS['._pirogue.database_collection.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
-        $file_include = sprintf('%s\sqlsrv-%s.ini', $GLOBALS['._pirogue.database_collection.config_path'], $name);
+        $file_include = sprintf('%s/mysqli-%s.ini', $GLOBALS['._pirogue.database_collection.config_path'], $name);
 
         if (false == file_exists($file_include)) {
-            throw new ErrorException("Unable to find database connection '{$name}'.");
+            throw new ErrorException("Unable to find database connection '{$name}' => {$file_include}.");
         }
-
         $config = parse_ini_file($file_include);
-        $GLOBALS['._pirogue.database_collection.connections'][$name] = mysqli_connect(
-            $config['host'] ?? null
-                , $config['username'] ?? null
-                , $config['password'] ?? null
-                , $config['dbname'] ?? ''
-                , $config['port'] ?? '3306'
-                , $config['socket'] ?? null
-        );
+
+        $GLOBALS['._pirogue.database_collection.connections'][$name] = mysqli_connect($config['host'] ?? null, $config['username'] ?? null, $config['password'] ?? null, $config['dbname'] ?? '', $config['port'] ?? '3306', $config['socket'] ?? null);
 
         if (false === $GLOBALS['._pirogue.database_collection.connections'][$name]) {
             throw new ErrorException("Unable to open database connection '{$name}'.");

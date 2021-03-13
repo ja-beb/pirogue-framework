@@ -6,16 +6,19 @@
 namespace pirogue;
 
 /**
+ *
  * @var string $GLOBALS['.pirogue.dispatcher.address'] The site's base address.
  */
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
+ *
  * @var string $GLOBALS['.pirogue.dispatcher.request_path'] The path the the client's current requested resource.
  */
 $GLOBALS['.pirogue.dispatcher.request_path'] = '';
 
 /**
+ *
  * @var string $GLOBALS['.pirogue.dispatcher.request_data'] The client's requested data.
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = '';
@@ -24,10 +27,13 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = '';
  * Setup dispatcher library.
  *
  * @internal Called from dispatcher only.
- *
- * @param string $address The base address for the site.
- * @param string $request_path String containing the path the the client's requested resource.
- * @param array $request_data Array containing the request data passed from the client.
+ *          
+ * @param string $address
+ *            The base address for the site.
+ * @param string $request_path
+ *            String containing the path the the client's requested resource.
+ * @param array $request_data
+ *            Array containing the request data passed from the client.
  */
 function dispatcher_init(string $address, string $request_path, array $request_data): void
 {
@@ -38,11 +44,12 @@ function dispatcher_init(string $address, string $request_path, array $request_d
 
 /**
  * Send content to user and exit.
- * 
+ *
  * @internal Called from dispatcher only.
  * @uses pirogue\_dispatcher_exit
- *
- * @param string $content The content that will be sent to the client.
+ *      
+ * @param string $content
+ *            The content that will be sent to the client.
  */
 function _dispatcher_send(string $content): void
 {
@@ -66,19 +73,18 @@ function _dispatcher_send(string $content): void
 
 /**
  * Redirect user to new address.
- * 
- * @param string $address The address to redirect too. If no address is specified the page is refreshed.
- * @param ing $status_code The http status code to use in the redirect process.
- * 
+ *
+ * @param string $address
+ *            The address to redirect too. If no address is specified the page is refreshed.
+ * @param int $status_code
+ *            The http status code to use in the redirect process.
+ *            
  * @uses pirogue\_dispatcher_exit
  */
 function dispatcher_redirect(string $address = '', int $status_code = 301): void
 {
-    header(
-        sprintf('Location: %s', empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address)
-            , true
-            , $status_code
-    );
+    $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
+    header(sprintf('Location: %s', $address), true, $status_code);
     session_id() && session_write_close();
     _dispatcher_exit();
 }
@@ -86,21 +92,18 @@ function dispatcher_redirect(string $address = '', int $status_code = 301): void
 /**
  * Create url to resource relative to site base.
  *
- * @param string $path The path to the resource.
+ * @param string $path
+ *            The path to the resource.
  * @param array $data
+ *            Array containing key => value pairs of data use as request parameters.
  * @return string
  * @uses _dispatcher_create_url
  */
 function dispatcher_create_url(string $path, array $data): string
 {
-    $base_url = sprintf(empty($path) ? '%s' : '%s/%s'
-        , $GLOBALS['.pirogue.dispatcher.address']
-        , $path
-    );    
-
-    return (0 == count($data)) 
-        ? $base_url 
-        : sprintf('%s?%s', $base_url, http_build_query($data));
+    $url_pattern = empty($path) ? '%s' : '%s/%s';
+    $url_pattern = 0 == count($data) ? $url_pattern : "{$url_pattern}?%s";
+    return sprintf($url_pattern, $GLOBALS['.pirogue.dispatcher.address'], $path, http_build_query($data));
 }
 
 /**
