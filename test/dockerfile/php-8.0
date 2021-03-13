@@ -1,3 +1,0 @@
-FROM php:rc-fpm-alpine3.12
-RUN docker-php-ext-install mysqli 
-    
