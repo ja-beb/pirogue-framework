@@ -35,7 +35,7 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = '';
  * @param array $request_data
  *            Array containing the request data passed from the client.
  */
-function dispatcher_init(string $address, string $request_path, array $request_data): void
+function __dispatcher(string $address, string $request_path, array $request_data): void
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;

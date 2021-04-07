@@ -2,18 +2,18 @@
 
 namespace html;
 
-use function pirogue\import_init;
+use function pirogue\__import;
 use function pirogue\import;
-use function pirogue\dispatcher_init;
-use function pirogue\dispatcher_create_url;
+use function pirogue\__dispatcher;
+use function pirogue\imdispatcher_create_url;
 use function pirogue\dispatcher_redirect;
 use function pirogue\_dispatcher_send;
 use function pirogue\_dispatcher_exit;
-use function pirogue\cdn_init;
-use function pirogue\user_session_init;
+use function pirogue\__cdn;
+use function pirogue\__user_session;
 use function pirogue\user_session_current;
-use function pirogue\database_collection_init;
-use function pirogue\site_notices_init;
+use function pirogue\__database_collection;
+use function pirogue\__site_notices;
 
 // Start timer.
 $GLOBALS['._dispatcher.start_time'] = microtime(true);
@@ -63,13 +63,13 @@ try {
         $GLOBALS['.request.path'] = $GLOBALS['.request.data']['__execution_path'] ?? '';
         unset($GLOBALS['.request.data']['__execution_path']);
 
-        dispatcher_init('https://pirogue-testing.local', $GLOBALS['.request.path'], $GLOBALS['.request.data']);
-        user_session_init('._pirogue.user_session');
-        cdn_init([
+        __dispatcher('https://pirogue-testing.local', $GLOBALS['.request.path'], $GLOBALS['.request.data']);
+        __user_session('._pirogue.user_session');
+        __cdn([
             'https://cdn.pirogue-testing.local'
         ]);
-        site_notices_init('._pirogue.site_notices');
-        database_collection_init($GLOBALS['.dispatcher.path.config'], 'website');
+        __site_notices('._pirogue.site_notices');
+        __database_collection($GLOBALS['.dispatcher.path.config'], 'website');
 
         // Get controller file.
         $_path = array_map(function ($v) {

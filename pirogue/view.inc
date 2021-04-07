@@ -19,7 +19,7 @@ $GLOBALS['._pirogue.view.path'] = '';
  * 
  * @param string $path The base location of the site's views.
  */
-function view_init(string $path): void
+function __view(string $path): void
 {
     $GLOBALS['._pirogue.view.path'] = $path;
 }

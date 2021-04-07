@@ -29,7 +29,7 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
  * @param string $label
  *            Array index label for session data.
  */
-function user_session_init(string $label): void
+function __user_session(string $label): void
 {
     $GLOBALS['._pirogue.user_session.label_user'] = "{$label}_user";
     $GLOBALS['._pirogue.user_session.label_data'] = "{$label}_data";

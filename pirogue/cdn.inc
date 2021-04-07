@@ -27,7 +27,7 @@ $GLOBALS['._pirogue.cdn.current_index'] = 0;
  * @param array $address_list
  *            Array containing a list of the base CDN server addresses.
  */
-function cdn_init(array $address_list): void
+function __cdn(array $address_list): void
 {
     $GLOBALS['._pirogue.cdn.current_index'] = 0;
     $GLOBALS['._pirogue.cdn.address_list'] = $address_list;

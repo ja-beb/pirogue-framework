@@ -20,7 +20,7 @@ $GLOBALS['._pirogue.import.path'] = '';
  *
  * @param string $path Base path that contains PHP *.inc files.
  */
-function import_init(string $path): void
+function __import(string $path): void
 {
     $GLOBALS['._pirogue.import.path'] = $path;
 }

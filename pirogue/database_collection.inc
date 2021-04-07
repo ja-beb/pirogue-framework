@@ -37,7 +37,7 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * @param string $default
  *            The name of the default database connection, used when there is no value passed to the get function.
  */
-function database_collection_init(string $config_path, string $default): void
+function __database_collection(string $config_path, string $default): void
 {
     $GLOBALS['._pirogue.database_collection.connections'] = [];
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
