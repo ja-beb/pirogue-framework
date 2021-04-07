@@ -13,8 +13,8 @@ services:
             - ./log:/var/log/nginx:rw
             - ./etc/self-signed.conf:/etc/nginx/conf.d/self-signed.conf:ro            
             - ./etc/ssl-params.conf:/etc/nginx/conf.d/ssl-params.conf:ro
-            - ./ssl/private:/etc/ssl/private:ro
-            - ./ssl/certs:/etc/ssl/certs:ro
+            - ./etc/ssl/private:/etc/ssl/private:ro
+            - ./etc/ssl/certs:/etc/ssl/certs:ro
         networks:
             - network-public
             - network-private
@@ -36,7 +36,7 @@ services:
             - ./etc/cdn-nginx.conf:/etc/nginx/conf.d/default.conf:ro            
             - ./entrypoint/cdn:/docker-entrypoint.d:ro
             - ./log:/var/log/nginx:rw
-            - ./app/cdn:/www:ro
+            - ./cdn:/www:ro
         networks:
             - network-private            
         ports:
@@ -50,7 +50,7 @@ services:
             - ./etc/site-nginx.conf:/etc/nginx/conf.d/default.conf:ro            
             - ./entrypoint/site:/docker-entrypoint.d:ro
             - ./log:/var/log/nginx:rw
-            - ./app/www:/var/www/html:ro
+            - ./site:/var/www/html:ro
         depends_on:
             - php-fpm
         links:
@@ -70,7 +70,7 @@ services:
             - ./etc/www.conf:/usr/local/etc/php-fpm.d/www.conf:ro
             - ./etc/php-fpm.conf:/usr/local/etc/php-fpm.conf:ro
             - ./etc/config.ini:/usr/local/etc/php/conf.d/config.ini:ro
-            - ./app/www:/var/www/html:ro
+            - ./site:/var/www/html:ro
             - ./app/include:/var/www/include:ro
             - ../pirogue:/var/www/pirogue:ro
             - ./app/view:/var/www/view:ro
