@@ -1,0 +1,14 @@
+<?php
+
+namespace view;
+
+/**
+ * Page not found error - 404.
+ */
+http_response_code(404);
+
+?>
+<h1>Not Found</h1>
+<p>Unable to find view file <?php echo $GLOBALS['.pirogue.dispatcher.request_path']; ?>.html</p>
+
+    

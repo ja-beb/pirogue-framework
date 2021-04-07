@@ -1,0 +1,17 @@
+<?php
+
+namespace view;
+
+/**
+ * Display 500 error page.
+ * @author sean.bourg@gmail.com
+ */
+http_response_code(500);
+$_exception = $GLOBALS['.dispatcher.exception'] ?? null;
+
+?>
+<?php if ( null == $_exception ): ?>
+    <p>Unknown error encounterd.</p>
+<?php else: ?>
+    <p>Error occurred "<?php echo $_exception->getMessage(); ?>" (file: <?php echo $_exception->getFile(); ?>:line: <?php echo $_exception->getLine(); ?>).</p>
+<?php endif; ?>

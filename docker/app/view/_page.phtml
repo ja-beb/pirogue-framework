@@ -1,0 +1,74 @@
+<?php
+
+namespace view;
+
+/**
+ *  Master page template
+ *  @author sean.bourg@gmail.com
+ */
+
+use function pirogue\cdn_create_url;
+use function pirogue\dispatcher_create_url;
+use function pirogue\site_notices_clear;
+use function pirogue\user_session_current;
+
+$GLOBALS['.html.head.title'] = empty($GLOBALS['.html.head.title']) ? 'Test Site' : $GLOBALS['.html.head.title'];
+$GLOBALS['.html.body.title'] = empty($GLOBALS['.html.body.title']) ? $GLOBALS['.html.head.title'] : $GLOBALS['.html.body.title'];
+$_user_session = user_session_current();
+
+?>
+<!doctype html>
+<html class="no-js" lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <title><?php echo $GLOBALS['.html.head.title']; ?></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+		<style>
+            @font-face {
+                font-family: "Roboto";
+                font-style: normal;
+                font-weight: normal;
+                font-display: auto;
+                src: url(<?php echo cdn_create_url('/webfonts/roboto/Roboto-Regular.ttf', []) ?>) format("truetype");
+            }                
+            @font-face {
+                font-family: "Roboto Slab";
+                font-style: normal;
+                font-weight: normal;
+                font-display: auto;
+                src: url(<?php echo cdn_create_url('/webfonts/roboto-slab/RobotoSlab-Regular.ttf', []); ?>) format("truetype");
+            }        
+        </style>
+        <link rel="manifest" href="site.webmanifest">
+		<link rel="stylesheet" href="<?php echo cdn_create_url('/style/base.css', []); ?>">        
+        <?php foreach( array_unique($GLOBALS['.html.css.files'] ?? []) as $_file ): ?>
+      		<link rel="stylesheet" href="<?php echo cdn_create_url("/style/{$_file}.css", []); ?>" />
+      	<?php endforeach; ?>
+      	<?php echo $GLOBALS['.html.css.inline'] ?? '' ?>
+      	<meta name="theme-color" content="#fafafa">
+      	<?php echo $GLOBALS['.html.head'] ?? ''; ?>
+	</head>
+	<body <?php echo empty($GLOBALS['.html.body.id']) ? '' : sprintf('id="%s"', $GLOBALS['.html.body.id']); ?> class="<?php echo $GLOBALS['.html.body.class'] ?? ''; ?>">
+		<header>
+			<a href="<?php echo dispatcher_create_url('', []); ?>" title="" class=""><?php echo $GLOBALS['.html.head.title'] ?? ''; ?></a>
+    	</header>
+		<main id="pt-page">
+			<?php $_site_notices = site_notices_clear(); ?>
+			<?php if ( 0 < count($_site_notices) ): ?>
+				<?php foreach( $_site_notices as $_notice ): ?>
+					<p class="pt-site-notice-entry <?php echo $_notice[0] ?? ''; ?>"><?php echo $_notice[1] ?? ''; ?></p>
+			<?php endforeach; ?>
+			<?php endif; ?>
+			<?php echo $GLOBALS['.html.body.content'] ?? ''; ?>
+		</main>
+		<footer>
+		</footer>
+        <script src="<?php echo cdn_create_url('/script/page.js', []); ?>"></script>
+    	<?php $_files = array_unique($GLOBALS['.html.script.files'] ?? []);?>
+        <?php foreach( $_files as $_file ): ?>
+        	<script src="<?php echo cdn_create_url("/script/{$_file}.js", []); ?>"></script>
+        <?php endforeach; ?>
+    	<?php echo $GLOBALS['.html.script.inline'] ?? '' ?>
+	</body>
+</html>
