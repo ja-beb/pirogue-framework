@@ -1,0 +1,51 @@
+<?php
+
+    namespace view;
+
+    use \Exception;
+
+    $_error_list = [];
+
+    if ( 'POST' == $_SERVER['REQUEST_METHOD'])
+    {
+        switch($_POST['error_type'] ?? 0)
+        {
+            case 1:
+                1/0;
+                break;
+
+            case 2:
+                throw new Exception('exception thrown.');
+                break;
+                
+            case 3:
+                trigger_error('Error triggered.');
+                break;
+
+            default:
+                $_error_list['error_type'] = 'Unknown error.';
+                break;
+
+        }
+    }
+
+?>
+<form method="post" action="">
+    <div class="<?php echo array_key_exists('error_type', $_error_list) ? 'FormEntry-Error':''; ?>">
+        <label for="">Error Type</label>
+        <select name="error_type" id="">
+            <option value=""> -- Select error</option>
+            <option value="1">divide by zero error</option>
+            <option value="2">throw exception</option>
+            <option value="3">trigger error</option>
+        </select>
+        <?php if ( array_key_exists('error_type', $_error_list) ): ?>
+            <p class="FormEntry-ErrorMessasge"><?php echo $_error_list['error_type'] ; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="">
+        <button type="submit" name="" value="">
+            <span class="">Submit</span>
+        </button>
+    </div>
+</form>
