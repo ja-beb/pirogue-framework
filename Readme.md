@@ -33,3 +33,28 @@ Any parts of a path that are prefixed with a '_' character are considered "prote
 - _private/end-point.json = private path component.
 - public/_private.json = private path compenent internal.
 
+
+## Configuring Docker Environment
+The docker environment uses a nginx LAMP stack. This requires a self signed certificate to run localally and can be generated using the following commands.
+
+`
+$ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ./docker/ssl/private/nginx-selfsigned.key -out ./docker/ssl/certs/nginx-selfsigned.crt
+$ openssl dhparam -out ./docker/ssl/certs/dhparam.pem 2048
+`
+The current enviroment uses two URLS that will have to be entered into your systems host file (/etc/hosts). Once added open these locations using the browser of choice and accept the certificates.
+- https://pirogue-testing.local
+- https://cdn.pirogue-testing.local
+
+
+### /etc/hosts
+`
+127.0.0.1 pirogue-testing.local
+::1 pirogue-testing.local
+
+127.0.0.1 cdn.pirogue-testing.local
+::1 cdn.pirogue-testing.local
+`
+
+
+
+

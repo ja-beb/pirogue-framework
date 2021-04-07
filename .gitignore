@@ -10,5 +10,5 @@
 # Ignore docker files
 docker/data
 docker/logs
-etc/ssl
-database.env
+ssl
+private
