@@ -48,13 +48,14 @@ The current enviroment uses two URLS that will have to be entered into your syst
 
 
 ### /etc/hosts > pirogue-testing.local
+Add the following lines to your host file to resolve the host.
+
 ```
+# host entry for site
 127.0.0.1 pirogue-testing.local
 ::1 pirogue-testing.local
-```
 
-### /etc/hosts > cdn.pirogue-testing.local
-```
+# host entry for cdn server.
 127.0.0.1 cdn.pirogue-testing.local
 ::1 cdn.pirogue-testing.local
 ```
