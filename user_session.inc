@@ -43,6 +43,16 @@ function __user_session(string $label): void
     if (false == array_key_exists($GLOBALS['._pirogue.user_session.label_data'], $_SESSION)) {
         $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
     }
+    
+    register_shutdown_function(__database_collection_destruct);
+}
+
+/**
+ * User Session destructor. Writes session data before exiting.
+ */
+function __user_session_destruct() : void
+{
+    session_id() && session_write_close();
 }
 
 /**
