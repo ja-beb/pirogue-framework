@@ -23,9 +23,7 @@ $GLOBALS['._pirogue.site_notices.index'] = '';
 function __site_notices(string $index): void
 {
     $GLOBALS['._pirogue.site_notices.index'] = $index;
-    if (false == array_key_exists($GLOBALS['._pirogue.site_notices.index'], $_SESSION)) {
-        $_SESSION[$GLOBALS['._pirogue.site_notices.index']] = [];
-    }
+    $_SESSION[$GLOBALS['._pirogue.site_notices.index']] ??= [];
 }
 
 /**
