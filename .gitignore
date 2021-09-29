@@ -12,3 +12,7 @@ docker/data
 docker/logs
 ssl
 private
+
+.project
+.settings
+.buildpath
