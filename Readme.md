@@ -16,9 +16,10 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 ## Naming conventions
 ### Functions
 - __library() = library setup/initialize function
-- library_name() = public function within a library (ie dispatcher_route()).
-- _library_name() = "protected" internal function, used within dispatcher and library only. 
-- __library_name() = "private" library function, do not call outside of library file.
+- __library_destruct() = library destructor function
+- library_name_func() = public function within a library (ie dispatcher_route()).
+- _library_name_func() = "protected" internal function, used within dispatcher and library only. 
+- __library_name_func() = "private" library function, do not call outside of library file.
 
 ### Local Variables
 - $\_varaible_name =  variable is scoped to current code block (file or function depending on scope). 
