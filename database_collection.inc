@@ -10,6 +10,7 @@
 namespace pirogue;
 
 use ErrorException;
+use Mysqli;
 
 /**
  * Config folder's path.
@@ -19,6 +20,12 @@ use ErrorException;
  */
 $GLOBALS['._pirogue.database_collection.config_path'] = null;
 
+/**
+ * Default database connection label - returned if no value is passed to the database_collection_get function.
+ *
+ * @internal
+ * @var string $GLOBALS['._pirogue.database_collection.default']
+ */
 $GLOBALS['._pirogue.database_collection.default'] = '';
 
 /**
@@ -30,8 +37,9 @@ $GLOBALS['._pirogue.database_collection.default'] = '';
 $GLOBALS['._pirogue.database_collection.connections'] = [];
 
 /**
- * Initialize database collection library.
+ * Initialize database collection library. This function will also register the database collection's destruct function as a shutdown function.
  *
+ * @see register_shutdown_function
  * @param string $config_path
  *            Configuration path folder - where the database connection settings files can be found.
  * @param string $default
@@ -41,16 +49,21 @@ function __database_collection(string $config_path, string $default): void
 {
     $GLOBALS['._pirogue.database_collection.connections'] = [];
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
-    $GLOBALS['._pirogue.database_collection.default'] = $default;
+    $GLOBALS['._pirogue.database_collection.default'] = $default;    
+    register_shutdown_function(__database_collection_destruct);
+}
 
-    register_shutdown_function(function () {
-        foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
-            if ('mysqli' == get_class($connection)) {
-                mysqli_close($connection);
-            }
+/**
+ * Deconstruct function for the database collection. Responsible for clossing all mysqli connections.
+ */
+function __database_collection_destruct() : void
+{
+    foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
+        if ('mysqli' == get_class($connection)) {
+            mysqli_close($connection);
         }
-        $GLOBALS['._pirogue.database_collection.connections'] = [];
-    });
+    }
+    $GLOBALS['._pirogue.database_collection.connections'] = [];
 }
 
 /**
@@ -62,7 +75,7 @@ function __database_collection(string $config_path, string $default): void
  * @param string $name
  * @return \Mysqli item
  */
-function database_collection_get(string $name = null): \Mysqli
+function database_collection_get(string $name = null): Mysqli
 {
     $name = (null == $name) ? $GLOBALS['._pirogue.database_collection.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
