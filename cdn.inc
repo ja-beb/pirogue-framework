@@ -9,9 +9,7 @@ namespace pirogue;
  *
  * @var string[] $GLOBALS['._pirogue.cdn.address_list'] A list of CDN server addresses.
  */
-$GLOBALS['._pirogue.cdn.address_list'] = [
-    ''
-];
+$GLOBALS['._pirogue.cdn.address_list'] = [];
 
 /**
  *
