@@ -1,11 +1,16 @@
 <?php
 
 /**
- * Database connections for a MySQL backend. 
- * 
+ * Database connections for a MySQL backend.
  * Handles the opening, storing, retrieving and closing of database connections by translating requested name into config file.
+ * php version 8.0.0
  * 
  * @author Bourg, Sean <sean.bourg@gmail.com>
+ * @category
+ * @package
+ * @license
+ * @version
+ * @link
  */
 namespace pirogue;
 

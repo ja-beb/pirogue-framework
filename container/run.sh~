@@ -1,0 +1,3 @@
+#!/bin/sh
+
+php /project/phpcs.phar /project/pirogue

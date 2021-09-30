@@ -1,0 +1,13 @@
+version: "3.7"
+services: 
+    php-test:
+        container_name: php-test-instance
+        build: 
+            context: ./container
+            dockerfile: Containerfile
+        environment:
+            - SFTP_USERNAME=$SFTP_USERNAME
+        volumes:
+           - ./pirogue:/project/pirogue:ro
+           - ./pirogue_testing:/project/testing:ro
+

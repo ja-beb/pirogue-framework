@@ -2,7 +2,14 @@
 
 /**
  * Pass notifications between pages using the client's session data.
+ * php version 8.0.0
+ * 
  * @author Bourg, Sean <sean.bourg@gmail.com>
+ * @category
+ * @package
+ * @license
+ * @version
+ * @link
  */
 namespace pirogue;
 
