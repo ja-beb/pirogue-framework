@@ -31,7 +31,7 @@ $GLOBALS['._pirogue.cdn.current_index'] = 0;
  * @param array $address_list
  *            Array containing a list of the base CDN server addresses.
  */
-function __cdn(array $address_list): void
+function pirogue_cdn_init(array $address_list): void
 {
     $GLOBALS['._pirogue.cdn.current_index'] = 0;
     $GLOBALS['._pirogue.cdn.address_list'] = $address_list;
@@ -47,7 +47,7 @@ function __cdn(array $address_list): void
  * @return string
  * @uses _dispatcher_create_url
  */
-function cdn_create_url(string $path, array $data): string
+function pirogue_cdn_create_url(string $path, array $data): string
 {
     $base_url = $GLOBALS['._pirogue.cdn.address_list'][$GLOBALS['._pirogue.cdn.current_index']];
     $GLOBALS['._pirogue.cdn.current_index'] ++;

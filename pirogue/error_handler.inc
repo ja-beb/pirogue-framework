@@ -28,7 +28,7 @@
  *            
  * @return boolean
  */
-function _error_handler(int $number, string $message, string $file, int $line): bool
+function _pirogue_error_handler(int $number, string $message, string $file, int $line): bool
 {
     if ($number & error_reporting()) {
         throw new ErrorException($message, 0, $number, $file, $line);
@@ -46,7 +46,7 @@ function _error_handler(int $number, string $message, string $file, int $line): 
  * @param int $line
  *            The line that the error was encountered at.
  */
-function error_handler_log(string $message, string $file, int $line): void
+function pirogue_error_handler_log(string $message, string $file, int $line): void
 {
     error_log(sprintf('PHP Error encountered: "%s" - %s (%d).', $message, $file, $line));
 }

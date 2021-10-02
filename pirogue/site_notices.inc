@@ -26,7 +26,7 @@ $GLOBALS['._pirogue.site_notices.index'] = '';
  * @param string $index
  *            Session array index for site notices.
  */
-function __site_notices(string $index): void
+function pirogue_site_notices_init(string $index): void
 {
     $GLOBALS['._pirogue.site_notices.index'] = $index;
     $_SESSION[$GLOBALS['._pirogue.site_notices.index']] ??= [];
@@ -37,7 +37,7 @@ function __site_notices(string $index): void
  *
  * @return array
  */
-function site_notices_clear(): array
+function pirogue_site_notices_clear(): array
 {
     $list = $_SESSION[$GLOBALS['._pirogue.site_notices.index']];
     $_SESSION[$GLOBALS['._pirogue.site_notices.index']] = [];
@@ -52,7 +52,7 @@ function site_notices_clear(): array
  * @param string $message
  *            The notice's message.
  */
-function site_notices_create(string $type, string $message): void
+function pirogue_site_notices_create(string $type, string $message): void
 {
     array_push($_SESSION[$GLOBALS['._pirogue.site_notices.index']], [
         $type,

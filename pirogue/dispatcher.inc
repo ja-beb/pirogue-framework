@@ -41,7 +41,7 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = '';
  * @param array $request_data
  *            Array containing the request data passed from the client.
  */
-function __dispatcher(string $address, string $request_path, array $request_data): void
+function pirogue_dispatcher_init(string $address, string $request_path, array $request_data): void
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
@@ -57,7 +57,7 @@ function __dispatcher(string $address, string $request_path, array $request_data
  * @param string $content
  *            The content that will be sent to the client.
  */
-function _dispatcher_send(string $content): void
+function _pirogue_dispatcher_send(string $content): void
 {
     // Cache control:
     ob_start('ob_gzhandler');
@@ -87,7 +87,7 @@ function _dispatcher_send(string $content): void
  *            
  * @uses pirogue\_dispatcher_exit
  */
-function dispatcher_redirect(string $address = '', int $status_code = 301): void
+function pirogue_dispatcher_redirect(string $address = '', int $status_code = 301): void
 {
     $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
     header(sprintf('Location: %s', $address), true, $status_code);
@@ -105,7 +105,7 @@ function dispatcher_redirect(string $address = '', int $status_code = 301): void
  * @return string
  * @uses _dispatcher_create_url
  */
-function dispatcher_create_url(string $path, array $data): string
+function pirogue_dispatcher_create_url(string $path, array $data): string
 {
     $url_pattern = empty($path) ? '%s' : '%s/%s';
     $url_pattern = 0 == count($data) ? $url_pattern : "{$url_pattern}?%s";
@@ -117,7 +117,7 @@ function dispatcher_create_url(string $path, array $data): string
  *
  * @internal
  */
-function _dispatcher_exit(): void
+function _pirogue_dispatcher_exit(): void
 {
     session_id() && session_write_close();
     exit();

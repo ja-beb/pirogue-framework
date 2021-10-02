@@ -46,7 +46,7 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * @param string $default
  *            The name of the default database connection, used when there is no value passed to the get function.
  */
-function __database_collection(string $config_path, string $default): void
+function pirogue_database_collection_init(string $config_path, string $default): void
 {
     $GLOBALS['._pirogue.database_collection.connections'] = [];
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
@@ -57,7 +57,7 @@ function __database_collection(string $config_path, string $default): void
 /**
  * Deconstruct function for the database collection. Responsible for clossing all mysqli connections.
  */
-function __database_collection_destruct() : void
+function pirogue_database_collection_destruct() : void
 {
     foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
         if ('mysqli' == get_class($connection)) {
@@ -76,7 +76,7 @@ function __database_collection_destruct() : void
  * @param string $name
  * @return \Mysqli item
  */
-function database_collection_get(string $name = null): Mysqli
+function pirogue_database_collection_get(string $name = null): Mysqli
 {
     $name = (null == $name) ? $GLOBALS['._pirogue.database_collection.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {

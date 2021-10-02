@@ -23,7 +23,7 @@ $GLOBALS['._pirogue.view.path'] = '';
  * 
  * @param string $path The base location of the site's views.
  */
-function __view(string $path): void
+function pirogue_view_init(string $path): void
 {
     $GLOBALS['._pirogue.view.path'] = $path;
 }
@@ -33,7 +33,7 @@ function __view(string $path): void
  * @param string $file View file name relative to view base directory.
  * @return string Path to the view file.
  */
-function _view_get_path(string $file): ?string
+function _pirogue_view_get_path(string $file): ?string
 {
     $view_file = implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]);
     return file_exists($view_file) ? $view_file : null;
