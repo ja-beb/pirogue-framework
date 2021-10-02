@@ -2,15 +2,12 @@
 
 /**
  * Database connections for a MySQL backend.
- * Handles the opening, storing, retrieving and closing of database connections by translating requested name into config file.
+ * Handles the opening, storing, retrieving and closing of database connections by translating
+ * requested name into config file.
  * php version 8.0.0
- * 
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
- * @category
- * @package
- * @license
- * @version
- * @link
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 /**
@@ -38,7 +35,8 @@ $GLOBALS['._pirogue.database_collection.default'] = '';
 $GLOBALS['._pirogue.database_collection.connections'] = [];
 
 /**
- * Initialize database collection library. This function will also register the database collection's destruct function as a shutdown function.
+ * Initialize database collection library. This function will also register the database collection's destruct
+ * function as a shutdown function.
  *
  * @see register_shutdown_function
  * @param string $config_path
@@ -50,14 +48,14 @@ function pirogue_database_collection_init(string $config_path, string $default):
 {
     $GLOBALS['._pirogue.database_collection.connections'] = [];
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
-    $GLOBALS['._pirogue.database_collection.default'] = $default;    
+    $GLOBALS['._pirogue.database_collection.default'] = $default;
     register_shutdown_function(__database_collection_destruct);
 }
 
 /**
  * Deconstruct function for the database collection. Responsible for clossing all mysqli connections.
  */
-function pirogue_database_collection_destruct() : void
+function pirogue_database_collection_destruct(): void
 {
     foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
         if ('mysqli' == get_class($connection)) {
@@ -87,7 +85,14 @@ function pirogue_database_collection_get(string $name = null): Mysqli
         }
         $config = parse_ini_file($file_include);
 
-        $GLOBALS['._pirogue.database_collection.connections'][$name] = mysqli_connect($config['host'] ?? null, $config['username'] ?? null, $config['password'] ?? null, $config['dbname'] ?? '', $config['port'] ?? '3306', $config['socket'] ?? null);
+        $GLOBALS['._pirogue.database_collection.connections'][$name] = mysqli_connect(
+            $config['host'] ?? null,
+            $config['username'] ?? null,
+            $config['password'] ?? null,
+            $config['dbname'] ?? '',
+            $config['port'] ?? '3306',
+            $config['socket'] ?? null
+        );
 
         if (false === $GLOBALS['._pirogue.database_collection.connections'][$name]) {
             throw new ErrorException("Unable to open database connection '{$name}'.");

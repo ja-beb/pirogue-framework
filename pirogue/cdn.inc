@@ -1,14 +1,11 @@
 <?php
+
 /**
  * CDN handler library.
  * php version 8.0.0
- * 
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
- * @category
- * @package
- * @license
- * @version
- * @link
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 /**
@@ -27,7 +24,7 @@ $GLOBALS['._pirogue.cdn.current_index'] = 0;
  * Setup CDN library.
  *
  * @internal Called from dispatcher only.
- *          
+ *
  * @param array $address_list
  *            Array containing a list of the base CDN server addresses.
  */
@@ -51,9 +48,10 @@ function pirogue_cdn_create_url(string $path, array $data): string
 {
     $base_url = $GLOBALS['._pirogue.cdn.address_list'][$GLOBALS['._pirogue.cdn.current_index']];
     $GLOBALS['._pirogue.cdn.current_index'] ++;
-    $GLOBALS['._pirogue.cdn.current_index'] = count($GLOBALS['._pirogue.cdn.address_list']) > $GLOBALS['._pirogue.cdn.current_index'] ? $GLOBALS['._pirogue.cdn.current_index'] : 0;
+    if (count($GLOBALS['._pirogue.cdn.address_list']) <= $GLOBALS['._pirogue.cdn.current_index']) {
+        $GLOBALS['._pirogue.cdn.current_index'] = 0;
+    }
     $url_pattern = empty($path) ? '%s' : '%s/%s';
     $base_url = sprintf($url_pattern, $base_url, $path);
     return (0 == count($data)) ? $base_url : sprintf('%s?%s', $base_url, http_build_query($data));
 }
-

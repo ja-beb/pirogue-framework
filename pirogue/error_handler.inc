@@ -1,14 +1,11 @@
 <?php
+
 /**
  * Site error handler functions.
  * php version 8.0.0
- * 
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
- * @category
- * @package
- * @license
- * @version
- * @link
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 /**
@@ -25,7 +22,7 @@
  *            The file the error was encountered in.
  * @param int $line
  *            The line that the error was encountered at.
- *            
+ *
  * @return boolean
  */
 function _pirogue_error_handler(int $number, string $message, string $file, int $line): bool

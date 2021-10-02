@@ -2,7 +2,9 @@
 
 /**
  * User session functions
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 /**
@@ -42,14 +44,14 @@ function pirogue_user_session_init(string $label): void
     if (false == array_key_exists($GLOBALS['._pirogue.user_session.label_data'], $_SESSION)) {
         $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
     }
-    
+
     register_shutdown_function(__database_collection_destruct);
 }
 
 /**
  * User Session destructor. Writes session data before exiting.
  */
-function __pirogue_user_session_destruct() : void
+function __pirogue_user_session_destruct(): void
 {
     session_id() && session_write_close();
 }
@@ -132,7 +134,7 @@ function pirogue_user_session_clear(): array
  * Start user session.
  *
  * @internal Use by dispatcher or login/logout modules only.
- *          
+ *
  * @param array $user_data
  *            User's account data.
  */

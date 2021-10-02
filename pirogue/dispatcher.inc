@@ -1,14 +1,11 @@
 <?php
+
 /**
  * Primary dispatcher library.
  * php version 8.0.0
- * 
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
- * @category
- * @package
- * @license
- * @version
- * @link
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 /**
@@ -33,7 +30,7 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = '';
  * Setup dispatcher library.
  *
  * @internal Called from dispatcher only.
- *          
+ *
  * @param string $address
  *            The base address for the site.
  * @param string $request_path
@@ -53,7 +50,7 @@ function pirogue_dispatcher_init(string $address, string $request_path, array $r
  *
  * @internal Called from dispatcher only.
  * @uses pirogue\_dispatcher_exit
- *      
+ *
  * @param string $content
  *            The content that will be sent to the client.
  */
@@ -84,7 +81,7 @@ function _pirogue_dispatcher_send(string $content): void
  *            The address to redirect too. If no address is specified the page is refreshed.
  * @param int $status_code
  *            The http status code to use in the redirect process.
- *            
+ *
  * @uses pirogue\_dispatcher_exit
  */
 function pirogue_dispatcher_redirect(string $address = '', int $status_code = 301): void

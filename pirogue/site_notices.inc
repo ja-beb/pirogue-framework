@@ -3,13 +3,9 @@
 /**
  * Pass notifications between pages using the client's session data.
  * php version 8.0.0
- * 
+ *
  * @author Bourg, Sean <sean.bourg@gmail.com>
- * @category
- * @package
- * @license
- * @version
- * @link
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 /**
