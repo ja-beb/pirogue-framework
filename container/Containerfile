@@ -16,5 +16,7 @@ RUN apk update; \
     mkdir /project/pirogue; \
     mkdir /project/testing;     
 
+COPY phpcs.xml /project/phpcs.xml
+
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/run.sh"]
