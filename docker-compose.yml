@@ -2,6 +2,8 @@ version: "3.7"
 services: 
     php-test:
         container_name: php-test-instance
+        environment:
+            - CODE_SNIFFER=false
         build: 
             context: ./container
             dockerfile: Containerfile
