@@ -10,8 +10,7 @@ then
     echo "[run]::codesniffer completed"
 fi    
 
-
-
-echo "[run]::_all.php start"
-php /project/testing/_all.php
-echo "[run]::_all.php complete"
+# Run unit testing.
+echo "[run] Unit Testing - start"
+php /project/testing/_unit-testing_all.php
+echo "[run] Unit Testing - complete"

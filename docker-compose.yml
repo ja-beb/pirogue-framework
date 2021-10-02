@@ -3,7 +3,7 @@ services:
     php-test:
         container_name: php-test-instance
         environment:
-            - CODE_SNIFFER=false
+            - CODE_SNIFFER=${CODE_SNIFFER-false}
         build: 
             context: ./container
             dockerfile: Containerfile
