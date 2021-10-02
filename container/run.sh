@@ -9,4 +9,4 @@ echo "[run]::codesniffer completed"
 
 echo "[run]::_all.php start"
 php /project/testing/_all.php
-echo "[run]::AllTest.php complete"
+echo "[run]::_all.php complete"
