@@ -5,9 +5,13 @@
  * the unit-test/ directory
  */
     
-define('_PIROGUE_TESTING_LIB_PATH', realdir('../pirogue'));
+define('_PIROGUE_TESTING_LIB_PATH', '/project/pirogue');
 
- for ( dir('./unit-testing') as $_file)
- {
-     echo $_file;
- }
+$_unit_test_dir = implode(DIRECTORY_SEPARATOR, [__DIR__, 'unit-test']);
+
+foreach ( scandir($_unit_test_dir) as $_file )
+{
+    if (str_ends_with($_file, '.php')) {
+        echo 'file: ', $_file, "\n";
+    }
+}
