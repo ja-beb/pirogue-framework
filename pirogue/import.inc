@@ -10,9 +10,6 @@
  * @version
  * @link
  */
-namespace pirogue;
-
-use ErrorException;
 
 /**
  * Base folder for library import.

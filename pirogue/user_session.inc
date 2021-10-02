@@ -4,7 +4,6 @@
  * User session functions
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
-namespace pirogue;
 
 /**
  * Session array index label for user's account.

@@ -10,9 +10,6 @@
      * @link
      */
 
-    namespace pirogue_testing\cdn;
-    use pirogue;
-
     function cdn_test(array $list, int $count) : void
     {
         __cdn($list);

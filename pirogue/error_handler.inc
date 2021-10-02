@@ -10,9 +10,6 @@
  * @version
  * @link
  */
-namespace pirogue;
-
-use ErrorException;
 
 /**
  * Translate PHP trigger errors into SPL ErrorException instance.

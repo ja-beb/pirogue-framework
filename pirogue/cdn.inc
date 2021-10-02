@@ -10,7 +10,6 @@
  * @version
  * @link
  */
-namespace pirogue;
 
 /**
  *

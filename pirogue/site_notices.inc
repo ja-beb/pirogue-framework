@@ -11,7 +11,6 @@
  * @version
  * @link
  */
-namespace pirogue;
 
 /**
  * Site notices index in session array.

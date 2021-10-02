@@ -12,10 +12,6 @@
  * @version
  * @link
  */
-namespace pirogue;
-
-use ErrorException;
-use Mysqli;
 
 /**
  * Config folder's path.
