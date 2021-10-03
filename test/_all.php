@@ -53,6 +53,7 @@ function _pirogue_test_load($dir): void{
     {
         if (!str_starts_with($_file, '_') && str_ends_with($_file, '.php')) {
             try{
+                echo '[load] ', $_file, "\n";
                 include(implode(DIRECTORY_SEPARATOR, [$dir, $_file]));
             } catch (Throwable $e) {
                 echo 'File level error encoungered: ', $e->getMessage();
