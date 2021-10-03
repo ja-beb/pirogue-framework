@@ -38,7 +38,6 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * Initialize database collection library. This function will also register the database collection's destruct
  * function as a shutdown function.
  *
- * @see register_shutdown_function
  * @param string $config_path
  *            Configuration path folder - where the database connection settings files can be found.
  * @param string $default
