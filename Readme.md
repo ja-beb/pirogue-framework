@@ -7,8 +7,7 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 ## Project uses the following conventions:
 - PSR-12: Extended Coding Style (https://www.php-fig.org/psr/psr-12/)
 - file extensions:
-	+ .inc = php include file.
-	+ .php = php executable.
+	+ .php = php executable or include file.
 	+ .phtml = php template file - contains both html and php content.
 - snake case for functions and variables.
 - kebab case for path components (example: site-users/user-assignment.json).
