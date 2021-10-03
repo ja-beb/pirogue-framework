@@ -48,7 +48,7 @@ function pirogue_cdn_init(array $address_list): void
 function pirogue_cdn_create_url(string $path, array $data): string
 {
     // If no CND servers are registered throw exception.
-    if ( empty($GLOBALS['._pirogue.cdn.address_list']) ){
+    if (empty($GLOBALS['._pirogue.cdn.address_list'])) {
         throw new LogicException('There are no registered CDN servers.');
     }
 
