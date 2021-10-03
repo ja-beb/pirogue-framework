@@ -2,6 +2,8 @@
 # Download codesniffer and execute run command.
 
 
+echo "[entry] start"
+echo "[entry] CODE_SNIFFER=${CODE_SNIFFER}"
 if [ true = "${CODE_SNIFFER}" ]
 then
     echo "[entry] download code sniffer."

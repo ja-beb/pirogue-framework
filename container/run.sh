@@ -12,5 +12,5 @@ fi
 
 # Run unit testing.
 echo "[run] Unit Testing - start"
-php /project/testing/_unit-testing_all.php
+php /project/testing/_all.php
 echo "[run] Unit Testing - complete"

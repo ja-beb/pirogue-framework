@@ -3,13 +3,13 @@ services:
     php-test:
         container_name: php-test-instance
         environment:
-            - CODE_SNIFFER=${CODE_SNIFFER-false}
+            - CODE_SNIFFER=${CODE_SNIFFER-true}
         build: 
             context: ./container
             dockerfile: Containerfile
         volumes:
            - ./pirogue:/project/pirogue:rw
-           - ./pirogue_testing:/project/testing:rw
+           - ./test:/project/testing:rw
         depends_on:
             - database
         links:
