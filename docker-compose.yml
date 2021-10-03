@@ -10,4 +10,21 @@ services:
         volumes:
            - ./pirogue:/project/pirogue:rw
            - ./pirogue_testing:/project/testing:rw
+        depends_on:
+            - database
+        links:
+            - database
 
+    database:
+        container_name: "php-test-db-instance"
+        image: mariadb:latest
+        environment:
+            - MYSQL_ROOT_PASSWORD=root-password
+            - MYSQL_USER=website-user
+            - MYSQL_PASSWORD=website-password
+            - MYSQL_DATABASE=website    
+        volumes:
+            - ./container/database-create.sql:/docker-entrypoint-initdb.d/00-database-create.sql:ro
+        ports:
+            - 3306:3306
+        restart: always        

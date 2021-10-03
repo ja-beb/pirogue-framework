@@ -14,7 +14,8 @@ RUN apk update; \
     chmod +x /run.sh; \
     mkdir /project; \
     mkdir /project/pirogue; \
-    mkdir /project/testing;     
+    mkdir /project/testing; \
+    docker-php-ext-install mysqli;
 
 COPY phpcs.xml /project/phpcs.xml
 
