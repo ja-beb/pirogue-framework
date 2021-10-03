@@ -6,17 +6,18 @@
      * @author Bourg, Sean <sean.bourg@gmail.com>
      */
 
-    require_once(join(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'database-collection.inc']));
+    require_once(join(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'database-collection.php']));
 
     // test pirogue_database_collection_init - invalid directory
     pirogue_test_run('database-collection-00', function(){
         try{
-        pirogue_database_collection_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'config-invalid']));
-        if ( null != pirogue_database_collection_get() ) {
+            pirogue_database_collection_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'config-invalid']));
+            if ( null != pirogue_database_collection_get() ) {
 
-        } else {
+            } else {
 
-        }
+            }
+        } catch ( Error)
     });
 
 

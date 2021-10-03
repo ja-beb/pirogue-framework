@@ -10,5 +10,4 @@
 *.gitattributes text
 .gitignore text
 *.md text
-*.inc php
 *.php php

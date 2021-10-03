@@ -20,7 +20,7 @@ $GLOBALS['._pirogue.import.path'] = '';
 /**
  * Initialize the import library.
  *
- * @param string $path Base path that contains PHP *.inc files.
+ * @param string $path Base path that contains PHP *.php files.
  * @return void
  */
 function pirogue_import_init(string $path): void
@@ -37,7 +37,7 @@ function pirogue_import_init(string $path): void
  */
 function pirogue_import(string $name): void
 {
-    $include_file = sprintf('%s\%s.inc', $GLOBALS['._pirogue.import.path'], $name);
+    $include_file = sprintf('%s\%s.php', $GLOBALS['._pirogue.import.path'], $name);
     if (false == file_exists($include_file)) {
         throw new ErrorException("Unable to find library: {$name}");
     }

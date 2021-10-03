@@ -51,7 +51,7 @@ function pirogue_test_run(string $label, $callable): void{
 function _pirogue_test_load($dir): void{
     foreach ( scandir($dir) as $_file )
     {
-        if (str_ends_with($_file, '.php')) {
+        if (!str_starts_with($_file, '_') && str_ends_with($_file, '.php')) {
             try{
                 include(implode(DIRECTORY_SEPARATOR, [$dir, $_file]));
             } catch (Throwable $e) {
@@ -62,5 +62,5 @@ function _pirogue_test_load($dir): void{
 }
 
 
-_pirogue_test_load(implode(DIRECTORY_SEPARATOR, [__DIR__, 'unit-test']));
+_pirogue_test_load(__DIR__);
 echo "[results] {$GLOBALS['._pirogue_test.count_test']} test(s), {$GLOBALS['._pirogue_test.count_errors']} error(s).\n";
