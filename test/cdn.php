@@ -52,7 +52,7 @@
     }
     
     // Run test
-    pirogue_test_run('CDN-00x03', function(){
+    pirogue_test_execute('CDN-00x03', function(){
         try{
             cdn_test([],3);
             return ['Worked with no CDN servers registered.'];
@@ -60,8 +60,8 @@
             return [];
         }
     });
-    pirogue_test_run('CDN-01x04', fn() => cdn_test(['cdn.localhost'],4));
-    pirogue_test_run('CDN-04x12',fn() => cdn_test([
+    pirogue_test_execute('CDN-01x04', fn() => cdn_test(['cdn.localhost'],4));
+    pirogue_test_execute('CDN-04x12',fn() => cdn_test([
         'cdn.00.localhost',
         'cdn.01.localhost',
         'cdn.02.localhost',
