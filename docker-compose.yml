@@ -1,12 +1,13 @@
 version: "3.7"
 services: 
     php-test:
-        container_name: php-test-instance
+        container_name: "${CONTAINER_NAME_UNIT_TEST:-pirogue-unit-test-instance}"
+        image: "${IMAGE_NAME_UNIT_TEST:-pirogue-unit-test}"
         environment:
-            - CODE_SNIFFER=${CODE_SNIFFER-true}
+            - CODE_SNIFFER=${CODE_SNIFFER:-true}
         build: 
             context: ./container
-            dockerfile: Containerfile
+            dockerfile: Containerfile-unit_testing
         volumes:
            - ./pirogue:/project/include/pirogue:rw
            - ./test:/project/testing:rw
@@ -18,7 +19,7 @@ services:
             - database
 
     database:
-        container_name: "php-test-db-instance"
+        container_name: "${CONTAINER_NAME_DATABASE:-pirogue-database-instance}"
         image: mariadb:latest
         environment:
             - MYSQL_ROOT_PASSWORD=root-password
@@ -29,4 +30,30 @@ services:
             - ./container/database-create.sql:/docker-entrypoint-initdb.d/00-database-create.sql:ro
         ports:
             - 3306:3306
+        restart: always                
+
+    php-server:
+        container_name: "${CONTAINER_NAME_SERVER:-pirogue-server-instance}"
+        image: nginx:alpine
+        volumes:
+                - ./config.d:/etc/nginx/config.d:ro
+                - ./www:/var/www:ro
+        depends_on:
+            - php-fpm
+        links:
+            - php-fpm
+        ports:
+            - 80:80
+        restart: always
+    
+    php-fpm:
+        container_name: "${CONTAINER_NAME_PHP:-pirogue-test-php-instance}"
+        image: nginx:alpine
+        volumes:
+            - ./www:/var/www:ro
+            - ./pirogue:/var/include/pirogue:ro
+            - ./config:/var/config:ro
+            - ./view:/var/view:ro
+        links:
+            - database
         restart: always        
