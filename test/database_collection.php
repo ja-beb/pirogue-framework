@@ -6,7 +6,7 @@
      * @author Bourg, Sean <sean.bourg@gmail.com>
      */
 
-    require_once(join(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, , 'pirogue', 'database_collection.php']));
+    require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'pirogue', 'database_collection.php']));
 
     function _pirogue_test_database_collection_query(?mysqli $database_connection) 
     {

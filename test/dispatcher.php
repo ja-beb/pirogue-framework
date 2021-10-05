@@ -6,7 +6,7 @@
      * @author Bourg, Sean <sean.bourg@gmail.com>
      */
 
-    require_once(join(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, , 'pirogue', 'dispatcher.php']));
+    require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'pirogue', 'dispatcher.php']));
 
     
     pirogue_test_execute('pirogue_dispatcher_init', function() {
