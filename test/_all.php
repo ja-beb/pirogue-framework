@@ -11,9 +11,10 @@ ini_set("display_errors", 1);
 error_reporting(E_ALL | E_STRICT);
 
 // define base folder.
+define('_PIROGUE_TESTING_PATH', dirname(__DIR__, 1));
 define('_PIROGUE_TESTING_TEST_PATH', __DIR__);
-define('_PIROGUE_TESTING_PATH', dirname(_PIROGUE_TESTING_TEST_PATH, 1));
-define('_PIROGUE_TESTING_LIB_PATH', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'pirogue']));
+define('_PIROGUE_TESTING_LIB_PATH', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include']));
+define('_PIROGUE_TESTING_VIEW_PATH', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view']));
 
 // Global variables for test counts
 $GLOBALS['._pirogue_test.count_test'] = 0;

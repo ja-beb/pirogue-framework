@@ -11,6 +11,7 @@
 /**
  * View base folder.
  *
+ * @internal
  * @var string $GLOBALS['._pirogue.view.path']
  */
 $GLOBALS['._pirogue.view.path'] = '';
@@ -22,12 +23,16 @@ $GLOBALS['._pirogue.view.path'] = '';
  */
 function pirogue_view_init(string $path): void
 {
+    if (!is_dir($path)) {
+        throw new InvalidArgumentException(sprintf('Directory does not exist: "%s"', $path));
+    }
     $GLOBALS['._pirogue.view.path'] = $path;
 }
 
 /**
  * Get view file.
  *
+ * @internal
  * @param string $file View file name relative to view base directory.
  * @return string Path to the view file.
  */
