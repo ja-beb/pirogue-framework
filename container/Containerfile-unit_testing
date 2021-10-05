@@ -1,0 +1,26 @@
+FROM php:8.0-alpine as base
+LABEL Maintainer="sean bourg <sean.bourg@gmail.com>"
+
+COPY entrypoint.sh /entrypoint.sh
+COPY run.sh /run.sh
+
+ENV PACKAGES \
+	git
+
+RUN apk update; \
+    apk upgrade; \
+    apk add --no-cache $PACKAGES; \
+    chmod +x /entrypoint.sh; \
+    chmod +x /run.sh; \
+    mkdir /project; \
+    mkdir /project/pirogue; \
+    mkdir /project/testing; \
+    mkdir /project/config; \
+    mkdir /project/include; \
+    mkdir /project/view; \
+    docker-php-ext-install mysqli;
+
+COPY phpcs.xml /project/phpcs.xml
+
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/run.sh"]
