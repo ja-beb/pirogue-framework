@@ -6,7 +6,7 @@
      * @author Bourg, Sean <sean.bourg@gmail.com>
      */
 
-    require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'pirogue', 'cdn.php']));
+    require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'cdn.php']));
 
     /**
      * Define testing function

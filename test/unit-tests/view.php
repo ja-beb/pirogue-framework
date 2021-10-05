@@ -6,7 +6,7 @@
      * @author Bourg, Sean <sean.bourg@gmail.com>
      */
 
-    require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_LIB_PATH, 'pirogue', 'view.php']));
+    require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'view.php']));
 
     pirogue_test_execute('pirogue_view_init - invalid directory', function () {
         try {
@@ -16,7 +16,7 @@
             return [];
         }
     });
-    pirogue_test_execute('pirogue_view_init - valid directory', fn() => pirogue_view_init(_PIROGUE_TESTING_VIEW_PATH));
+    pirogue_test_execute('pirogue_view_init - valid directory', fn() => pirogue_view_init(_PIROGUE_TESTING_PATH_VIEW));
     pirogue_test_execute('pirogue_import_load - invalid file', function () {
         $view = _pirogue_view_get_path('file-not-found');
         return '' == $view ? []: [ 'Loaded invalid library file.'] ;

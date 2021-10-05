@@ -12,12 +12,7 @@ RUN apk update; \
     apk add --no-cache $PACKAGES; \
     chmod +x /entrypoint.sh; \
     chmod +x /run.sh; \
-    mkdir /project; \
-    mkdir /project/pirogue; \
-    mkdir /project/testing; \
-    mkdir /project/config; \
-    mkdir /project/include; \
-    mkdir /project/view; \
+    mkdir /var/pirogue-testing; 
     docker-php-ext-install mysqli;
 
 COPY phpcs.xml /project/phpcs.xml

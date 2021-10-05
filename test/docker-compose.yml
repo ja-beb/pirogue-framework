@@ -23,10 +23,11 @@ services:
             context: ./container
             dockerfile: Containerfile-unit_testing
         volumes:
-           - ./pirogue:/project/include/pirogue:rw
-           - ./test:/project/testing:rw
-           - ./config:/project/config:rw
-           - ./view:/project/view:rw
+           - ./site/test:/var/pirogue-testing/test:rw
+           - ./site/config:/var/pirogue-testing/config:rw
+           - ./site/view:/var/pirogue-testing/view:rw
+           - ./site/include:/var/pirogue-testing/include:rw
+           - ../pirogue:/var/pirogue-testing/include/pirogue:rw           
         depends_on:
             - database
         links:
@@ -37,7 +38,7 @@ services:
         image: nginx:alpine
         volumes:
                 - ./container/conf.d:/etc/nginx/conf.d:ro
-                - ./www-html:/var/www/html:ro
+                - ./site/html:/var/www/html:ro
         depends_on:
             - php-fpm
         links:
@@ -52,10 +53,12 @@ services:
             context: ./container
             dockerfile: Containerfile-php        
         volumes:
-            - ./www-html:/var/www/html:ro
-            - ./pirogue:/var/www/include/pirogue:ro
-            - ./config:/var/www/config:ro
-            - ./view:/var/www/view:ro
+           - ./www-html:/var/www/html:ro
+           - ./site/test:/var/www/testing:rw
+           - ./site/config:/var/www/config:rw
+           - ./site/view:/var/www/view:rw
+           - ./site/include:/var/www/include:rw
+           - ../pirogue:/var/www/include/pirogue:rw           
         links:
             - database
         restart: always        
