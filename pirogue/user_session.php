@@ -45,13 +45,13 @@ function pirogue_user_session_init(string $label): void
         $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
     }
 
-    register_shutdown_function(__database_collection_destruct);
+    register_shutdown_function(_pirogue_user_session_destruct);
 }
 
 /**
  * User Session destructor. Writes session data before exiting.
  */
-function __pirogue_user_session_destruct(): void
+function _pirogue_user_session_destruct(): void
 {
     session_id() && session_write_close();
 }
