@@ -38,6 +38,6 @@ function pirogue_view_init(string $path): void
  */
 function _pirogue_view_get_path(string $file): ?string
 {
-    $view_file = implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]);
+    $view_file = sprintf( '%s.phtml', implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]));
     return file_exists($view_file) ? $view_file : null;
 }
