@@ -11,6 +11,7 @@ services:
            - ./pirogue:/project/pirogue:rw
            - ./test:/project/testing:rw
            - ./config:/project/config:rw
+           - ./view:/project/viewrw
         depends_on:
             - database
         links:
