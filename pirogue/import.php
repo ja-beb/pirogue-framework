@@ -14,7 +14,7 @@
  *
  * @internal
  * @var string $GLOBALS['._pirogue.import.path']
- *
+ */
 $GLOBALS['._pirogue.import.path'] = '';
 
 /**
@@ -25,6 +25,9 @@ $GLOBALS['._pirogue.import.path'] = '';
  */
 function pirogue_import_init(string $path): void
 {
+    if (!is_dir($path)) {
+        throw new InvalidArgumentException(sprintf('Directory does not exist: "%s"', $path));
+    }
     $GLOBALS['._pirogue.import.path'] = $path;
 }
 
@@ -35,11 +38,11 @@ function pirogue_import_init(string $path): void
  * @param string $name Name of library being loaded (translates to the filename without extension).
  * @return void
  */
-function pirogue_import(string $name): void
+function pirogue_import_load(string $name): void
 {
-    $include_file = sprintf('%s\%s.php', $GLOBALS['._pirogue.import.path'], $name);
+    $include_file = sprintf('%s.php', implode(DIRECTORY_SEPARATOR, [ $GLOBALS['._pirogue.import.path'], $name]));
     if (false == file_exists($include_file)) {
-        throw new ErrorException("Unable to find library: {$name}");
+        throw new ErrorException("Unable to find library: {$name} ({$include_file}).");
     }
     include_once $include_file;
 }
