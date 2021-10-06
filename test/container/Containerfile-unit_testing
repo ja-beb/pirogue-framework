@@ -15,7 +15,7 @@ RUN apk update; \
     mkdir /var/pirogue-testing; \ 
     docker-php-ext-install mysqli;
 
-COPY phpcs.xml /project/phpcs.xml
+COPY phpcs.xml /var/pirogue-testing/phpcs.xml
 
 ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/run.sh"]

@@ -12,7 +12,7 @@ error_reporting(E_ALL | E_STRICT);
 
 // define base folder.
 // 'var/pirogue-testing';
-define('_PIROGUE_TESTING_PATH', implode(DIRECTORY_SEPARATOR, ['var', 'pirogue-testing']));
+define('_PIROGUE_TESTING_PATH', '/var/pirogue-testing');
 define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include']));
 define('_PIROGUE_TESTING_PATH_VIEW', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view']));
 define('_PIROGUE_TESTING_PATH_CONFIG', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config']));

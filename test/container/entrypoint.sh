@@ -7,7 +7,7 @@ echo "[entry] CODE_SNIFFER=${CODE_SNIFFER}"
 if [ true = "${CODE_SNIFFER}" ]
 then
     echo "[entry] download code sniffer."
-    cd /project
+    cd /var/pirogue-testing
     if [[ -f /project/phpcs.phar ]]
     then
         curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar

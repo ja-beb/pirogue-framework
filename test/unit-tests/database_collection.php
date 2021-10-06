@@ -19,7 +19,7 @@
     // test pirogue_database_collection_init - invalid directory
     pirogue_test_execute('pirogue_database_collection_init: invalid config directory', function(){
         try{
-            pirogue_database_collection_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config-invalid']), 'website');
+            pirogue_database_collection_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_CONFIG, 'config-invalid']), 'website');
             return [ 'Invalid database config directory accepted.' ];
         } catch ( InvalidArgumentException $_exception){
             return [];

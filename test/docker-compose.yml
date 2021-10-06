@@ -23,7 +23,7 @@ services:
             context: ./container
             dockerfile: Containerfile-unit_testing
         volumes:
-            - ./site/test:/var/pirogue-testing/test:rw
+            - ./unit-tests:/var/pirogue-testing/test:rw
             - ./site/config:/var/pirogue-testing/config:rw
             - ./site/view:/var/pirogue-testing/view:rw
             - ./site/include:/var/pirogue-testing/include:rw
@@ -35,9 +35,11 @@ services:
 
     php-server:
         container_name: "${CONTAINER_NAME_SERVER:-pirogue-server-instance}"
-        image: nginx:alpine
+        image: "${IMAGE_NAME_PROXY:-pirogue-server}"
+        build: 
+            context: ./container
+            dockerfile: Containerfile-site
         volumes:
-                - ./container/conf.d:/etc/nginx/conf.d:ro
                 - ./site/html:/var/www/html:ro
         depends_on:
             - php-fpm
@@ -45,6 +47,7 @@ services:
             - php-fpm
         ports:
             - 80:80
+            - 443:443
         restart: always
     
     php-fpm:
@@ -54,7 +57,6 @@ services:
             dockerfile: Containerfile-php        
         volumes:
             - ./site/html:/var/www/html:ro
-            - ./site/test:/var/www/testing:rw
             - ./site/config:/var/www/config:rw
             - ./site/view:/var/www/view:rw
             - ./site/include:/var/www/include:rw

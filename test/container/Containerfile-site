@@ -1,0 +1,9 @@
+FROM nginx:alpine
+
+RUN apk update && apk upgrade; 
+
+COPY ./conf.d  /etc/nginx/conf.d/
+COPY ./ssl /etc/ssl/keys
+
+EXPOSE 80 443
+CMD ["nginx", "-g", "daemon off;"]
