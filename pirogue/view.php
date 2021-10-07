@@ -17,16 +17,25 @@
 $GLOBALS['._pirogue.view.path'] = '';
 
 /**
+ * View file extension.
+ *
+ * @internal
+ * @var string $GLOBALS['._pirogue.view.extension']
+ */
+$GLOBALS['._pirogue.view.extension'] = '';
+
+/**
  * initialize view library.
  *
  * @param string $path The base location of the site's views.
  */
-function pirogue_view_init(string $path): void
+function pirogue_view_init(string $path, string $extension = 'phtml'): void
 {
     if (!is_dir($path)) {
         throw new InvalidArgumentException(sprintf('Directory does not exist: "%s"', $path));
     }
     $GLOBALS['._pirogue.view.path'] = $path;
+    $GLOBALS['._pirogue.view.extension'] = $extension;
 }
 
 /**
@@ -38,6 +47,6 @@ function pirogue_view_init(string $path): void
  */
 function _pirogue_view_get_path(string $file): ?string
 {
-    $view_file = sprintf( '%s.phtml', implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]));
+    $view_file = sprintf( '%s.%s', implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]), $GLOBALS['._pirogue.view.extension']);
     return file_exists($view_file) ? $view_file : null;
 }
