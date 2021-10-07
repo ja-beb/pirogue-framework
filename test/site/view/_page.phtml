@@ -51,6 +51,7 @@
                 <?php echo json_encode($GLOBALS['.pirogue.dispatcher.request_path']); ?>,
                 <?php echo json_encode($GLOBALS['.pirogue.dispatcher.request_data']); ?>,
             );
+            console.log('request url: <?php echo json_encode(pirogue_dispatcher_create_url("{$GLOBALS['.pirogue.dispatcher.request_path']}.html", $GLOBALS['.pirogue.dispatcher.request_data'])); ?>');
         </script>
         <?php echo $GLOBALS['.html.script.inline'] ?? ''; ?>
     </body>
