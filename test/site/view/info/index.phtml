@@ -1,6 +1,16 @@
-<ul>
-    <li>Page = <?php echo $GLOBALS['.request_page']; ?></li>
-    <li>Path = <?php echo $GLOBALS['.request_path']; ?></li>
-    <li>Data = <pre><?php print_r($GLOBALS['.request_data']); ?></pre></li>
-</ul>
-        
+<?php
+
+    $_menu = require implode(DIRECTORY_SEPARATOR, [__DIR__, '_menu.php']) ?? [];
+    $_module = 'info';
+
+?>
+<?php if ( empty($_menu) ): ?>
+<?php else: ?>
+    <?php foreach ( $_menu as $_entry ): ?>
+        <li>
+            <a href="<?php echo pirogue_dispatcher_create_url(sprintf('%s/%s', $_module, $_entry['path'] ?? ''), $_entry['request'] ?? []); ?>" title="<?php echo $_entry['title'] ?? ''; ?>">
+                <span class=""><?php echo $_entry['label'] ?? 'Menu Option'; ?><span>
+            </a>
+        </li>    
+    <?php endforeach; ?>
+<?php endif; ?>
