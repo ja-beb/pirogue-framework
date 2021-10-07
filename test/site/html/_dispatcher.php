@@ -45,44 +45,42 @@
 
             $_path = implode('/', $_path_parts);
 
-        
-
-        pirogue_import_load('pirogue/view');
-        pirogue_import_load('pirogue/cdn');
-        pirogue_import_load('site/html');
-        
-        pirogue_view_init(_PIROGUE_PATH_VIEW);    
-        pirogue_cdn_init([$GLOBALS['.pirogue.dispatcher.address']]);
-        
-        // initialize view variables:
-        site_html_create();
-        
-        // load requested page.
-        $_view_file = _pirogue_view_get_path($_view);
-        $GLOBALS['.request_page'] = $_view;
-        $GLOBALS['.request_path'] = $_path;
-        $GLOBALS['.request_data'] = $_request_data;
-        
-
-        if ( empty($_view_file) ) {
-            $GLOBALS['.request_page'] = '_error-404';
-            $GLOBALS['.request_path'] = '';
-            $GLOBALS['.request_data'] = [
-                'view_file' => $_view_file,
-                'view' => $_view,
-                'path' => $_path,
-                'data' => $_data,
-            ];            
-            $_view_file = _pirogue_view_get_path('_error-404');
+            pirogue_import_load('pirogue/view');
+            pirogue_import_load('pirogue/cdn');
+            pirogue_import_load('site/html');
             
-        }
+            pirogue_view_init(_PIROGUE_PATH_VIEW);    
+            pirogue_cdn_init([$GLOBALS['.pirogue.dispatcher.address']]);
 
-        $GLOBALS['view_data'] = [];
-        ob_start();
-        require $_view_file;
-        $GLOBALS['.html.body.content'] = ob_get_clean();
+            // initialize view variables:
+            site_html_create();
+            
+            // load requested page.
+            $_view_file = _pirogue_view_get_path($_view);
+            $GLOBALS['.request_page'] = $_view;
+            $GLOBALS['.request_path'] = $_path;
+            $GLOBALS['.request_data'] = $_request_data;
+            
 
-        
+            if ( empty($_view_file) ) {
+                $GLOBALS['.request_page'] = '_error-404';
+                $GLOBALS['.request_path'] = '';
+                $GLOBALS['.request_data'] = [
+                    'view_file' => $_view_file,
+                    'view' => $_view,
+                    'path' => $_path,
+                    'data' => $_data,
+                ];            
+                $_view_file = _pirogue_view_get_path('_error-404');
+                
+            }
+
+            $GLOBALS['view_data'] = [];
+            ob_start();
+            require $_view_file;
+            $GLOBALS['.html.body.content'] = ob_get_clean();
+
+            
         }
         catch (Throwable $_throwable) {
             $_view_file = _pirogue_view_get_path('_error-500');
