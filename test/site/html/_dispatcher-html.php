@@ -6,7 +6,7 @@
     // define constants.
     define('_PIROGUE_PATH', '/var/www');
     define('_PIROGUE_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_PATH, 'include']));
-    define('_PIROGUE_PATH_VIEW', implode(DIRECTORY_SEPARATOR, [_PIROGUE_PATH, 'view']));
+    define('_PIROGUE_PATH_VIEW', implode(DIRECTORY_SEPARATOR, [_PIROGUE_PATH, 'view', 'html']));
     define('_PIROGUE_PATH_CONFIG', implode(DIRECTORY_SEPARATOR, [_PIROGUE_PATH, 'config']));
 
     function _dispatcher_clear_buffer() {
@@ -89,6 +89,7 @@
 
         // send page content and exit.
         _dispatcher_clear_buffer();
+        header('Content-Type: text/html');
         _pirogue_dispatcher_send($_html_page);
         _pirogue_dispatcher_exit();
     } catch (Throwable $_throwable) {
