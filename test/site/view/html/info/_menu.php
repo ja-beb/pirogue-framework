@@ -13,5 +13,17 @@ return [
         'label' => 'Session Data',
         'path' => 'session.html',
         'request' => []
-    ]        
+    ],
+    [
+        'title' => 'View framework data.',
+        'label' => 'Pirogue Framework Data',
+        'path' => 'pirogue-vars.html',
+        'request' => []
+    ],
+    [
+        'title' => 'View dispatcher data.',
+        'label' => 'Dispatcher Data',
+        'path' => 'dispatcher-vars/page/options.html',
+        'request' => ['test' => 'true']
+    ]
 ];

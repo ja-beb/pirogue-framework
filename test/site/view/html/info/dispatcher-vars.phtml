@@ -1,0 +1,24 @@
+<?php
+
+?>
+<table id="varList">
+    <tr><th>._dispatcher_path</th><td><?php echo implode( '/', $GLOBALS['._dispatcher_path']); ?></td></tr>
+    <tr><th>.request_path</th><td><?php echo implode( '/', $GLOBALS['.request_path']); ?></td></tr>
+    <tr><th>.request_module</th><td><?php echo $GLOBALS['.request_module']; ?></td></tr>
+    <tr><th>.request_page</th><td><?php echo $GLOBALS['.request_page']; ?></td></tr>
+</table>
+<p>.request_data</p>
+<?php if ( empty($GLOBALS['.request_data'])): ?>
+    <p>None</p>
+<?php else: ?>
+    <ul>
+        <?php foreach ( $GLOBALS['.request_data'] as $_key => $_value ): ?>
+            <li><?php echo $_key; ?> = <?php echo $_value; ?></li>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+<?php ob_start(); ?>
+    <style>
+        #varList td, #varList th{ text-align: left; padding: .25ex 1ex; line-height: 150%;}
+    </style>
+<?php $GLOBALS['.html.css.inline'] = ob_get_clean();
