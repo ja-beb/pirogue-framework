@@ -3,6 +3,7 @@
      * Page master template.
      */
     
+     
     
 ?>
 <!doctype html>
@@ -16,23 +17,41 @@
     <meta property="og:type" content="">
     <meta property="og:url" content="">
     <meta property="og:image" content="">
-    <link rel="manifest" href="site.webmanifest">
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/style.css">
     <meta name="theme-color" content="#fafafa">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="<?php echo pirogue_cdn_create_url('css/normalize.css', []); ?>">
+    <link rel="stylesheet" href="<?php echo pirogue_cdn_create_url('css/style.css', []); ?>">
     <?php foreach ( $GLOBALS['.html.css.files'] ?? [] as $_file ): ?>
-        <link rel="stylesheet" href="css/<?php echo $_file; ?>.css">
+        <link rel="stylesheet" href="<?php echo pirogue_cdn_create_url("css/{$_file}.css", []); ?>.css">
     <?php endforeach; ?>
     <?php echo $GLOBALS['.html.css.inline'] ?? ''; ?>
     <?php echo $GLOBALS['.html.head'] ?? ''; ?>
     </head>
-    <body id="<?php echo $GLOBALS['.html.body.id'] ?? ''; ?>" class="<?php echo $GLOBALS['.html.body.class'] ?? ''; ?>">
-        <h1><?php echo $GLOBALS['.html.body.title'] ?? ''; ?></h1>
-        <?php echo $GLOBALS['.html.body.content'] ?? ''; ?>
-        <script src="script/app.js"></script>
+    <body id="<?php echo $GLOBALS['.html.body.id'] ?? ''; ?>" class="<?php echo $GLOBALS['.html.body.class'] ?? ''; ?>" class="clearfix">
+        <header id="pageHeader">
+            <h1 id="pageTitle"><a href="<?php echo $GLOBALS['.pirogue.dispatcher.address']; ?>">Test Site</a></h1>
+            <h2 id="pageSubtitle"><?php echo $GLOBALS['.html.body.title']; ?></h2>
+            <nav>
+                <ul id="siteMenu">
+                    <li><a href="<?php echo pirogue_dispatcher_create_url('info.html', []); ?>" title="" class=""><span class="">Info<span></a></li>
+                    <li><a href="<?php echo pirogue_dispatcher_create_url('test.html', []); ?>" title="" class=""><span class="">Test<span></a></li>
+                    <li><a href="<?php echo pirogue_dispatcher_create_url('user.html', []); ?>" title="" class=""><span class="">User<span></a></li>
+                </ul>
+            </nav>
+        </header>
+        <section id=""><?php echo $GLOBALS['.html.body.content'] ?? ''; ?></section>
+        <footer id=""></footer>
+        <script src="<?php echo pirogue_cdn_create_url('script/app.js', []); ?>"></script>
         <?php foreach ( $GLOBALS['.html.script.files'] ?? [] as $_file ): ?>
-            <script src="script/<?php $_file; ?>.js"></script>
+            <script src="script/<?php echo pirogue_cdn_create_url("script/{$_file}.js", []); ?>"></script>
         <?php endforeach; ?>
+        <script>
+            _pirogue_site_display(
+                <?php echo json_encode($GLOBALS['.pirogue.dispatcher.address']); ?>,
+                <?php echo json_encode($GLOBALS['.pirogue.dispatcher.request_path']); ?>,
+                <?php echo json_encode($GLOBALS['.pirogue.dispatcher.request_data']); ?>,
+            );
+        </script>
         <?php echo $GLOBALS['.html.script.inline'] ?? ''; ?>
     </body>
 </html>

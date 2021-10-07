@@ -33,8 +33,8 @@
             $_path_parts = explode('/', $_request_path);
             array_walk($_path_parts, fn($str) => preg_replace('/^_/','', $str));
             
-            $_module = array_pop($_path_parts);            
-            $_page = array_pop($_path_parts);            
+            $_module = array_shift($_path_parts);            
+            $_page = array_shift($_path_parts);            
             $_page = empty($_page) ? 'index' : $_page;
 
             if ( empty($_module) ){
@@ -48,8 +48,11 @@
         
 
         pirogue_import_load('pirogue/view');
+        pirogue_import_load('pirogue/cdn');
         pirogue_import_load('site/html');
+        
         pirogue_view_init(_PIROGUE_PATH_VIEW);    
+        pirogue_cdn_init([$GLOBALS['.pirogue.dispatcher.address']]);
         
         // initialize view variables:
         site_html_create();
@@ -62,14 +65,16 @@
         
 
         if ( empty($_view_file) ) {
-            $_view_file = _pirogue_view_get_path('_error-404');
             $GLOBALS['.request_page'] = '_error-404';
             $GLOBALS['.request_path'] = '';
             $GLOBALS['.request_data'] = [
+                'view_file' => $_view_file,
                 'view' => $_view,
                 'path' => $_path,
                 'data' => $_data,
             ];            
+            $_view_file = _pirogue_view_get_path('_error-404');
+            
         }
 
         $GLOBALS['view_data'] = [];
@@ -106,10 +111,15 @@
 
 
         // send page content and exit.
-        ob_get_clean();
+        while ( 0 < ob_get_level() ) {
+            ob_get_clean();
+        }
         _pirogue_dispatcher_send($_html_page);
         _pirogue_dispatcher_exit();
     } catch (Throwable $_throwable) {
+        while ( 0 < ob_get_level() ) {
+            ob_get_clean();
+        }
         printf('%s (%s:%d)', $_throwable->getMessage(),$_throwable->getFile(), $_throwable->getLine());
         echo '<pre>';
         var_dump($_throwable);

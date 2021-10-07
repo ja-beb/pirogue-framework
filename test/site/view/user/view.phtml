@@ -1,1 +1,6 @@
-<?php echo __FILE__; ?>
+<ul>
+    <li>Page = <?php echo $GLOBALS['.request_page']; ?></li>
+    <li>Path = <?php echo $GLOBALS['.request_path']; ?></li>
+    <li>Data = <pre><?php print_r($GLOBALS['.request_data']); ?></pre></li>
+</ul>
+        

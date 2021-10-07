@@ -15,7 +15,7 @@
   // Build original request query.
   $_request_uri = sprintf('%s://%s', $_SERVER['REQUEST_SCHEME'], $_SERVER['HTTP_HOST']);
   if ( !empty($_SERVER['REQUEST_URI']) ) {
-    $_request_uri = sprintf('%s/%s', $_request_uri, $_SERVER['REQUEST_URI']);
+    $_request_uri = sprintf('%s%s', $_request_uri, $_SERVER['REQUEST_URI']);
   }
 
   // Process get request.
@@ -33,6 +33,7 @@
 ?> 
 <p>Sorry, but the page you were trying to view does not exist.</p>
 <p>Request: <?php echo $_request_uri; ?></td>
+<pre><?php print_r($GLOBALS['.request_data']); ?></pre>
 <pre><?php print_r($_SERVER); ?></pre>
 
 
