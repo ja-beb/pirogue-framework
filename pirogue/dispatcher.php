@@ -24,7 +24,7 @@ $GLOBALS['.pirogue.dispatcher.request_path'] = '';
  *
  * @var string $GLOBALS['.pirogue.dispatcher.request_data'] The client's requested data.
  */
-$GLOBALS['.pirogue.dispatcher.request_data'] = '';
+$GLOBALS['.pirogue.dispatcher.request_data'] = [];
 
 /**
  * Setup dispatcher library.

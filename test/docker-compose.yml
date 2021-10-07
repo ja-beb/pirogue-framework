@@ -23,11 +23,10 @@ services:
             context: ./container
             dockerfile: Containerfile-unit_testing
         volumes:
-            - ./unit-tests:/var/pirogue-testing/test:rw
-            - ./site/config:/var/pirogue-testing/config:rw
-            - ./site/view:/var/pirogue-testing/view:rw
-            - ./site/include:/var/pirogue-testing/include:rw
-            - ../pirogue:/var/pirogue-testing/include/pirogue:rw           
+            - ${PROJECT_PATH:-./}/test/unit-tests:/var/pirogue-testing/test:rw
+            - ${PROJECT_PATH:-./}/test/site/config:/var/pirogue-testing/config:rw
+            - ${PROJECT_PATH:-./}/test/site/view:/var/pirogue-testing/view:rw
+            - ${PROJECT_PATH:-./}/pirogue:/var/pirogue-testing/include/pirogue:rw           
         depends_on:
             - database
         links:
@@ -40,7 +39,7 @@ services:
             context: ./container
             dockerfile: Containerfile-site
         volumes:
-                - ./site/html:/var/www/html:ro
+                - ${PROJECT_PATH:-./}/test/site/html:/var/www/html:ro
         depends_on:
             - php-fpm
         links:
@@ -56,11 +55,11 @@ services:
             context: ./container
             dockerfile: Containerfile-php        
         volumes:
-            - ./site/html:/var/www/html:ro
-            - ./site/config:/var/www/config:rw
-            - ./site/view:/var/www/view:rw
-            - ./site/include:/var/www/include:rw
-            - ../pirogue:/var/www/include/pirogue:rw           
+            - ${PROJECT_PATH:-./}/test/site/html:/var/www/html:ro
+            - ${PROJECT_PATH:-./}/test/site/config:/var/www/config:rw
+            - ${PROJECT_PATH:-./}/test/site/view:/var/www/view:rw
+            - ${PROJECT_PATH:-./}/test/site/include/site:/var/www/include/site:rw
+            - ${PROJECT_PATH:-./}/pirogue:/var/www/include/pirogue:rw           
         links:
             - database
         restart: always        

@@ -1,28 +1,38 @@
+<?php
+    /**
+     * Page master template.
+     */
+    
+    
+?>
 <!doctype html>
 <html class="no-js" lang="">
-
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <meta property="og:title" content="">
-  <meta property="og:type" content="">
-  <meta property="og:url" content="">
-  <meta property="og:image" content="">
-
-  <link rel="manifest" href="site.webmanifest">
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/style.css">
-
-  <meta name="theme-color" content="#fafafa">
-</head>
-
-<body>
-
-    <?php echo $_view_data['page']['body'] ?? 'nonpe'; ?>
-  <script src="js/app.js"></script>
-</body>
-
+    <head>
+    <meta charset="utf-8">
+    <title><?php echo $GLOBALS['.html.head.title'] ?? 'Test Page'; ?></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="theme-color" content="#fafafa">
+    <?php foreach ( $GLOBALS['.html.css.files'] ?? [] as $_file ): ?>
+        <link rel="stylesheet" href="css/<?php echo $_file; ?>.css">
+    <?php endforeach; ?>
+    <?php echo $GLOBALS['.html.css.inline'] ?? ''; ?>
+    <?php echo $GLOBALS['.html.head'] ?? ''; ?>
+    </head>
+    <body id="<?php echo $GLOBALS['.html.body.id'] ?? ''; ?>" class="<?php echo $GLOBALS['.html.body.class'] ?? ''; ?>">
+        <h1><?php echo $GLOBALS['.html.body.title'] ?? ''; ?></h1>
+        <?php echo $GLOBALS['.html.body.content'] ?? ''; ?>
+        <script src="script/app.js"></script>
+        <?php foreach ( $GLOBALS['.html.script.files'] ?? [] as $_file ): ?>
+            <script src="script/<?php $_file; ?>.js"></script>
+        <?php endforeach; ?>
+        <?php echo $GLOBALS['.html.script.inline'] ?? ''; ?>
+    </body>
 </html>
