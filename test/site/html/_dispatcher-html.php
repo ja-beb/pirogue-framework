@@ -27,6 +27,7 @@
         pirogue_import_load('pirogue/view');
         pirogue_import_load('pirogue/cdn');
         pirogue_import_load('pirogue/site_notices');
+        pirogue_import_load('pirogue/user_session');
         pirogue_import_load('pirogue/database_collection');
         pirogue_import_load('site/html');
 
@@ -55,20 +56,34 @@
             ]);
             pirogue_view_init(_PIROGUE_PATH_VIEW);
             pirogue_site_notices_init('._pirogue-testing.site_notices');
+            pirogue_user_session_init('._pirogue-testing.user_session');
             pirogue_database_collection_init(_PIROGUE_PATH_CONFIG, 'website');
 
             // build request components.
             $GLOBALS['.request_path'] = $GLOBALS['._dispatcher_path'];
-            $GLOBALS['.request_module'] = array_shift($GLOBALS['.request_path']);
-            $GLOBALS['.request_page'] = array_shift($GLOBALS['.request_path']) ?? 'index';            
+            $GLOBALS['.request_module'] = array_shift($GLOBALS['.request_path']) ?? '';
+            $GLOBALS['.request_page'] = array_shift($GLOBALS['.request_path']) ?? '';
 
             // initialize html view variables:
             site_html_create();
             ob_start();
-            $_path = empty($GLOBALS['.request_module']) ? $GLOBALS['.request_page'] : implode('/', [$GLOBALS['.request_module'], $GLOBALS['.request_page']]);
-            require _pirogue_view_get_path($_path) ?? _pirogue_view_get_path('_error/404');
-            $GLOBALS['.html.body.content'] = ob_get_clean();
 
+            // get view path.
+            if ( '' == $GLOBALS['.request_module']  ){
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path('index');
+            } elseif ( '' == $GLOBALS['.request_page'] ) {
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path(
+                    implode(DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], $GLOBALS['.request_page']]) 
+                ) ?? _pirogue_view_get_path( $GLOBALS['.request_module'] );
+            } else {
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path(implode(DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], $GLOBALS['.request_page']]) );
+            }
+            $GLOBALS['._request_view'] = $GLOBALS['._dispatcher_view'];
+            $GLOBALS['._dispatcher_view'] = '' == $GLOBALS['._dispatcher_view'] ? _pirogue_view_get_path('_error/404') : $GLOBALS['._dispatcher_view'];
+
+            // load view into the $GLOBALS['.html.body.content'] variable to pass to template.
+            require $GLOBALS['._dispatcher_view'];
+            $GLOBALS['.html.body.content'] = ob_get_clean();
         }
         catch (Throwable $_throwable) {
             $GLOBALS['.request_data'] = [
