@@ -3,7 +3,7 @@
      * Page master template.
      */
     
-     
+     $_user_session = pirogue_user_session_current();
     
 ?>
 <!doctype html>
@@ -36,6 +36,11 @@
                     <li><a href="<?php echo pirogue_dispatcher_create_url('info.html', []); ?>" title="" class=""><span class="">Info<span></a></li>
                     <li><a href="<?php echo pirogue_dispatcher_create_url('test.html', []); ?>" title="" class=""><span class="">Test<span></a></li>
                     <li><a href="<?php echo pirogue_dispatcher_create_url('user.html', []); ?>" title="" class=""><span class="">User<span></a></li>
+                    <?php if ( null == $_user_session ): ?>
+                        <li><a href="<?php echo pirogue_dispatcher_create_url('login.html', []); ?>" title="" class=""><span class="">Login<span></a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo pirogue_dispatcher_create_url('logout.html', []); ?>" title="" class=""><span class="">Sign Out <?php echo $_user_session['username']; ?><span></a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </header>
@@ -52,6 +57,8 @@
                 <?php echo json_encode($GLOBALS['.pirogue.dispatcher.request_data']); ?>,
             );
             console.log('request url: <?php echo json_encode(pirogue_dispatcher_create_url("{$GLOBALS['.pirogue.dispatcher.request_path']}.html", $GLOBALS['.pirogue.dispatcher.request_data'])); ?>');
+            console.log('view: <?php echo json_encode($GLOBALS['._dispatcher_view']); ?>');
+            console.log('request view: <?php echo json_encode($GLOBALS['._request_view']); ?>');
         </script>
         <?php echo $GLOBALS['.html.script.inline'] ?? ''; ?>
     </body>
