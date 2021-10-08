@@ -1,0 +1,55 @@
+<?php
+
+    $_form_errors = [];
+    
+    if ( 'POST' == $_SERVER['REQUEST_METHOD'] && 'test' == $_POST['action'] ?? '' ){
+        $_message_text = trim($_POST['message-text'] ?? '');
+        if ( '' == $_message_text ) {
+            $_form_errors['message-text']  = 'Message required.';
+        }
+        
+        $_message_type = match (trim($_POST['message-type'] ?? '')){
+            'Warning' => 'Warning',
+            'Error' => 'Error',
+            'Information' => 'Information',
+            default => ''
+        };
+
+        if ( '' == $_message_type ) {
+            $_form_errors['message-type']  = 'Invalid message type.';
+        }
+
+        if ( empty($_form_errors) ) {
+            pirogue_site_notices_create($_message_type, $_message_text);
+            return pirogue_dispatcher_redirect();
+        }
+    }
+
+    // Build page.
+    site_html_create(html_title: 'Test Site Notices', page_title: 'Test Site Notices');
+
+?>
+<form id="" method="POST" action="<?php echo pirogue_dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']); ?>">
+    <?php if ( array_key_exists('form', $_form_errors) ): ?>
+        <p class="error-mesasage"><?php echo $_form_errors['form']; ?></p>
+    <?php endif; ?>
+    <div class="form-entry <?php echo array_key_exists('message-text', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <input type="text" placeholder="Message text." name="message-text" value="" />
+        <?php if ( array_key_exists('message-text', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['message-text']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="form-entry <?php echo array_key_exists('message-type', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <select id="" name="message-type">
+            <option value="Warning">Warning</option>
+            <option value="Error">Error</option>
+            <option value="Information">Information</option>
+        </select>
+        <?php if ( array_key_exists('message-type', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['message-type']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="">
+        <button name="action" type="submit" value="test"><span class="">Test messages</span></button>
+    </div>
+</form>
