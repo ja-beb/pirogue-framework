@@ -1,15 +1,32 @@
 <?php
 
-    $_menu = require implode(DIRECTORY_SEPARATOR, [__DIR__, '_menu.php']) ?? [];
+    $_database_connection = pirogue_database_collection_get();
+
+    
+    $_sql_filter = "";
+
+    $_order_by_field = 'username';
+    $_order_by_dir = 'ASC';
+    $_sql_query = "SELECT id, username, email FROM users {$_sql_filter} ORDER BY {$_order_by_field} {$_order_by_dir}";
+    $_sql_result = mysqli_query($_database_connection, $_sql_query);
+
+    // create page.
+    site_html_create(html_title: 'Users', page_title: 'Users');
 
 ?>
-<?php if ( empty($_menu) ): ?>
+<?php if ( 0 == mysqli_num_rows($_sql_result) ): ?>
+    <p class="">No Results</p>
 <?php else: ?>
-    <?php foreach ( $_menu as $_entry ): ?>
-        <li>
-            <a href="<?php echo pirogue_dispatcher_create_url(sprintf('%s/%s', $GLOBALS['.request_module'], $_entry['path'] ?? ''), $_entry['request'] ?? []); ?>" title="<?php echo $_entry['title'] ?? ''; ?>">
-                <span class=""><?php echo $_entry['label'] ?? 'Menu Option'; ?><span>
-            </a>
-        </li>    
-    <?php endforeach; ?>
+    <table>
+        <thead></thead>
+        <tbody>
+            <?php while ( $_sql_data = mysqli_fetch_assoc($_sql_result) ): ?>
+                <tr>
+                    <td><?php echo $_sql_data['id']; ?></td>
+                    <td><?php echo $_sql_data['username']; ?></td>
+                    <td><?php echo $_sql_data['email']; ?></td>
+                </tr>
+            <?php endwhile; ?>
+        <tbody>
+    </table>
 <?php endif; ?>
