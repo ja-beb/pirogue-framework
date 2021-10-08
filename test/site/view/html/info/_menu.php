@@ -24,6 +24,9 @@ return [
         'title' => 'View dispatcher data.',
         'label' => 'Dispatcher Data',
         'path' => 'dispatcher-vars/page/options.html',
-        'request' => ['test' => 'true']
+        'request' => [
+            'test1' => 'true',
+            'test2' => 'false'
+        ]
     ]
 ];
