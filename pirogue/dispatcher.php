@@ -86,7 +86,9 @@ function _pirogue_dispatcher_send(string $content): void
  */
 function pirogue_dispatcher_redirect(string $address = '', int $status_code = 301): void
 {
-    $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
+    $address = '' == $address
+        ? pirogue_dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data'] )
+        : $address;        
     header(sprintf('Location: %s', $address), true, $status_code);
     session_id() && session_write_close();
     _pirogue_dispatcher_exit();
