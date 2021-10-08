@@ -44,7 +44,24 @@
                 </ul>
             </nav>
         </header>
-        <section id=""><?php echo $GLOBALS['.html.body.content'] ?? ''; ?></section>
+        <section id="">
+            <?php $_site_notices = pirogue_site_notices_clear(); ?>
+            <?php if ( !empty($_site_notices) ): ?>
+                <?php foreach ( $_site_notices as $_notice): ?>
+                    <p class="<?php echo $_notice[0]; ?>"><?php echo $_notice[1]; ?></p>
+                <?php endforeach; ?>
+                <?php ob_start(); ?>
+                    <script>
+                        console.group('Site Notices');                        
+                        <?php foreach ( $_site_notices as $_notice): ?>
+                            console.log("type='<?php echo $_notice[0]; ?>', message='<?php echo $_notice[1]; ?>'");
+                        <?php endforeach; ?>
+                        console.groupEnd()
+                    </script>
+                <?php $GLOBALS['.html.script.inline'] .= ob_get_clean(); ?>
+            <?php endif; ?>
+            <?php echo $GLOBALS['.html.body.content'] ?? ''; ?>
+        </section>
         <footer id=""></footer>
         <script src="<?php echo pirogue_cdn_create_url('script/app.js', []); ?>"></script>
         <?php foreach ( $GLOBALS['.html.script.files'] ?? [] as $_file ): ?>
