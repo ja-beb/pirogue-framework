@@ -3,7 +3,7 @@
     $_form_errors = [];
     
     if ( null != pirogue_user_session_current() ) {
-        return pirogue_dispatcher_redirect();
+        return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url('', []));
     }
     
     if ( 'POST' == $_SERVER['REQUEST_METHOD'] && 'login' == $_POST['action'] ?? '' ){
@@ -46,7 +46,7 @@
                     'username' => $_sql_data['username'],
                     'email' => $_sql_data['email'],
                 ]);
-                return pirogue_dispatcher_redirect();
+                return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url('', []));
             }
         } elseif ( !empty($_form_errors) ){
             $_form_errors['form'] = 'Login failed.';
