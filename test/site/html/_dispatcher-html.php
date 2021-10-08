@@ -72,9 +72,8 @@
             if ( '' == $GLOBALS['.request_module']  ){
                 $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path('index');
             } elseif ( '' == $GLOBALS['.request_page'] ) {
-                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path(
-                    implode(DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], $GLOBALS['.request_page']]) 
-                ) ?? _pirogue_view_get_path( $GLOBALS['.request_module'] );
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path( $GLOBALS['.request_module'] )
+                    ?? _pirogue_view_get_path( implode( DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], 'index'] ) ); 
             } else {
                 $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path(implode(DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], $GLOBALS['.request_page']]) );
             }
