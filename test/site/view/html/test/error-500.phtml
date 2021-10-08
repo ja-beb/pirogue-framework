@@ -1,0 +1,39 @@
+<?php
+
+    $_form_errors = [];
+    
+    if ( 'POST' == $_SERVER['REQUEST_METHOD'] && 'execute' == $_POST['action'] ?? '' ){
+        $_form_errors['error-type'] = match (intval($_POST['error-type'] ?? '')){
+            0 => 'Error case required.',
+            1 => 1/0,
+            2 => throw new Exception('I threw this exception for you.'),
+            3 => trigger_error('I triggered this error for you.'),
+            4 => pirogue_no_such_function(),
+            default => 'Invalid option.',
+        };
+    }
+
+    // Build page.
+    site_html_create(html_title: 'Test 500 Errors', page_title: 'Test 500 Errors');
+
+?>
+<form id="" method="POST" action="<?php echo pirogue_dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data']); ?>">
+    <?php if ( array_key_exists('form', $_form_errors) ): ?>
+        <p class="error-mesasage"><?php echo $_form_errors['form']; ?></p>
+    <?php endif; ?>
+    <div class="form-entry <?php echo array_key_exists('error-type', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <select id="" name="error-type">
+            <option value=""> -- Select error</option>
+            <option value="1">Divide by 0</option>
+            <option value="2">Throw exception</option>
+            <option value="3">trigger_error()</option>
+            <option value="4">Undefined reference</option>
+        </select>
+        <?php if ( array_key_exists('error-type', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['error-type']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="">
+        <button name="action" type="submit" value="execute"><span class="">Execute</span></button>
+    </div>
+</form>
