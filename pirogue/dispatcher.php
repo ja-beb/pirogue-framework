@@ -49,7 +49,7 @@ function pirogue_dispatcher_init(string $address, string $request_path, array $r
  * Send content to user and exit.
  *
  * @internal Called from dispatcher only.
- * @uses pirogue\_dispatcher_exit
+ * @uses _pirogue_dispatcher_exit
  *
  * @param string $content
  *            The content that will be sent to the client.
@@ -71,7 +71,7 @@ function _pirogue_dispatcher_send(string $content): void
         echo $content;
     }
     ob_end_flush();
-    _dispatcher_exit();
+    _pirogue_dispatcher_exit();
 }
 
 /**
@@ -82,14 +82,14 @@ function _pirogue_dispatcher_send(string $content): void
  * @param int $status_code
  *            The http status code to use in the redirect process.
  *
- * @uses pirogue\_dispatcher_exit
+ * @uses _pirogue_dispatcher_exit
  */
 function pirogue_dispatcher_redirect(string $address = '', int $status_code = 301): void
 {
     $address = empty($address) ? $GLOBALS['.pirogue.dispatcher.address'] : $address;
     header(sprintf('Location: %s', $address), true, $status_code);
     session_id() && session_write_close();
-    _dispatcher_exit();
+    _pirogue_dispatcher_exit();
 }
 
 /**
