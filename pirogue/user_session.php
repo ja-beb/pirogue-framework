@@ -45,7 +45,7 @@ function pirogue_user_session_init(string $label): void
         $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
     }
 
-    register_shutdown_function(_pirogue_user_session_destruct);
+    register_shutdown_function('_pirogue_user_session_destruct');
 }
 
 /**
