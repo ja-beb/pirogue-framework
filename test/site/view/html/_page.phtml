@@ -36,15 +36,17 @@
                     <li><a href="<?php echo pirogue_dispatcher_create_url('info.html', []); ?>" title="" class=""><span class="">Info<span></a></li>
                     <li><a href="<?php echo pirogue_dispatcher_create_url('test.html', []); ?>" title="" class=""><span class="">Test<span></a></li>
                     <li><a href="<?php echo pirogue_dispatcher_create_url('user.html', []); ?>" title="" class=""><span class="">User<span></a></li>
-                    <?php if ( null == $_user_session ): ?>
-                        <li><a href="<?php echo pirogue_dispatcher_create_url('login.html', []); ?>" title="" class=""><span class="">Login<span></a></li>
-                    <?php else: ?>
-                        <li><a href="<?php echo pirogue_dispatcher_create_url('logout.html', []); ?>" title="" class=""><span class="">Sign Out <?php echo $_user_session['username']; ?><span></a></li>
-                    <?php endif; ?>
                 </ul>
+                <div id="userMenu">
+                    <?php if ( null == $_user_session ): ?>
+                        <a href="<?php echo pirogue_dispatcher_create_url('login.html', []); ?>" title="" class=""><span class="">Login<span></a>
+                    <?php else: ?>
+                        <a href="<?php echo pirogue_dispatcher_create_url('logout.html', []); ?>" title="" class=""><span class="">Sign Out <?php echo $_user_session['username']; ?><span></a>
+                    <?php endif; ?>
+                </div>
             </nav>
         </header>
-        <section id="">
+        <section id="pageBody">
             <?php $_site_notices = pirogue_site_notices_clear(); ?>
             <?php if ( !empty($_site_notices) ): ?>
                 <?php foreach ( $_site_notices as $_notice): ?>
@@ -62,7 +64,7 @@
             <?php endif; ?>
             <?php echo $GLOBALS['.html.body.content'] ?? ''; ?>
         </section>
-        <footer id=""></footer>
+        <footer id="pageFooter"></footer>
         <script src="<?php echo pirogue_cdn_create_url('script/app.js', []); ?>"></script>
         <?php foreach ( $GLOBALS['.html.script.files'] ?? [] as $_file ): ?>
             <script src="script/<?php echo pirogue_cdn_create_url("script/{$_file}.js", []); ?>"></script>

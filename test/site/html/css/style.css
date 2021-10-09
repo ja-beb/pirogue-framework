@@ -261,6 +261,38 @@ textarea {
   }
 }
 
-
-
-header, footer{ display: block; width: 100%;}
+nav, section, header, footer{ display: block; width: 100%;}
+body{
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 12pt;
+}
+#pageHeader{ margin: 1ex 3ex; }
+#pageHeader nav{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+#userMenu{
+  min-width: 50ex;
+  width: 20%;
+  text-align: right;
+}
+#siteMenu{
+  width: 75%;
+  padding: 0;
+  margin: 0;
+}
+#siteMenu li{
+  display: inline;
+  color: #333;
+}
+#userMenu a,
+#siteMenu li a{
+  padding: .5ex 1ex;
+  color: #333;
+}
+#pageBody{
+    width: 75%; 
+    margin: 5ex auto; 
+}
