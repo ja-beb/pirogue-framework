@@ -103,6 +103,17 @@ pirogue_test_execute('pirogue_user_session_set:', function () {
 });
 
 // function pirogue_user_session_get(string $label): ?string
+pirogue_test_execute('pirogue_user_session_get:', function () {
+    $label = '!pirogue_user_session_get.key';
+    $value = "@my value";
+
+    $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
+
+    return ($value != pirogue_user_session_get($label))
+        ? ['Invalid value retrieved.']
+        : [];
+});
+
 // function pirogue_user_session_remove(string $label): ?string
 // function pirogue_user_session_exists(string $label): bool
 // pirogue_user_session_clear(): array
