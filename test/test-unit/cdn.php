@@ -60,7 +60,9 @@
             return [];
         }
     });
+
     pirogue_test_execute('pirogue_cdn_init: uri = 1, pirogue_cdn_create_url x4', fn() => cdn_test(['cdn.localhost'],4));
+    
     pirogue_test_execute('pirogue_cdn_init: uri = 4, pirogue_cdn_create_url x12',fn() => cdn_test([
         'cdn.00.localhost',
         'cdn.01.localhost',

@@ -16,7 +16,9 @@
             return [];
         }
     });
+
     pirogue_test_execute('pirogue_view_init: valid directory', fn() => pirogue_view_init(_PIROGUE_TESTING_PATH_VIEW));
+    
     pirogue_test_execute('_pirogue_view_get_path: invalid file', function () {
         $view = _pirogue_view_get_path('file-not-found');
         return '' == $view ? []: [ 'Loaded invalid view.'] ;
