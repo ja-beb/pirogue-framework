@@ -27,15 +27,3 @@ function _pirogue_error_handler(int $number, string $message, string $file, int 
     }
     return false;
 }
-
-/**
- * Write error message to the site's error log.
- *
- * @param string $message the message to write to log.
- * @param string $file the file the error was encountered in.
- * @param int $line the line that the error was encountered at.
- */
-function pirogue_error_handler_log(string $message, string $file, int $line): void
-{
-    error_log(sprintf('PHP Error encountered: "%s" - %s (%d).', $message, $file, $line));
-}
