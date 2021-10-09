@@ -3,4 +3,4 @@
      * End user session and redirect to landing page.
      */
     _pirogue_user_session_end();
-    return pirogue_dispatcher_redirect();
+    return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url('', []));
