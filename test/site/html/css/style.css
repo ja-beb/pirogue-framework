@@ -296,3 +296,63 @@ body{
     width: 75%; 
     margin: 5ex auto; 
 }
+
+.form{display: block;}
+.form .error-mesasage{color: rgba(169,0,0,1.00);}
+.form-entry{
+  line-height: 150%;
+  padding: .5ex 2ex;
+}
+.form-entry + .form-entry{ margin-top: 2ex;}
+.form-entry-label{
+  font-weight: bold;
+  display: block;
+}
+.form-entry-content{display: block;}
+.form-entry.form-entry-error ::-webkit-input-placeholder,
+.form-entry.form-entry-error :placeholder,
+.form-entry.form-entry-error ::-moz-placeholder,
+.form-entry.form-entry-error :-ms-input-placeholder {
+	color: rgba(131, 18, 27, 1)
+}
+.form-entry.form-entry-required label.form-entry-label{ color: rgba(66,72,116); }
+.form-entry.form-entry-required label.form-entry-label:before{
+  content: '*';
+	font-weight: 700;
+	vertical-align: middle;
+	padding-right: 4px
+}
+.form-entry-input {
+	margin: auto 0;
+	padding-left: 10px;
+	display: block;
+	width: 98%
+}
+select.form-entry-input, input.form-entry-input{padding: 1ex 2ex;}
+@keyframes __ErrorEntryAnimation { 
+	10%,90%{transform: translate3d(-1px, 0, 0)}
+    20%,80%{ transform:translate3d(2px,0,0)}
+    30%,50%,70%{transform:translate3d(-4px,0,0)}
+    40%,60%{transform:translate3d(4px,0,0)}
+}
+.form-entry.form-entry-error {
+	padding: 5px 0 5px 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+	border-left-color: rgba(131, 18, 27, 1);
+	animation: __ErrorEntryAnimation 0.72s cubic-bezier(.36, .07, .19, .97) both;
+}
+.form-entry-controls{text-align: right;}
+.page-actions{
+  display: block;
+  margin: 2ex 1.5ex;
+}
+.page-actions a{ color: inherit; text-decoration: none; font-weight: bold;}
+.form-entry-controls button{
+  padding: 1ex 2ex;
+  font-weight: bold;
+}
+.link-back:before{
+  content: '< ';
+  font-weight: bold;
+}
