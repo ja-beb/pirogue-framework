@@ -19,7 +19,7 @@ services:
         image: "pirogue-test"
         build: .
         volumes:
-            - ./test-unit:/var/pirogue/test:ro
+            - ./test-unit:/var/pirogue/test:rw
             - ./test-config:/var/pirogue/config:ro
             - ./test-view:/var/pirogue/view:ro
             - ../src:/var/pirogue/include/pirogue:rw

@@ -1,8 +1,9 @@
-<?php 
+<?php
+
     /**
      * Test dispatcher library.
      * php version 8.0.0
-     * 
+     *
      * @author Bourg, Sean <sean.bourg@gmail.com>
      */
 
@@ -17,7 +18,10 @@
         }
     });
 
-    pirogue_test_execute('pirogue_import_init: valid directory', fn() => pirogue_import_init(_PIROGUE_TESTING_PATH_INCLUDE));
+    pirogue_test_execute(
+        'pirogue_import_init: valid directory',
+        fn() => pirogue_import_init(_PIROGUE_TESTING_PATH_INCLUDE)
+    );
 
     pirogue_test_execute('pirogue_import_load: invalid file', function () {
         try {
@@ -26,7 +30,7 @@
             return [ 'Loaded invalid library file.'];
         } catch (ErrorException $_exception) {
             return [];
-        }        
+        }
     });
 
     pirogue_test_execute('pirogue_import_load: valid file', function () {

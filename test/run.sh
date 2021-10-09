@@ -5,7 +5,10 @@
 # code sniffer.
 echo "[run.sh]::codesniffer start"
 php ./phpcs.phar --standard=./phpcs.xml ./include
+php ./phpcs.phar --standard=./phpcs.xml ./test
+
 php ./phpcbf.phar --standard=./phpcs.xml ./include
+php ./phpcbf.phar --standard=./phpcs.xml ./test
 echo "[run.sh]::codesniffer completed"
 
 # run unit testing.
