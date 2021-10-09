@@ -12,7 +12,7 @@
         try {
             pirogue_view_init('no-where');
             return ['Set library to invalid file.'];
-        } catch (InvalidArgumentException $_exception) {
+        } catch (InvalidArgumentException) {
             return [];
         }
     });

@@ -56,7 +56,7 @@
         try{
             cdn_test([],3);
             return ['Worked with no CDN servers registered.'];
-        } catch (LogicException $e) {
+        } catch (LogicException) {
             return [];
         }
     });

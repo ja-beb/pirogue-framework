@@ -21,7 +21,7 @@
         try{
             pirogue_database_collection_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_CONFIG, 'config-invalid']), 'website');
             return [ 'Invalid database config directory accepted.' ];
-        } catch ( InvalidArgumentException $_exception){
+        } catch (InvalidArgumentException){
             return [];
         }
     });
@@ -34,7 +34,7 @@
         try{
             _pirogue_test_database_collection_query(pirogue_database_collection_get('no-such-connection'));
             return [ 'Invalid database connection returned.' ];
-        } catch ( ErrorException $_exception){
+        } catch (ErrorException){
             return [];
         }
     });
