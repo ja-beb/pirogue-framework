@@ -59,20 +59,11 @@
 
             // build request components.
             $GLOBALS['.request_path'] = $GLOBALS['._dispatcher_path'];
-            $GLOBALS['.request_module'] = array_shift($GLOBALS['.request_path']);
             $GLOBALS['.request_page'] = array_shift($GLOBALS['.request_path']) ?? '';            
 
             // initialize html view variables:
             ob_start();
-            // get view path.
-            if ( '' == $GLOBALS['.request_module']  ){
-                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path('index');
-            } elseif ( '' == $GLOBALS['.request_page'] ) {
-                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path( $GLOBALS['.request_module'] )
-                    ?? _pirogue_view_get_path( implode( DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], 'index'] ) ); 
-            } else {
-                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path(implode(DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], $GLOBALS['.request_page']]) );
-            }
+            $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path($GLOBALS['.request_page']);
             $GLOBALS['._request_view'] = $GLOBALS['._dispatcher_view'];
             $GLOBALS['._dispatcher_view'] = '' == $GLOBALS['._dispatcher_view'] ? _pirogue_view_get_path('_error/404') : $GLOBALS['._dispatcher_view'];
             
