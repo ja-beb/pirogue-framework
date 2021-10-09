@@ -17,42 +17,25 @@
     site_html_create(html_title: 'User Details', page_title: 'User Details');
 
 ?>
-<a href="<?php echo pirogue_dispatcher_create_url($GLOBALS['.request_module'],[]); ?>" title=""><span class="">Back to list</span></a>
-<div class="user-details">
-    <div class="user-details-entry">
-        <label class="user-details-label">Id</label>
-        <span class="user-details-value"><?php echo $_user_info['id']; ?></span>
+<div class="page-actions">
+    <a class="link-back" href="<?php echo pirogue_dispatcher_create_url($GLOBALS['.request_module'], []); ?>"><span class="">Back to list</span></a>
+</div>
+<div class="details-display">
+    <div class="details-display-entry">
+        <label class="details-display-label">Id</label>
+        <span class="details-display-value"><?php echo $_user_info['id']; ?></span>
     </div>
-    <div class="user-details-entry">
-        <label class="user-details-label">Email</label>
-        <span class="user-details-value"><?php echo $_user_info['email']; ?></span>
+    <div class="details-display-entry">
+        <label class="details-display-label">Email</label>
+        <span class="details-display-value"><?php echo $_user_info['email']; ?></span>
     </div>
-    <div class="user-details-entry">
-        <label class="user-details-label">Username</label>
-        <span class="user-details-value"><?php echo $_user_info['username']; ?></span>
+    <div class="details-display-entry">
+        <label class="details-display-label">Username</label>
+        <span class="details-display-value"><?php echo $_user_info['username']; ?></span>
     </div>
-    <div class="user-details-entry">
-        <label class="user-details-label">Password Hash</label>
-        <span class="user-details-value"><?php echo $_user_info['password']; ?></span>
+    <div class="details-display-entry">
+        <label class="details-display-label">Password Hash</label>
+        <span class="details-display-value"><?php echo $_user_info['password']; ?></span>
     </div>
 </div>
-<?php ob_start(); ?>
-  <style>
-      .user-details{
-      }
-      .user-details-entry{
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
-      .user-details-label{
-          width: 25ex;
-          font-weight: bold;
-          padding: .5ex 1ex;
-      }
-      .user-details-value{
-        padding: .5ex 1ex;
-      }
-  </style>
-<?php $GLOBALS['.html.css.inline'] = ob_get_clean(); ?>
 
