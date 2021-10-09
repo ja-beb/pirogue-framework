@@ -1,6 +1,113 @@
-<ul>
-    <li>Page = <?php echo $GLOBALS['.request_page']; ?></li>
-    <li>Path = <?php echo implode('\', $GLOBALS['.request_path']); ?></li>
-    <li>Data = <pre><?php print_r($GLOBALS['.request_data']); ?></pre></li>
-</ul>
-        
+<?php
+
+
+    // init page variables.
+    $_form_errors = [];
+    
+    // process user input.
+    if ('POST' == $_SERVER['REQUEST_METHOD']){
+        if ( 'cancel' == $_POST['action'] ?? '' ){
+            pirogue_site_notices_create('info', 'Cancel user create.');
+            return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url($GLOBALS['.request_module'], []));
+        }elseif ( 'create' == $_POST['action'] ?? '' ){
+            // init variables.
+            pirogue_import_load('site/users');
+            $_database_connection = pirogue_database_collection_get();
+            $_username = trim($_POST['username'] ?? '');
+            $_email = trim($_POST['email'] ?? '');
+            $_password = trim($_POST['password'] ?? '');
+            $_password_confirm = trim($_POST['password_confirm'] ?? '');
+
+            // validate input.
+            if ( '' == $_username ) {
+                $_form_errors['username'] = 'Username required.';
+            } elseif ( null != site_user_fetch($_database_connection, 'username', $_username) ) {
+                $_form_errors['username'] = 'Username taken.';
+            }
+
+            if ( '' == $_email ) {
+                $_form_errors['email'] = 'Email required.';
+            } elseif ( null != site_user_fetch($_database_connection, 'email', $_email) ) {
+                $_form_errors['email'] = 'Email in use.';
+            }
+
+            if ('' == $_password) {
+                $_form_errors['password'] = 'Password required.';
+            } 
+            
+            if ('' == $_password_confirm) {
+                $_form_errors['password_confirm'] = 'Password confirm required.';
+            } 
+            
+            if ( !array_key_exists('password', $_form_errors) && !array_key_exists('password_confirm', $_form_errors) &&$_password != $_password_confirm){
+                $_form_errors['password_confirm'] = 'Password does not match confirm.';
+            }
+
+            // create account or show errors.
+            if (empty($_form_errors)) {
+                // create account.
+                $_is_success = mysqli_query(
+                    $_database_connection, 
+                    sprintf(
+                        "INSERT INTO users(username,email,password) VALUES('%s', '%s', SHA2('%s',256))",
+                        mysqli_real_escape_string($_database_connection, $_username),
+                        mysqli_real_escape_string($_database_connection, $_email),
+                        mysqli_real_escape_string($_database_connection, $_password)
+                    ));     
+                if ( $_is_success ){
+                    pirogue_site_notices_create('info', 'User account create.');
+                    return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url($GLOBALS['.request_module'], []));
+                } else {
+                    pirogue_site_notices_create('error', 'Uable to save account.');
+                    return pirogue_dispatcher_redirect();
+                }
+            } else {
+                $_form_errors['form'] = 'Unable to create account.';
+            }
+        }
+    }
+
+    // create page.
+    site_html_create(html_title: 'New User', page_title: 'New User');
+
+?>
+<div class="page-actions">
+    <a class="link-back" href="<?php echo pirogue_dispatcher_create_url($GLOBALS['.request_module'], []); ?>"><span class="">Back to list</span></a>
+</div>
+<form class="form" id="" method="POST" action="<?php echo pirogue_dispatcher_create_url(sprintf('%s/%s.html', $GLOBALS['.request_module'], $GLOBALS['.request_page']), []); ?>">
+    <?php if ( array_key_exists('form', $_form_errors) ): ?>
+        <p class="error-mesasage"><?php echo $_form_errors['form']; ?></p>
+    <?php endif; ?>
+    <div class="form-entry form-entry-required <?php echo array_key_exists('username', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <label class="form-entry-label" for="">Username</label>
+        <input class="form-entry-content form-entry-input" type="text" id="" value="<?php echo $_POST['username'] ?? ''; ?>" name="username" placeholder="Enter account's email."/>
+        <?php if ( array_key_exists('username', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['username']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="form-entry form-entry-required <?php echo array_key_exists('email', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <label class="form-entry-label" for="">Email</label>
+        <input class="form-entry-content form-entry-input" type="text" id="" value="<?php echo $_POST['email'] ?? ''; ?>" name="email" placeholder="Enter account's username."/>
+        <?php if ( array_key_exists('email', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['email']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="form-entry form-entry-required <?php echo array_key_exists('password', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <label class="form-entry-label" for="">Password</label>
+        <input class="form-entry-content form-entry-input" type="password" id="" value="" name="password" placeholder="Enter account's password."/>
+        <?php if ( array_key_exists('password', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['password']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="form-entry form-entry-required <?php echo array_key_exists('password_confirm', $_form_errors) ? 'form-entry-error' : ''; ?>">
+        <label class="form-entry-label" for="">Confirm Password</label>
+        <input class="form-entry-content form-entry-input" type="password" id="" value="" name="password_confirm" placeholder="Enter account's password."/>
+        <?php if ( array_key_exists('password_confirm', $_form_errors) ): ?>
+            <p class="error-mesasage"><?php echo $_form_errors['password_confirm']; ?></p>
+        <?php endif; ?>
+    </div>
+    <div class="form-entry form-entry-controls">
+        <button name="action" type="submit" value="cancel"><span class="">Cancel</span></button>
+        <button name="action" type="submit" value="create"><span class="">Create</span></button>
+    </div>
+</form>
