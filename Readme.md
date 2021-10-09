@@ -14,8 +14,8 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 
 ## Naming conventions
 ### Functions
-- pirogue_library_init() = library setup/initialize function
-- pirogue_library_destruct() = library destructor function
+- pirogue_library_init() = library initialize function.
+- _pirogue_library_destruct() = internal function, library destructor function registered when library is initialized.
 - pirogue_library_name_func() = public function within a library (ie dispatcher_route()).
 - _pirogue_library_name_func() = internal function, used within dispatcher and library only. 
 
@@ -29,7 +29,8 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 
 ### Path 
 Any parts of a path that are prefixed with a '_' character are considered "protected" and are not directly accessabile to the client (can not be routed by HTTP requests). The dispatcher is repsonsible for removing these special character prefixes. They can be accessed via internal calls only. 
-- _private/end-point.phtml = private path component.
+- public/public.phtml = public file.
+- _private/end-point.phtml = private module.
 - public/_private.phtml = private file.
 
 

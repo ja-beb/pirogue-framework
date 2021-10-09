@@ -45,7 +45,7 @@
     // test pirogue_database_collection_get: default label
     pirogue_test_execute('pirogue_database_collection_get: default label', fn() => _pirogue_test_database_collection_query(pirogue_database_collection_get()));
 
-    // test pirogue_database_collection_destruct
+    // test _pirogue_database_collection_destruct
     pirogue_test_execute('_pirogue_database_collection_destruct', function(){
          _pirogue_database_collection_destruct();
          return empty($GLOBALS['._pirogue.database_collection.connections']) ? [] : ['Registered connections exist.'];
