@@ -20,8 +20,9 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 - _pirogue_library_name_func() = internal function, used within dispatcher and library only. 
 
 ### Global Variables
-- $GLOBALS['.\_pirogue.library.name'] = internal variable (prefixed with '.\_').
-- $GLOBALS['.pirogue.library.name'] = public variable (prefixed with '.')
+Variables registered with a global array ($GLOBALS or $_SESSION) are prefixed with the '.' character to prevent them from being exported to the current symbol table or being made available with the "register globals" (prevent user from impulating register_globals).
+- $GLOBALS['.\_pirogue-library-name'] = internal variable (prefixed with '.\_').
+- $GLOBALS['.pirogue-library-name'] = public variable (prefixed with '.')
 
 ### Local Variables
 - $\_varaible_name =  variable is scoped to current code block (file or function depending on scope). 
