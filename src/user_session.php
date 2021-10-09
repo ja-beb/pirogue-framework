@@ -35,7 +35,6 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
  */
 function pirogue_user_session_init(string $label): void
 {
-    session_id() || session_start();
     $GLOBALS['._pirogue.user_session.label_user'] = "{$label}_user";
     $GLOBALS['._pirogue.user_session.label_data'] = "{$label}_data";
 
