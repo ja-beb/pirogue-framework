@@ -1,16 +1,10 @@
-FROM php:8.0-alpine as base
-LABEL Maintainer="sean bourg <sean.bourg@gmail.com>"
+FROM php:8.0-alpine
+LABEL maintainer="sean bourg <sean.bourg@gmail.com>"
 
 COPY entrypoint.sh /entrypoint.sh
 COPY run.sh /run.sh
 
-ENV PACKAGES \
-	git
-
-RUN apk update; \
-    apk upgrade; \
-    apk add --no-cache $PACKAGES; \
-    chmod +x /entrypoint.sh; \
+RUN chmod +x /entrypoint.sh; \
     chmod +x /run.sh; \
     mkdir /var/pirogue-testing; \ 
     docker-php-ext-install mysqli;

@@ -1,13 +1,13 @@
 version: "3.8"
 services: 
     database:
-        container_name: "${CONTAINER_NAME_DATABASE:-pirogue-database-instance}"
+        container_name: "pirogue-database-instance"
         image: mariadb:latest
         environment:
-            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root-password}
-            - MYSQL_USER=${MYSQL_USER:-website-user}
-            - MYSQL_PASSWORD=${MYSQL_PASSWORD:-website-password}
-            - MYSQL_DATABASE=${MYSQL_DATABASE:-website}
+            - MYSQL_ROOT_PASSWORD=root-password
+            - MYSQL_USER=website-user
+            - MYSQL_PASSWORD=website-password
+            - MYSQL_DATABASE=website
         volumes:
             - ./container/database-create.sql:/docker-entrypoint-initdb.d/00-database-create.sql:ro
         ports:
@@ -15,51 +15,19 @@ services:
         restart: always        
 
     php-test:
-        container_name: "${CONTAINER_NAME_UNIT_TEST:-pirogue-unit-test-instance}"
-        image: "${IMAGE_NAME_UNIT_TEST:-pirogue-unit-test}"
+        container_name: "pirogue-test-instance"
+        image: "pirogue-test"
         environment:
-            - CODE_SNIFFER=${CODE_SNIFFER:-true}
+            - EXECUTE_TEST=${EXECUTE_TEST:-3}
         build: 
             context: ./container
             dockerfile: Containerfile-unit_testing
         volumes:
-            - ${PROJECT_PATH:-./}/test/unit-tests:/var/pirogue-testing/test:rw
-            - ${PROJECT_PATH:-./}/test/site/config:/var/pirogue-testing/config:rw
-            - ${PROJECT_PATH:-./}/test/site/view:/var/pirogue-testing/view:rw
-            - ${PROJECT_PATH:-./}/pirogue:/var/pirogue-testing/include/pirogue:rw           
+            - ./unit-tests:/var/pirogue-testing/test:rw
+            - ./config:/var/pirogue-testing/config:rw
+            - ./view:/var/pirogue-testing/view:rw
+            - ${PIROGUE_PATH}:-../src}/pirogue:/var/pirogue-testing/include/pirogue:rw           
         depends_on:
             - database
         links:
             - database        
-
-    php-server:
-        container_name: "${CONTAINER_NAME_SERVER:-pirogue-server-instance}"
-        image: "${IMAGE_NAME_PROXY:-pirogue-server}"
-        build: 
-            context: ./container
-            dockerfile: Containerfile-site
-        volumes:
-                - ${PROJECT_PATH:-./}/test/site/html:/var/www/html:ro
-        depends_on:
-            - php-fpm
-        links:
-            - php-fpm
-        ports:
-            - 80:80
-            - 443:443
-        restart: always
-    
-    php-fpm:
-        container_name: "${CONTAINER_NAME_PHP:-pirogue-test-php-instance}"
-        build: 
-            context: ./container
-            dockerfile: Containerfile-php        
-        volumes:
-            - ${PROJECT_PATH:-./}/test/site/html:/var/www/html:ro
-            - ${PROJECT_PATH:-./}/test/site/config:/var/www/config:rw
-            - ${PROJECT_PATH:-./}/test/site/view:/var/www/view:rw
-            - ${PROJECT_PATH:-./}/test/site/include/site:/var/www/include/site:rw
-            - ${PROJECT_PATH:-./}/pirogue:/var/www/include/pirogue:rw           
-        links:
-            - database
-        restart: always        
