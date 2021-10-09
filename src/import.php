@@ -12,7 +12,7 @@
 /**
  * Base folder for library import.
  *
- * @internal
+ * @internal used by library only.
  * @var string $GLOBALS['._pirogue.import.path']
  */
 $GLOBALS['._pirogue.import.path'] = '';
@@ -20,8 +20,8 @@ $GLOBALS['._pirogue.import.path'] = '';
 /**
  * Initialize the import library.
  *
- * @param string $path Base path that contains PHP *.php files.
- * @return void
+ * @uses $GLOBALS['._pirogue.import.path']
+ * @param string $path the base path that contains *.php library files files.
  */
 function pirogue_import_init(string $path): void
 {
@@ -34,9 +34,9 @@ function pirogue_import_init(string $path): void
 /**
  * Import library file.
  *
- * @throws ErrorException Error thrown if the requested library file is not found.
- * @param string $name Name of library being loaded (translates to the filename without extension).
- * @return void
+ * @uses $GLOBALS['._pirogue.import.path']
+ * @throws ErrorException the error thrown if the requested library file is not found.
+ * @param string $name the name of library being loaded (translates to the filename without extension).
  */
 function pirogue_import_load(string $name): void
 {

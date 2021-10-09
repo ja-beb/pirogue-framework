@@ -1,3 +1,4 @@
+# docker compose for performing unit testing and code sniff on code base.
 version: "3.8"
 services: 
     database:
@@ -9,24 +10,19 @@ services:
             - MYSQL_PASSWORD=website-password
             - MYSQL_DATABASE=website
         volumes:
-            - ./container/database-create.sql:/docker-entrypoint-initdb.d/00-database-create.sql:ro
+            - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
         ports:
-            - 3306:3306
-        restart: always        
+            - 3306:3306        
 
     php-test:
         container_name: "pirogue-test-instance"
         image: "pirogue-test"
-        environment:
-            - EXECUTE_TEST=${EXECUTE_TEST:-3}
-        build: 
-            context: ./container
-            dockerfile: Containerfile-unit_testing
+        build: .
         volumes:
-            - ./unit-tests:/var/pirogue-testing/test:rw
-            - ./config:/var/pirogue-testing/config:rw
-            - ./view:/var/pirogue-testing/view:rw
-            - ${PIROGUE_PATH}:-../src}/pirogue:/var/pirogue-testing/include/pirogue:rw           
+            - ./test-unit:/var/pirogue/test:ro
+            - ./test-config:/var/pirogue/config:ro
+            - ./test-view:/var/pirogue/view:ro
+            - ../src:/var/pirogue/include/pirogue:rw
         depends_on:
             - database
         links:

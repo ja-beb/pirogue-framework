@@ -11,8 +11,8 @@ ini_set("display_errors", 1);
 error_reporting(E_ALL | E_STRICT);
 
 // define base folder.
-// 'var/pirogue-testing';
-define('_PIROGUE_TESTING_PATH', '/var/pirogue-testing');
+// '/var/pirogue';
+define('_PIROGUE_TESTING_PATH', '/var/pirogue');
 define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include']));
 define('_PIROGUE_TESTING_PATH_VIEW', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view']));
 define('_PIROGUE_TESTING_PATH_CONFIG', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config']));
@@ -30,12 +30,12 @@ $GLOBALS['._pirogue_test.count_errors'] = 0;
 function _pirogue_test_log(string $label, array $errors): void 
 {
     if ( empty($errors) ) {
-        echo "[{$label}] SUCCESS\n";
+        echo "> {$label} SUCCESS\n";
     }else {
         $GLOBALS['._pirogue_test.count_errors']++;
-        echo "[{$label}] FAILED.\n";
+        echo "> {$label} FAILED.\n";
         foreach( $errors as $_message ){        
-            echo "\t{$_message}\n";
+            echo "  * {$_message}\n";
         }    
     }
 }
@@ -67,11 +67,11 @@ function _pirogue_test_load(string $path, string $filename): void {
     try{
         require(implode(DIRECTORY_SEPARATOR, [__DIR__, $filename]));
     } catch (Throwable $e) {
-        _pirogue_test_log("_pirogue_test_load - load {$filename}", [$e->getMessage()]);
+        _pirogue_test_log("_pirogue_test_load::load({$filename})", [$e->getMessage()]);
     }
 }
 
-
+// scan current folder for /^[^_].*.php$/ files to execute.
 foreach ( scandir(__DIR__) as $_filename )
 {
     if ( preg_match('/^[^_](.*)\.php$/', $_filename) ) {

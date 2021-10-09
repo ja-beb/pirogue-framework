@@ -1,18 +1,2 @@
-**/log
-**/data
-**/var
-**/.env
 **/.vscode
-**/ssl
-**/*.env
-.DS_Store
 
-# Ignore docker files
-docker/data
-docker/logs
-ssl
-private
-
-.project
-.settings
-.buildpath

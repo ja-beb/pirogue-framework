@@ -16,7 +16,7 @@
         return array_key_exists('user_count', $_sql_data) ? [] : ['unable to get count of website.users rows.'];
     }
 
-    // test pirogue_database_collection_init - invalid directory
+    // test pirogue_database_collection_init: invalid directory
     pirogue_test_execute('pirogue_database_collection_init: invalid config directory', function(){
         try{
             pirogue_database_collection_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_CONFIG, 'config-invalid']), 'website');
@@ -26,10 +26,10 @@
         }
     });
 
-    // test pirogue_database_collection_init - valid directory
+    // test pirogue_database_collection_init: valid directory
     pirogue_test_execute('pirogue_database_collection_init: valid config directory', fn() => pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website'));
 
-    // test pirogue_database_collection_get - invalid label
+    // test pirogue_database_collection_get: invalid label
     pirogue_test_execute('pirogue_database_collection_get: invalid label', function(){
         try{
             _pirogue_test_database_collection_query(pirogue_database_collection_get('no-such-connection'));
@@ -39,10 +39,10 @@
         }
     });
 
-    // test pirogue_database_collection_get - valid label
+    // test pirogue_database_collection_get: valid label
     pirogue_test_execute('pirogue_database_collection_get: valid label', fn() => _pirogue_test_database_collection_query(pirogue_database_collection_get('website')));
 
-    // test pirogue_database_collection_get - default label
+    // test pirogue_database_collection_get: default label
     pirogue_test_execute('pirogue_database_collection_get: default label', fn() => _pirogue_test_database_collection_query(pirogue_database_collection_get()));
 
     // test pirogue_database_collection_destruct

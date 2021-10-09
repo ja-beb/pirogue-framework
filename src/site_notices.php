@@ -11,7 +11,7 @@
 /**
  * Site notices index in session array.
  *
- * @internal
+ * @internal used by library only.
  * @var string $GLOBALS['._pirogue.site_notices.index']
  */
 $GLOBALS['._pirogue.site_notices.index'] = '';
@@ -19,8 +19,8 @@ $GLOBALS['._pirogue.site_notices.index'] = '';
 /**
  * Setup site notices.
  *
- * @param string $index
- *            Session array index for site notices.
+ * @uses $GLOBALS['._pirogue.site_notices.index']
+ * @param string $index the session array index for site notices.
  */
 function pirogue_site_notices_init(string $index): void
 {
@@ -31,7 +31,8 @@ function pirogue_site_notices_init(string $index): void
 /**
  * Fetch existing notices from sessioned list and clear list.
  *
- * @return array
+ * @uses $GLOBALS['._pirogue.site_notices.index']
+ * @return array the list of cleared session notices in a [type,text] format.
  */
 function pirogue_site_notices_clear(): array
 {
@@ -43,10 +44,9 @@ function pirogue_site_notices_clear(): array
 /**
  * Append site notice to list of existing notices.
  *
- * @param int $type
- *            The code for the notice type to add.
- * @param string $message
- *            The notice's message.
+ * @uses $GLOBALS['._pirogue.site_notices.index']
+ * @param int $type the code for the notice type to add.
+ * @param string $message the notice's message.
  */
 function pirogue_site_notices_create(string $type, string $message): void
 {

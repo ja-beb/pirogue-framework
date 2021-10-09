@@ -9,34 +9,33 @@
  */
 
 /**
- *
- * @var string $GLOBALS['.pirogue.dispatcher.address'] The site's base address.
+ * The site's base address.
+ * @var string $GLOBALS['.pirogue.dispatcher.address']
  */
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
- *
- * @var string $GLOBALS['.pirogue.dispatcher.request_path'] The path the the client's current requested resource.
+ * The path the the client's current requested resource.
+ * @var string $GLOBALS['.pirogue.dispatcher.request_path']
  */
 $GLOBALS['.pirogue.dispatcher.request_path'] = '';
 
 /**
- *
- * @var string $GLOBALS['.pirogue.dispatcher.request_data'] The client's requested data.
+ * The client's requested data.
+ * @var string $GLOBALS['.pirogue.dispatcher.request_data']
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = [];
 
 /**
  * Setup dispatcher library.
  *
- * @internal Called from dispatcher only.
- *
- * @param string $address
- *            The base address for the site.
- * @param string $request_path
- *            String containing the path the the client's requested resource.
- * @param array $request_data
- *            Array containing the request data passed from the client.
+ * @internal called from dispatcher only.
+ * @uses $GLOBALS['.pirogue.dispatcher.address'] = $address;
+ * @uses $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
+ * @uses $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
+ * @param string $address the base address for the site.
+ * @param string $request_path a string containing the path the the client's requested resource.
+ * @param array $request_data array containing the request data passed from the client.
  */
 function pirogue_dispatcher_init(string $address, string $request_path, array $request_data): void
 {
@@ -50,9 +49,7 @@ function pirogue_dispatcher_init(string $address, string $request_path, array $r
  *
  * @internal Called from dispatcher only.
  * @uses _pirogue_dispatcher_exit
- *
- * @param string $content
- *            The content that will be sent to the client.
+ * @param string $content the content that will be sent to the client.
  */
 function _pirogue_dispatcher_send(string $content): void
 {
@@ -77,32 +74,33 @@ function _pirogue_dispatcher_send(string $content): void
 /**
  * Redirect user to new address.
  *
- * @param string $address
- *            The address to redirect too. If no address is specified the page is refreshed.
- * @param int $status_code
- *            The http status code to use in the redirect process.
- *
+ * @uses pirogue_dispatcher_create_url
+ * @uses $GLOBALS['.pirogue.dispatcher.request_path']
+ * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @uses _pirogue_dispatcher_exit
+ * @param string $address the address to redirect too. If no address is specified the page is refreshed.
+ * @param int $status_code the http status code to use in the redirect process.
  */
 function pirogue_dispatcher_redirect(string $address = '', int $status_code = 301): void
 {
     $address = '' == $address
-        ? pirogue_dispatcher_create_url($GLOBALS['.pirogue.dispatcher.request_path'], $GLOBALS['.pirogue.dispatcher.request_data'] )
-        : $address;        
+        ? pirogue_dispatcher_create_url(
+            $GLOBALS['.pirogue.dispatcher.request_path'],
+            $GLOBALS['.pirogue.dispatcher.request_data']
+        )
+        : $address;
     header(sprintf('Location: %s', $address), true, $status_code);
-    session_id() && session_write_close();
     _pirogue_dispatcher_exit();
 }
 
 /**
  * Create url to resource relative to site base.
  *
- * @param string $path
- *            The path to the resource.
- * @param array $data
- *            Array containing key => value pairs of data use as request parameters.
- * @return string
  * @uses _dispatcher_create_url
+ * @uses $GLOBALS['.pirogue.dispatcher.address']
+ * @param string $path the path to the resource.
+ * @param array $data an array containing key => value pairs of data use as request parameters.
+ * @return string the url created from user input.
  */
 function pirogue_dispatcher_create_url(string $path, array $data): string
 {
@@ -112,12 +110,28 @@ function pirogue_dispatcher_create_url(string $path, array $data): string
 }
 
 /**
+ * Get current uri.
+ *
+ * @uses _dispatcher_create_url
+ * @uses $GLOBALS['.pirogue.dispatcher.request_path']
+ * @uses $GLOBALS['.pirogue.dispatcher.request_data']
+ * @return string the current requested url.
+ */
+function pirogue_dispatcher_current_url(string $path, array $data): string
+{
+    return pirogue_dispatcher_create_url(
+        $GLOBALS['.pirogue.dispatcher.request_path'],
+        $GLOBALS['.pirogue.dispatcher.request_data']
+    );
+}
+
+
+/**
  * Exit dispatcher - close session if open.
  *
- * @internal
+ * @internal uses by dispatcher and library only.
  */
 function _pirogue_dispatcher_exit(): void
 {
-    session_id() && session_write_close();
     exit();
 }

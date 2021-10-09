@@ -33,17 +33,17 @@
         return $errors;
     });
 
-    pirogue_test_execute('pirogue_dispatcher_create_url - empty', fn() => pirogue_dispatcher_create_url('', []) == $GLOBALS['.pirogue.dispatcher.address'] 
+    pirogue_test_execute('pirogue_dispatcher_create_url: empty', fn() => pirogue_dispatcher_create_url('', []) == $GLOBALS['.pirogue.dispatcher.address'] 
         ? [] 
         : [ sprintf('Invalid url returned "%s".', pirogue_dispatcher_create_url('', []))]);
     
-    pirogue_test_execute('pirogue_dispatcher_create_url - path only', function () {
+    pirogue_test_execute('pirogue_dispatcher_create_url: path only', function () {
         $path = 'index.html';
         $url = pirogue_dispatcher_create_url($path, []);
         return $url == "{$GLOBALS['.pirogue.dispatcher.address']}/{$path}" ? [] : [ "Invalid url '{$url}' returned."];
     });
 
-    pirogue_test_execute('pirogue_dispatcher_create_url - path and data', function () {
+    pirogue_test_execute('pirogue_dispatcher_create_url: path and data', function () {
         $path = 'index.html';
         $data_label = 'id';
         $data_value = 1;

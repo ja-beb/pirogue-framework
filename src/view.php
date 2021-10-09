@@ -9,17 +9,17 @@
  */
 
 /**
- * View base folder.
+ * The base directory used to create view's file path.
  *
- * @internal
+ * @internal use by libary only.
  * @var string $GLOBALS['._pirogue.view.path']
  */
 $GLOBALS['._pirogue.view.path'] = '';
 
 /**
- * View file extension.
+ * The view file's extension.
  *
- * @internal
+ * @internal use by library only.
  * @var string $GLOBALS['._pirogue.view.extension']
  */
 $GLOBALS['._pirogue.view.extension'] = '';
@@ -27,7 +27,9 @@ $GLOBALS['._pirogue.view.extension'] = '';
 /**
  * initialize view library.
  *
- * @param string $path The base location of the site's views.
+ * @uses $GLOBALS['._pirogue.view.extension']
+ * @uses $GLOBALS['._pirogue.view.path']
+ * @param string $path the base location of the site's views.
  */
 function pirogue_view_init(string $path, string $extension = 'phtml'): void
 {
@@ -39,14 +41,20 @@ function pirogue_view_init(string $path, string $extension = 'phtml'): void
 }
 
 /**
- * Get view file.
+ * Translate view name to the respective view file.
  *
- * @internal
- * @param string $file View file name relative to view base directory.
- * @return string Path to the view file.
+ * @internal use by dispatcher only.
+ * @uses $GLOBALS['._pirogue.view.extension']
+ * @uses $GLOBALS['._pirogue.view.path']
+ * @param string $file the name of the desired view file relative to the base view directory.
+ * @return string the absolute filename of the view file if found or an empty string if not found.
  */
 function _pirogue_view_get_path(string $file): ?string
 {
-    $view_file = sprintf( '%s.%s', implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]), $GLOBALS['._pirogue.view.extension']);
+    $view_file = sprintf(
+        '%s.%s',
+        implode(DIRECTORY_SEPARATOR, [$GLOBALS['._pirogue.view.path'], $file]),
+        $GLOBALS['._pirogue.view.extension']
+    );
     return file_exists($view_file) ? $view_file : null;
 }

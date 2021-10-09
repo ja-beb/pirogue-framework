@@ -8,7 +8,7 @@
 
     require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'view.php']));
 
-    pirogue_test_execute('pirogue_view_init - invalid directory', function () {
+    pirogue_test_execute('pirogue_view_init: invalid directory', function () {
         try {
             pirogue_view_init('no-where');
             return ['Set library to invalid file.'];
@@ -16,13 +16,13 @@
             return [];
         }
     });
-    pirogue_test_execute('pirogue_view_init - valid directory', fn() => pirogue_view_init(_PIROGUE_TESTING_PATH_VIEW));
-    pirogue_test_execute('pirogue_import_load - invalid file', function () {
+    pirogue_test_execute('pirogue_view_init: valid directory', fn() => pirogue_view_init(_PIROGUE_TESTING_PATH_VIEW));
+    pirogue_test_execute('_pirogue_view_get_path: invalid file', function () {
         $view = _pirogue_view_get_path('file-not-found');
-        return '' == $view ? []: [ 'Loaded invalid library file.'] ;
+        return '' == $view ? []: [ 'Loaded invalid view.'] ;
     });
     
-    pirogue_test_execute('pirogue_import_load - valid file', function () {
+    pirogue_test_execute('_pirogue_view_get_path: valid file', function () {
         $view = _pirogue_view_get_path('test');
-        return '' == $view ? [ 'Loaded invalid library file.'] : [];
+        return '' == $view ? [ 'Unable to load view.'] : [];
     });

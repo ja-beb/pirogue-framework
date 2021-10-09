@@ -13,7 +13,7 @@
 /**
  * Config folder's path.
  *
- * @internal
+ * @internal used by library only.
  * @var string $GLOBALS['._pirogue.database_collection.config_path']
  */
 $GLOBALS['._pirogue.database_collection.config_path'] = null;
@@ -21,7 +21,7 @@ $GLOBALS['._pirogue.database_collection.config_path'] = null;
 /**
  * Default database connection label - returned if no value is passed to the database_collection_get function.
  *
- * @internal
+ * @internal used by library only.
  * @var string $GLOBALS['._pirogue.database_collection.default']
  */
 $GLOBALS['._pirogue.database_collection.default'] = '';
@@ -29,7 +29,7 @@ $GLOBALS['._pirogue.database_collection.default'] = '';
 /**
  * Collection of open database connections.
  *
- * @internal
+ * @internal used by library only.
  * @var array $GLOBALS['._pirogue.database_collection.connections']
  */
 $GLOBALS['._pirogue.database_collection.connections'] = [];
@@ -38,10 +38,14 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * Initialize database collection library. This function will also register the database collection's destruct
  * function as a shutdown function.
  *
- * @param string $config_path
- *            Configuration path folder - where the database connection settings files can be found.
- * @param string $default
- *            The name of the default database connection, used when there is no value passed to the get function.
+ * @throws InvalidArgumentException if $config_path directory does not exist.
+ * @throws ErrorException default database does not exist.
+ * @uses _pirogue_database_collection_get_config_file()
+ * @uses $GLOBALS['._pirogue.database_collection.config_path']
+ * @uses $GLOBALS['._pirogue.database_collection.default']
+ * @uses $GLOBALS['._pirogue.database_collection.connections']
+ * @param string $config_path the path to the config directory that stores the database connection settings.
+ * @param string $default the name of the default database.
  */
 function pirogue_database_collection_init(string $config_path, string $default): void
 {
@@ -62,7 +66,10 @@ function pirogue_database_collection_init(string $config_path, string $default):
 }
 
 /**
- * Deconstruct function for the database collection. Responsible for clossing all mysqli connections.
+ * Close and dealocate all registered mysqli connections.
+ *
+ * @internal used by library only.
+ * @uses $GLOBALS['._pirogue.database_collection.connections']
  */
 function _pirogue_database_collection_destruct(): void
 {
@@ -76,11 +83,12 @@ function _pirogue_database_collection_destruct(): void
 
 /**
  * Translate name to config file location.
- * 
- * @param string $name name of database connection to open. Corresponds to config file mysql-{$name}.ini.
- * @return ?string path to config file if exist otherwise null.
+ *
+ * @uses $GLOBALS['._pirogue.database_collection.default']
+ * @param string $name the name of database connection to open. Corresponds to config file mysql-{$name}.ini.
+ * @return ?string the path to config file if exist otherwise null.
  */
-function _pirogue_database_collection_get_config_file(string $name) : ?string
+function _pirogue_database_collection_get_config_file(string $name): ?string
 {
     $file_include = sprintf('%s/mysqli-%s.ini', $GLOBALS['._pirogue.database_collection.config_path'], $name);
     return file_exists($file_include) ? $file_include : null;
@@ -88,14 +96,17 @@ function _pirogue_database_collection_get_config_file(string $name) : ?string
 
 /**
  * Open database connection.
- *
  * Fetches connection based on name by translating nane to a config file ("{$config_path}\mysqli-{$name}.ini")
  * which contain the attributes for 'name' and 'options' as defined by the sqlsrv_connect() function.
  *
+ * @throws ErrorException if database not found or unable to open requested database.
+ * @uses _pirogue_database_collection_get_config_file()
+ * @uses $GLOBALS['._pirogue.database_collection.connections']
+ * @uses $GLOBALS['._pirogue.database_collection.default']
  * @param string $name
- * @return \Mysqli item
+ * @return mysqli resource item.
  */
-function pirogue_database_collection_get(?string $name = null): Mysqli
+function pirogue_database_collection_get(?string $name = null): mysqli
 {
     $name = null == $name ? $GLOBALS['._pirogue.database_collection.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
