@@ -139,16 +139,16 @@ pirogue_test_execute('pirogue_user_session_exists', function () {
     $value = "@my value";
     $errors = [];
 
-    if (pirogue_user_session_exists($label)){
+    if (pirogue_user_session_exists($label)) {
         array_push($errors, '00 - value exists before set.');
     }
 
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
 
-    if (pirogue_user_session_exists($label)){
-        array_push($errors, '00 - value does not exists after set.');
+    if (!pirogue_user_session_exists($label)) {
+        array_push($errors, '01 - value does not exists after set.');
     }
-    
+
     return $errors;
 });
 
