@@ -14,6 +14,9 @@
     site_html_create(html_title: 'Users', page_title: 'Users');
 
 ?>
+<div class="">
+    <a href="<?php echo pirogue_dispatcher_create_url(sprintf('%s/create.html', $GLOBALS['.request_module']), []); ?>"><span class="">New User</span></a>
+</div>
 <?php if ( 0 == mysqli_num_rows($_sql_result) ): ?>
     <p class="">No Results</p>
 <?php else: ?>
@@ -25,6 +28,15 @@
                     <td><?php echo $_sql_data['id']; ?></td>
                     <td><?php echo $_sql_data['username']; ?></td>
                     <td><?php echo $_sql_data['email']; ?></td>
+                    <td>
+                        <a title="" class="" href="<?php echo pirogue_dispatcher_create_url(sprintf('%s/%s/%d.html', $GLOBALS['.request_module'], 'delete', $_sql_data['id']), []); ?>"><span class="">delete</span></a>
+                    </td>
+                    <td>
+                        <a title="" class="" href="<?php echo pirogue_dispatcher_create_url(sprintf('%s/%s/%d.html', $GLOBALS['.request_module'], 'edit', $_sql_data['id']), []); ?>"><span class="">edit</span></a>
+                    </td>
+                    <td>
+                        <a title="" class="" href="<?php echo pirogue_dispatcher_create_url(sprintf('%s/%s/%d.html', $GLOBALS['.request_module'], 'view', $_sql_data['id']), []); ?>"><span class="">view</span></a>
+                    </td>
                 </tr>
             <?php endwhile; ?>
         <tbody>
