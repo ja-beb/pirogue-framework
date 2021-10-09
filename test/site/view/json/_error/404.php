@@ -11,5 +11,9 @@
   // Set up page.
   http_response_code(404);
   return [
-    'message' => 'api not found'
+    'message' => 'api not found',
+    '.request_path' => $GLOBALS['.request_path'],
+    '.request_page' => $GLOBALS['.request_page'],
+    '._request_view' => $GLOBALS['._request_view'],
+    '._dispatcher_view' => $GLOBALS['._dispatcher_view']
   ];
