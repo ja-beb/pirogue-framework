@@ -7,7 +7,7 @@
         return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url($GLOBALS['.request_module'],[]));
     } 
         
-    $_user_info = site_user_fetch(pirogue_database_collection_get(), $_id);
+    $_user_info = site_user_fetch_by_id(pirogue_database_collection_get(), $_id);
     if ( null == $_user_info ){
         pirogue_site_notices_create('Error', 'Unable to find requested user.');
         return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url($GLOBALS['.request_module'],[]));   
