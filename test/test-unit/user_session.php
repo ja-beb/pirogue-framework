@@ -85,7 +85,21 @@ pirogue_test_execute('pirogue_user_session_current:', function () {
     return $_errors;
 });
 
-// function pirogue_user_session_set(string $label, ?string $value): void
+pirogue_test_execute('pirogue_user_session_set:', function () {
+    $label = '!my label';
+    $value = "@my value";
+    $_errors = []; 
+
+    pirogue_user_session_set($label, $value);    
+    if ( array_key_exist($label, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']]) {
+        array_push($_errors, "00 - '{$label}' not set.");
+    } elseif ($value == $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label]) {
+        array_push($_errors, "01 - '{$label}' contains the wrong value.");
+    }
+    return $_errors;
+});
+
+    // function pirogue_user_session_set(string $label, ?string $value): void
 // function pirogue_user_session_get(string $label): ?string
 // function pirogue_user_session_remove(string $label): ?string
 // function pirogue_user_session_exists(string $label): bool
