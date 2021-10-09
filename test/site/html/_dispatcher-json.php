@@ -60,12 +60,24 @@
             // build request components.
             $GLOBALS['.request_path'] = $GLOBALS['._dispatcher_path'];
             $GLOBALS['.request_module'] = array_shift($GLOBALS['.request_path']);
-            $GLOBALS['.request_page'] = array_shift($GLOBALS['.request_path']) ?? 'index';            
+            $GLOBALS['.request_page'] = array_shift($GLOBALS['.request_path']) ?? '';            
 
             // initialize html view variables:
             ob_start();
-            $_path = empty($GLOBALS['.request_module']) ? $GLOBALS['.request_page'] : implode('/', [$GLOBALS['.request_module'], $GLOBALS['.request_page']]);
-            $_json_data = require _pirogue_view_get_path($_path) ?? _pirogue_view_get_path('_error/404');
+            // get view path.
+            if ( '' == $GLOBALS['.request_module']  ){
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path('index');
+            } elseif ( '' == $GLOBALS['.request_page'] ) {
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path( $GLOBALS['.request_module'] )
+                    ?? _pirogue_view_get_path( implode( DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], 'index'] ) ); 
+            } else {
+                $GLOBALS['._dispatcher_view'] = _pirogue_view_get_path(implode(DIRECTORY_SEPARATOR, [ $GLOBALS['.request_module'], $GLOBALS['.request_page']]) );
+            }
+            $GLOBALS['._request_view'] = $GLOBALS['._dispatcher_view'];
+            $GLOBALS['._dispatcher_view'] = '' == $GLOBALS['._dispatcher_view'] ? _pirogue_view_get_path('_error/404') : $GLOBALS['._dispatcher_view'];
+            
+            // load view into the $GLOBALS['.html.body.content'] variable to pass to template.
+            $_json_data = require $GLOBALS['._dispatcher_view'];
             ob_get_clean();
 
         }
