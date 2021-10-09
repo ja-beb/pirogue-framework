@@ -13,7 +13,9 @@ echo "[run.sh]::codesniffer completed"
 
 # run unit testing.
 echo "[run.sh] Unit Testing - start"
+echo "======================================================================"
 php ./test/_all.php
+echo "======================================================================"
 echo "[run.sh] Unit Testing - complete"
 
 # complete.

@@ -32,10 +32,10 @@ $GLOBALS['._pirogue_test.count_errors'] = 0;
 function _pirogue_test_log(string $label, array $errors): void
 {
     if (empty($errors)) {
-        echo "> {$label} SUCCESS\n";
+        echo "+ PASSED >> {$label}\n";
     } else {
         $GLOBALS['._pirogue_test.count_errors']++;
-        echo "> {$label} FAILED.\n";
+        echo "- FAILED >> {$label}\n";
         foreach ($errors as $_message) {
             echo "  * {$_message}\n";
         }
@@ -55,7 +55,7 @@ function pirogue_test_execute(string $label, $callable): void
         $GLOBALS['._pirogue_test.count_test']++;
         _pirogue_test_log($label, $callable() ?? []);
     } catch (Throwable $e) {
-        _pirogue_test_log($label, [$e->getMessage()]);
+        _pirogue_test_log($label, [sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())]);
     }
 }
 
@@ -70,7 +70,10 @@ function _pirogue_test_load(string $path, string $filename): void
     try {
         require(implode(DIRECTORY_SEPARATOR, [__DIR__, $filename]));
     } catch (Throwable $e) {
-        _pirogue_test_log("_pirogue_test_load::load({$filename})", [$e->getMessage()]);
+        _pirogue_test_log(
+            "_pirogue_test_load::load({$filename})",
+            [sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())]
+        );
     }
 }
 
@@ -80,4 +83,7 @@ foreach (scandir(__DIR__) as $_filename) {
         _pirogue_test_load(__DIR__, $_filename);
     }
 }
-echo "[results] {$GLOBALS['._pirogue_test.count_test']} test(s), {$GLOBALS['._pirogue_test.count_errors']} error(s).\n";
+echo "\n";
+echo "Tests performed___: {$GLOBALS['._pirogue_test.count_test']} test(s)\n";
+echo "Errors encountered: {$GLOBALS['._pirogue_test.count_errors']}\n";
+echo "\n";
