@@ -68,7 +68,6 @@ pirogue_test_execute('pirogue_user_session_current:', function () {
     $_errors = [];
     $user = ['id' => 1];
 
-
     if (null != pirogue_user_session_current()) {
         array_push($_errors, '00 - user session contains values before being set.');
     }
