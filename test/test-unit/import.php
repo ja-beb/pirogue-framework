@@ -13,7 +13,7 @@
         try {
             pirogue_import_init('no-where');
             return ['Set library to invalid file.'];
-        } catch (InvalidArgumentException $_exception) {
+        } catch (InvalidArgumentException) {
             return [];
         }
     });
@@ -28,7 +28,7 @@
             pirogue_import_init(_PIROGUE_TESTING_PATH_INCLUDE);
             pirogue_import_load('file-not-found');
             return [ 'Loaded invalid library file.'];
-        } catch (ErrorException $_exception) {
+        } catch (ErrorException) {
             return [];
         }
     });

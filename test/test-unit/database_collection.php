@@ -25,7 +25,7 @@ function _pirogue_test_database_collection_query(?mysqli $database_connection)
                 'website'
             );
             return [ 'Invalid database config directory accepted.' ];
-        } catch (InvalidArgumentException $_exception) {
+        } catch (InvalidArgumentException){
             return [];
         }
     });
@@ -41,7 +41,7 @@ function _pirogue_test_database_collection_query(?mysqli $database_connection)
         try {
             _pirogue_test_database_collection_query(pirogue_database_collection_get('no-such-connection'));
             return [ 'Invalid database connection returned.' ];
-        } catch (ErrorException $_exception) {
+        } catch (ErrorException){
             return [];
         }
     });
