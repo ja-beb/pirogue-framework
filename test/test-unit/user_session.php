@@ -63,3 +63,31 @@ pirogue_test_execute('pirogue_user_session_init:', function () {
     }
     return $_errors;
 });
+
+pirogue_test_execute('pirogue_user_session_current:', function () {
+    $_errors = [];
+    $user = ['id' => 1];
+
+
+    if (null != pirogue_user_session_current()) {
+        array_push($_errors, '00 - user session contains values before being set.');
+    }
+
+    _pirogue_user_session_start($user);
+    if ($user != pirogue_user_session_current()) {
+        array_push($_errors, '01 - user session data not properly set.');
+    }
+
+    _pirogue_user_session_end();
+    if (null != pirogue_user_session_current()) {
+        array_push($_errors, '02 - user session data not properly destoryed.');
+    }
+
+    return $_errors;
+});
+
+// function pirogue_user_session_set(string $label, ?string $value): void
+// function pirogue_user_session_get(string $label): ?string
+// function pirogue_user_session_remove(string $label): ?string
+// function pirogue_user_session_exists(string $label): bool
+// pirogue_user_session_clear(): array
