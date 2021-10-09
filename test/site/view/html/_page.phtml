@@ -50,7 +50,7 @@
             <?php $_site_notices = pirogue_site_notices_clear(); ?>
             <?php if ( !empty($_site_notices) ): ?>
                 <?php foreach ( $_site_notices as $_notice): ?>
-                    <p class="<?php echo $_notice[0]; ?>"><?php echo $_notice[1]; ?></p>
+                    <p class="site-notice site-notice-<?php echo $_notice[0]; ?>"><?php echo $_notice[1]; ?></p>
                 <?php endforeach; ?>
                 <?php ob_start(); ?>
                     <script>
