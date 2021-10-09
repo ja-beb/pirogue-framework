@@ -10,6 +10,7 @@
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']));
 
+// test pirogue_user_session_init()
 pirogue_test_execute('pirogue_user_session_init:', function () {
     $test_label = 'test-label';
     pirogue_user_session_init($test_label);
@@ -64,6 +65,7 @@ pirogue_test_execute('pirogue_user_session_init:', function () {
     return $_errors;
 });
 
+// test pirogue_user_session_current(), _pirogue_user_session_start() and _pirogue_user_session_end()
 pirogue_test_execute('pirogue_user_session_current:', function () {
     $_errors = [];
     $user = ['id' => 1];
@@ -85,21 +87,21 @@ pirogue_test_execute('pirogue_user_session_current:', function () {
     return $_errors;
 });
 
+// Test pirogue_user_session_set()
 pirogue_test_execute('pirogue_user_session_set:', function () {
     $label = '!my label';
     $value = "@my value";
-    $_errors = []; 
+    $_errors = [];
 
-    pirogue_user_session_set($label, $value);    
-    if ( array_key_exist($label, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']]) {
+    pirogue_user_session_set($label, $value);
+    if (!array_key_exists($label, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
         array_push($_errors, "00 - '{$label}' not set.");
-    } elseif ($value == $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label]) {
+    } elseif ($value != $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label]) {
         array_push($_errors, "01 - '{$label}' contains the wrong value.");
     }
     return $_errors;
 });
 
-    // function pirogue_user_session_set(string $label, ?string $value): void
 // function pirogue_user_session_get(string $label): ?string
 // function pirogue_user_session_remove(string $label): ?string
 // function pirogue_user_session_exists(string $label): bool
