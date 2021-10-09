@@ -1,14 +1,6 @@
 <?php
     
     pirogue_import_load('site/users');
-        
-
-    /*
-     * Display user information. if user identifier is passed use specific user else all users.
-     */
-    function _get_user_info(mysqli $database_connection, string $key='', string $value=''): ?array {
-        return [];
-    }
 
     $_database_connection = pirogue_database_collection_get();
     $_page = array_shift($GLOBALS['.request_path']);
