@@ -152,5 +152,17 @@ pirogue_test_execute('pirogue_user_session_exists', function () {
     return $errors;
 });
 
-
 // pirogue_user_session_clear(): array
+pirogue_test_execute('pirogue_user_session_clear', function () {
+    $saved_state = $_SESSION[$GLOBALS['._pirogue.user_session.label_data']];
+    $errors = [];
+    if ($saved_state != pirogue_user_session_clear()) {
+        array_push($errors, '00 - returned variables do not match initial state.');
+    }
+
+    if (!empty($_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
+        array_push($errors, '01 - registered variables did not cleared.');
+    }
+    
+    return $errors;
+});
