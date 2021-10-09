@@ -1,6 +1,58 @@
-<ul>
-    <li>Page = <?php echo $GLOBALS['.request_page']; ?></li>
-    <li>Path = <?php echo implode('\', $GLOBALS['.request_path']); ?></li>
-    <li>Data = <pre><?php print_r($GLOBALS['.request_data']); ?></pre></li>
-</ul>
+<?php
+    pirogue_import_load('site/users');
+    $_id = array_shift($GLOBALS['.request_path']);
+
+    // verify input.
+    if ( '' == $_id ) {
+        return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url($GLOBALS['.request_module'],[]));
+    } 
         
+    $_user_info = site_user_fetch(pirogue_database_collection_get(), $_id);
+    if ( null == $_user_info ){
+        pirogue_site_notices_create('Error', 'Unable to find requested user.');
+        return pirogue_dispatcher_redirect(pirogue_dispatcher_create_url($GLOBALS['.request_module'],[]));   
+    }
+    
+    // build page.
+    site_html_create(html_title: 'User Details', page_title: 'User Details');
+
+?>
+<a href="<?php echo pirogue_dispatcher_create_url($GLOBALS['.request_module'],[]); ?>" title=""><span class="">Back to list</span></a>
+<div class="user-details">
+    <div class="user-details-entry">
+        <label class="user-details-label">Id</label>
+        <span class="user-details-value"><?php echo $_user_info['id']; ?></span>
+    </div>
+    <div class="user-details-entry">
+        <label class="user-details-label">Email</label>
+        <span class="user-details-value"><?php echo $_user_info['email']; ?></span>
+    </div>
+    <div class="user-details-entry">
+        <label class="user-details-label">Username</label>
+        <span class="user-details-value"><?php echo $_user_info['username']; ?></span>
+    </div>
+    <div class="user-details-entry">
+        <label class="user-details-label">Password Hash</label>
+        <span class="user-details-value"><?php echo $_user_info['password']; ?></span>
+    </div>
+</div>
+<?php ob_start(); ?>
+  <style>
+      .user-details{
+      }
+      .user-details-entry{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .user-details-label{
+          width: 25ex;
+          font-weight: bold;
+          padding: .5ex 1ex;
+      }
+      .user-details-value{
+        padding: .5ex 1ex;
+      }
+  </style>
+<?php $GLOBALS['.html.css.inline'] = ob_get_clean(); ?>
+
