@@ -9,13 +9,13 @@
 
     require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'database_collection.php']));
 
-function _pirogue_test_database_collection_query(?mysqli $database_connection)
-{
-    $_sql_results = mysqli_query($database_connection, 'SELECT COUNT(id) AS user_count FROM users ORDER BY username');
-    $_sql_data = mysqli_fetch_assoc($_sql_results);
-    mysqli_free_result($_sql_results);
-    return array_key_exists('user_count', $_sql_data) ? [] : ['unable to get count of website.users rows.'];
-}
+    function _pirogue_test_database_collection_query(?mysqli $database_connection)
+    {
+        $_sql_results = mysqli_query($database_connection, 'SELECT COUNT(id) AS user_count FROM users ORDER BY username');
+        $_sql_data = mysqli_fetch_assoc($_sql_results);
+        mysqli_free_result($_sql_results);
+        return array_key_exists('user_count', $_sql_data) ? [] : ['unable to get count of website.users rows.'];
+    }
 
     // test pirogue_database_collection_init: invalid directory
     pirogue_test_execute('pirogue_database_collection_init: invalid config directory', function () {
