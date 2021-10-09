@@ -134,4 +134,23 @@ pirogue_test_execute('pirogue_user_session_remove', function () {
 });
 
 // function pirogue_user_session_exists(string $label): bool
+pirogue_test_execute('pirogue_user_session_exists', function () {
+    $label = '!pirogue_user_session_exists.key';
+    $value = "@my value";
+    $errors = [];
+
+    if (pirogue_user_session_exists($label)){
+        array_push($errors, '00 - value exists before set.');
+    }
+
+    $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
+
+    if (pirogue_user_session_exists($label)){
+        array_push($errors, '00 - value does not exists after set.');
+    }
+    
+    return $errors;
+});
+
+
 // pirogue_user_session_clear(): array
