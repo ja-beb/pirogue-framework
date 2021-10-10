@@ -15,11 +15,11 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test'
 pirogue_test_execute("pirogue_site_notices_init(): \$GLOBALS['._pirogue.site_notices.index']", function () {
     pirogue_site_notices_init(_PIROGUE_TESTING_SITE_NOTICES_LABEL);
     if (!array_key_exists('._pirogue.site_notices.index', $GLOBALS)) {
-        return ["Variable \$GLOBALS['._pirogue.site_notices.index'] not initialized"];
+        return "Variable \$GLOBALS['._pirogue.site_notices.index'] not initialized";
     } elseif (_PIROGUE_TESTING_SITE_NOTICES_LABEL != $GLOBALS['._pirogue.site_notices.index']) {
-        return ["Variable \$GLOBALS['._pirogue.site_notices.index'] contains incorrect value."];
+        return "Variable \$GLOBALS['._pirogue.site_notices.index'] contains incorrect value.";
     } else {
-        return [];
+        return '';
     }
 });
 
@@ -28,10 +28,10 @@ pirogue_test_execute("pirogue_site_notices_init(): \$_SESSION[\$GLOBALS['._pirog
     $_SESSION = [];
     pirogue_site_notices_init(_PIROGUE_TESTING_SITE_NOTICES_LABEL);
     if (!array_key_exists($GLOBALS['._pirogue.site_notices.index'], $_SESSION)) {
-        return ["Variable \$_SESSION[\$GLOBALS['._pirogue.site_notices.index']] is not initialized"];
+        return "Variable \$_SESSION[\$GLOBALS['._pirogue.site_notices.index']] is not initialized";
     } elseif (!empty($_SESSION[$GLOBALS['._pirogue.site_notices.index']])) {
-        return ["Variable \$_SESSION[\$GLOBALS['._pirogue.site_notices.index']] contains values."];
+        return "Variable \$_SESSION[\$GLOBALS['._pirogue.site_notices.index']] contains values.";
     } else {
-        return [];
+        return '';
     }
 });

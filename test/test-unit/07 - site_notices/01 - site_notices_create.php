@@ -23,10 +23,10 @@ pirogue_test_execute("pirogue_site_notices_create()", function () {
 
     // test contents of saved site notices.
     if (empty($_SESSION[$GLOBALS['._pirogue.site_notices.index']])) {
-        return ['00 - no site notices exist.'];
+        return '00 - no site notices exist.';
     } elseif ($GLOBALS['.pirogue-testing.session_notices.notices'] != $_SESSION[$GLOBALS['._pirogue.site_notices.index']]) {
-        return ['01 - site notice list does not match.'];
+        return '01 - site notice list does not match.';
     } else {
-        return [];
+        return '';
     }
 });
