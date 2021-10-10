@@ -31,6 +31,7 @@ pirogue_test_execute('pirogue_user_session_remove(): ', function () {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
 
     foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
+        pirogue_user_session_remove($key);
         if (array_key_exists($key, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
             return "variable '{$key}' not removed.";
         }
