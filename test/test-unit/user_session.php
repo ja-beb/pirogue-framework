@@ -10,6 +10,9 @@
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']));
 
+// initialize and reset session variable.
+$_SESSION = [];
+
 // test pirogue_user_session_init()
 pirogue_test_execute('pirogue_user_session_init:', function () {
     $test_label = 'test-label';
