@@ -15,9 +15,9 @@ pirogue_test_execute('pirogue_database_collection_init(): invalid config directo
             implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_CONFIG, 'config-invalid']),
             'website'
         );
-        return [ 'Invalid database config directory accepted.' ];
+        return 'Invalid database config directory accepted.';
     } catch (InvalidArgumentException) {
-        return [];
+        return '';
     }
 });
 
@@ -29,20 +29,20 @@ pirogue_test_execute(
 pirogue_test_execute("pirogue_database_collection_init(): \$GLOBALS['._pirogue.database_collection.config_path']", function () {
     pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website');
     return _PIROGUE_TESTING_PATH_CONFIG == $GLOBALS['._pirogue.database_collection.config_path']
-        ? []
-        : ["invalid value for \$GLOBALS['._pirogue.database_collection.config_path']"];
+        ? ''        
+        : "invalid value for \$GLOBALS['._pirogue.database_collection.config_path']";
 });
 
 pirogue_test_execute("pirogue_database_collection_init(): \$GLOBALS['._pirogue.database_collection.default']", function () {
     pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website');
     return 'website' == $GLOBALS['._pirogue.database_collection.default']
-        ? []
-        : ["invalid value for \$GLOBALS['._pirogue.database_collection.default']"];
+        ? ''
+        : "invalid value for \$GLOBALS['._pirogue.database_collection.default']];
 });
 
 pirogue_test_execute("pirogue_database_collection_init(): \$GLOBALS['._pirogue.database_collection.connections']", function () {
     pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website');
     return empty($GLOBALS['._pirogue.database_collection.connections'])
-        ? []
-        : ["invalid value for \$GLOBALS['._pirogue.database_collection.connections']"];
+        ? ''
+        : "invalid value for \$GLOBALS['._pirogue.database_collection.connections']";
 });
