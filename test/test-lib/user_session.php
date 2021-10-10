@@ -38,7 +38,7 @@ $GLOBALS['._pirogue-testing.user_session.user'] = [
 
 /**
  * Initialize user session data.
- * 
+ *
  * @param string $label the label to use when initializing sessiond ata.
  * @param array $data data to initialize library with.
  */
@@ -51,7 +51,7 @@ function _user_session_test_init(string $label, array $data): void
 
 /**
  * Compare two arrays to check for values from list_src in list
- * 
+ *
  * @param array $list_src the source array to use for checking contents.
  * @param array $list the array to check for contents in.
  * @param array $errors the errors already encountered.
