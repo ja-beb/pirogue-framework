@@ -18,10 +18,10 @@ pirogue_test_execute("pirogue_site_notices_clear()", function () {
     $_SESSION[_PIROGUE_TESTING_SITE_NOTICES_LABEL] = $GLOBALS['.pirogue-testing.session_notices.notices'];
     $list = pirogue_site_notices_clear();
     if (!empty($_SESSION[_PIROGUE_TESTING_SITE_NOTICES_LABEL])) {
-        return ['00 - site notices were not cleared.'];
+        return '00 - site notices were not cleared.';
     } elseif ($list != $GLOBALS['.pirogue-testing.session_notices.notices']) {
-        return ['01 - wrong site notices were returned.'];
+        return '01 - wrong site notices were returned.';
     } else {
-        return [];
+        return '';
     }
 });
