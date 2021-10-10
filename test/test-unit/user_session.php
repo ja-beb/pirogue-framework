@@ -48,7 +48,7 @@ function _user_session_compare(array $list_src, array $list, array $errors = [])
         } elseif ($list_src[$key] != $list[$key]) {
             array_push($errors, "01 - variable '{$key}' not set.");
         }
-        return _user_session_check(array_slice($list_src, 1), $list, $errors);
+        return _user_session_compare(array_slice($list_src, 1), $list, $errors);
     }
     return $errors;
 }
@@ -154,38 +154,32 @@ function _user_session_compare(array $list_src, array $list, array $errors = [])
 
     // function pirogue_user_session_get(string $label): ?string
     pirogue_test_execute('pirogue_user_session_get', function () {
-            _user_session_reset();
-            $label = '!pirogue_user_session_get.key';
-            $value = "@my value";
-
-            $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
-
-            return ($value != pirogue_user_session_get($label))
-            ? ['Invalid value retrieved.']
-            : [];
+        _user_session_reset();
+        $errors = [];
+        $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
+        foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
+            if ($value != pirogue_user_session_get($key)) {
+                array_push($errors, "00 - variable {$key} not set.");
+            }
+        }
+        return $errors;
     });
 
     // function pirogue_user_session_remove(string $label): ?string
     pirogue_test_execute('pirogue_user_session_remove', function () {
-            _user_session_reset();
-            $label = '!pirogue_user_session_remove.key';
-            $value = "@my value";
-            $errors = [];
+        _user_session_reset();
+        $errors = [];
+        $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
+        foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
+            if ($value != pirogue_user_session_remove($key)) {
+                array_push($errors, "00 - returned incorrect value for '{$key}'.");
+            }
 
-
-            key($GLOBALS['._pirogue-testing.user_session.list']);
-
-            $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
-            $del_value = pirogue_user_session_remove($label);
-        if ($value != $del_value) {
-            array_push($errors, '00 - returned value does not match set value.');
+            if (array_key_exists($key, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
+                array_push($errors, "01 - variable '{$key}' not removed.");
+            }
         }
-
-        if (array_key_exists($label, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
-            array_push($errors, '00 - value not unset.');
-        }
-
-            return $errors;
+        return $errors;
     });
 
     // function pirogue_user_session_exists(string $label): bool
