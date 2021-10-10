@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test the user session functions.
+ * Testin tfor pirogue_user_session_init().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -10,11 +10,10 @@
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']);
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', '_PirogueTestObject.php']);
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'user_session.php']);
 
-// test pirogue_user_session_init() - ._pirogue.user_session.label_user
-pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_session.label_user', function () {
+// test pirogue_user_session_init(): ._pirogue.user_session.label_user exists
+pirogue_test_execute('pirogue_user_session_init(): initialize ._pirogue.user_session.label_user', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 
@@ -27,8 +26,8 @@ pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_sessi
     }
 });
 
-// test pirogue_user_session_init() - ._pirogue.user_session.label_data
-pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_session.label_data', function () {
+// test pirogue_user_session_init() - ._pirogue.user_session.label_data exists.
+pirogue_test_execute('pirogue_user_session_init(): initialize ._pirogue.user_session.label_data', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 
@@ -41,11 +40,12 @@ pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_sessi
     }
 });
 
-// test pirogue_user_session_init() - check user data
-pirogue_test_execute('pirogue_user_session_init: user data', function () {
+// test pirogue_user_session_init() - user data is initialized to a null value.
+pirogue_test_execute('pirogue_user_session_init(): user data', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $index = sprintf('%s_user', _PIROGUE_TESTING_USER_SESSION_LABEL);
+
     if (false == array_key_exists($index, $_SESSION)) {
         return ["00 - session variable '{$index}' not initialized."];
     } elseif (null != $_SESSION[$index]) {
@@ -59,11 +59,12 @@ pirogue_test_execute('pirogue_user_session_init: user data', function () {
     }
 });
 
-// test pirogue_user_session_init() - check data
-pirogue_test_execute('pirogue_user_session_init: user data', function () {
+// test pirogue_user_session_init() - verify that saved data is initialized to an empty array.
+pirogue_test_execute('pirogue_user_session_init(): user data', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $index = sprintf('%s_data', _PIROGUE_TESTING_USER_SESSION_LABEL);
+
     if (false == array_key_exists($index, $_SESSION)) {
         return ["00 - session variable '{$index}' is not initialized."];
     } elseif (!empty($_SESSION[$index])) {
