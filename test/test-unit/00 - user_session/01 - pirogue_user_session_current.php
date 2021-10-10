@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test the user session functions.
+ * Testing pirogue_user_session_current().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -10,18 +10,17 @@
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']);
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', '_PirogueTestObject.php']);
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'user_session.php']);
 
 // test pirogue_user_session_current() - check for emtpy initialized session
-pirogue_test_execute('pirogue_user_session_current', function () {
+pirogue_test_execute('pirogue_user_session_current(): verify that session is null', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     return null == pirogue_user_session_current() ? [] : ['User session contains values before being set.'];
 });
 
 // test pirogue_user_session_current() - check for session after set manually.
-pirogue_test_execute('pirogue_user_session_current', function () {
+pirogue_test_execute('pirogue_user_session_current(): verify that session exists', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $GLOBALS['._pirogue-testing.user_session.user'];

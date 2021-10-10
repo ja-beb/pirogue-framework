@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Test the user session functions.
+ * Testing pirogue_user_session_start().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -10,18 +10,19 @@
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']);
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', '_PirogueTestObject.php']);
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'user_session.php']);
 
-// test _pirogue_user_session_start() - check for session when there should be none.
-pirogue_test_execute('_pirogue_user_session_start: null session', function () {
+// test pirogue_user_session_start() - check for session when there should be none.
+pirogue_test_execute('_pirogue_user_session_start(): null session', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-    return null != pirogue_user_session_current() ? ['User session contains values before being set.'] : [];
+    return null != pirogue_user_session_current() 
+        ? ['User session contains values before being set.'] 
+        : [];
 });
 
-// test _pirogue_user_session_start() - check for session set.
-pirogue_test_execute('_pirogue_user_session_start: session set', function () {
+// test pirogue_user_session_start() - check for session set.
+pirogue_test_execute('_pirogue_user_session_start(): session set', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     _pirogue_user_session_start($GLOBALS['._pirogue-testing.user_session.user']);
