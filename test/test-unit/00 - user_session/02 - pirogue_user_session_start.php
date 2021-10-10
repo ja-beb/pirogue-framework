@@ -16,8 +16,8 @@ require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test'
 pirogue_test_execute('_pirogue_user_session_start(): null session', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-    return null != pirogue_user_session_current() 
-        ? ['User session contains values before being set.'] 
+    return null != pirogue_user_session_current()
+        ? ['User session contains values before being set.']
         : [];
 });
 
