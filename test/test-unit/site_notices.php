@@ -64,5 +64,17 @@
     // test pirogue_site_notices_create
     pirogue_test_execute('pirogue_site_notices_create()', function () {
         $errors = [];
+        $_SESSION[$GLOBALS['._pirogue.site_notices.index']] = [];
+
+        foreach ($GLOBALS['.pirogue-testing.session_notices.notices'] as $notice) {
+            pirogue_site_notices_create($notice[0], $notice[1]);
+        }
+
+        if (empty($_SESSION[$GLOBALS['._pirogue.site_notices.index']])) {
+            array_push($errors, '00 - site notice not added.');
+        } elseif ($GLOBALS['.pirogue-testing.session_notices.notices'] != $_SESSION[$GLOBALS['._pirogue.site_notices.index']]) {
+            array_push($errors, '01 - site notice not added.');
+        }
+
         return $errors;
     });
