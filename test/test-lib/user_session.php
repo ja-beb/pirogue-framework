@@ -54,7 +54,7 @@ function _user_session_compare(array $list_src, array $list, array $errors = [])
         if (!array_key_exists($key, $list)) {
             array_push($errors, "00 - variable '{$key}' not registered.");
         } elseif ($list_src[$key] != $list[$key]) {
-            array_push($errors, "01 - variable '{$key}' not set.");
+            array_push($errors, "01 - variable '{$key}' values do not match.");
         }
         return _user_session_compare(array_slice($list_src, 1), $list, $errors);
     }
