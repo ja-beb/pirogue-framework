@@ -10,8 +10,29 @@
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']));
 
+// define test object
+class PirogueTestObject
+{
+    public function __construct(
+        public string $label,
+        public string $value
+    ) {
+    }
+
+    public function __toString(): string {
+        return '';
+    }
+}
+
 // initialize and reset session variable.
 $_SESSION = [];
+$GLOBALS['._pirogue-testing.user_session.list'] = [
+    'int_val' => 3.14,
+    'function results' => sqrt(9),
+    '.function' => fn(string $msg) => "I display '{$msg}'",
+    '!array' => [1. . .10],
+    '@object' => new PirogueTestObject('label', 'value'),
+];
 
 // test pirogue_user_session_init()
 pirogue_test_execute('pirogue_user_session_init:', function () {
@@ -166,6 +187,6 @@ pirogue_test_execute('pirogue_user_session_clear', function () {
     if (!empty($_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
         array_push($errors, '01 - registered variables did not cleared.');
     }
-    
+
     return $errors;
 });
