@@ -22,6 +22,7 @@ services:
             - ./test-unit:/var/pirogue/test:rw
             - ./test-config:/var/pirogue/config:ro
             - ./test-view:/var/pirogue/view:ro
+            - ./test-lib:/var/pirogue/include/test:rw
             - ../src:/var/pirogue/include/pirogue:rw
         depends_on:
             - database

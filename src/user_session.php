@@ -146,9 +146,14 @@ function _pirogue_user_session_start(array $user_data): void
  *
  * @internal used by disaptcher or login/logout modules only.
  * @uses $GLOBALS['._pirogue.user_session.label_user']
+ * @param bool $clear_data flag used to determine if session data should be cleared.
  * @internal Use by dispatcher or login/logout modules only.
  */
-function _pirogue_user_session_end(): void
+function _pirogue_user_session_end(bool $clear_data = false): void
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = null;
+
+    if ($clear_data) {
+        $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
+    }
 }
