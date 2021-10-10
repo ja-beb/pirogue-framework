@@ -1,7 +1,23 @@
 <?php
 
+/**
+ * Assist in testing user_session library.
+ * php version 8.0.0
+ *
+ * @author Bourg, Sean <sean.bourg@gmail.com>
+ * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
+ */
+
+ /**
+  * Label to use for initializing the user_session library.
+  * @var string _PIROGUE_TESTING_USER_SESSION_LABEL
+  */
 define('_PIROGUE_TESTING_USER_SESSION_LABEL', '._pirogue-testing.user_session.label');
 
+/**
+  * Sample user session data.
+  * @var array $GLOBALS['._pirogue-testing.user_session.list']
+  */
 $GLOBALS['._pirogue-testing.user_session.list'] = [
     'int_val' => 3.14,
     'function results' => sqrt(9),
@@ -10,12 +26,22 @@ $GLOBALS['._pirogue-testing.user_session.list'] = [
     '@object' => new PirogueTestObject('label', 'value'),
 ];
 
+/**
+  * Sample user data.
+  * @var array $GLOBALS['._pirogue-testing.user_session.user']
+  */
 $GLOBALS['._pirogue-testing.user_session.user'] = [
     'id' => 1,
     '.username' => 'admin',
     '@display name' => 'Admin User',
 ];
 
+/**
+ * Initialize user session data.
+ * 
+ * @param string $label the label to use when initializing sessiond ata.
+ * @param array $data data to initialize library with.
+ */
 function _user_session_test_init(string $label, array $data): void
 {
     $_SESSION = [];
@@ -25,6 +51,11 @@ function _user_session_test_init(string $label, array $data): void
 
 /**
  * check for values from list_src in list
+ * 
+ * @param array $list_src the source array to use for checking contents.
+ * @param array $list the array to check for contents in.
+ * @param array $errors the errors already encountered.
+ * @return array list of errors encountered.
  */
 function _user_session_compare(array $list_src, array $list, array $errors = []): array
 {
