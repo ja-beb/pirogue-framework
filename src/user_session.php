@@ -72,7 +72,7 @@ function pirogue_user_session_current(): ?array
  * @param string $label the label of the session variable to save.
  * @param string $value the value to store.
  */
-function pirogue_user_session_set(string $label, ?string $value): void
+function pirogue_user_session_set(string $label, mixed $value): void
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
 }
@@ -85,7 +85,7 @@ function pirogue_user_session_set(string $label, ?string $value): void
  * @param string $label the label of the session variable to fetch.
  * @return string sessioned variable or null if not found.
  */
-function pirogue_user_session_get(string $label): ?string
+function pirogue_user_session_get(string $label): mixed
 {
     return $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] ?? null;
 }
@@ -97,7 +97,7 @@ function pirogue_user_session_get(string $label): ?string
  * @param string $label the label of the session variable to fetch.
  * @return string sessioned variable's value that was removed or null if not found.
  */
-function pirogue_user_session_remove(string $label): ?string
+function pirogue_user_session_remove(string $label): mixed
 {
     $value = $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] ?? null;
     unset($_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label]);

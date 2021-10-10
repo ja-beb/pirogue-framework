@@ -15,6 +15,22 @@
 
 
     // initialize and reset session variable.
+<<<<<<< HEAD
+=======
+    $_SESSION = [];
+    $GLOBALS['._pirogue-testing.user_session.user'] = [
+        'id' => 1,
+        '.username' => 'admin',
+        '@display name' => 'Admin User',
+    ];
+    $GLOBALS['._pirogue-testing.user_session.list'] = [
+        'int_val' => 3.14,
+        'function results' => sqrt(9),
+        '.function' => fn(string $msg) => "I display '{$msg}'",
+        '!array' => [1. . .10],
+        '@object' => new PirogueTestObject('label', 'value'),
+    ];
+>>>>>>> test/user_session
 
     // test pirogue_user_session_init()
     pirogue_test_execute('pirogue_user_session_init:', function () {
