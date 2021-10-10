@@ -13,13 +13,13 @@ pirogue_test_execute("pirogue_cdn_init(): \$GLOBALS['._pirogue.cdn.address_list'
     $list = ['https://cdn.localhost.localdomain'];
     pirogue_cdn_init($list);
     return $list == $GLOBALS['._pirogue.cdn.address_list']
-        ? []
-        : ["Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly"];
+        ? ''
+        : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";
 });
 
 pirogue_test_execute("pirogue_cdn_init(): \$GLOBALS['._pirogue.cdn.current_index']", function () {
     pirogue_cdn_init(['https://cdn.localhost.localdomain']);
     return 0 == $GLOBALS['._pirogue.cdn.current_index']
-        ? []
-        : ["Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly"];
+        ? ''
+        : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";
 });
