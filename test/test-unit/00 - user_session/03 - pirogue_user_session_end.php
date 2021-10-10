@@ -19,7 +19,8 @@
  */
 function _user_session_test_end(bool $clear_data, array $message_cleared, array $message_not_cleared): array
 {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
+    pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
     _pirogue_user_session_end($clear_data);
     return empty($_SESSION[$GLOBALS['._pirogue.user_session.label_data']]) ? $message_cleared : $message_not_cleared;
@@ -32,7 +33,8 @@ require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test'
 
 // test _pirogue_user_session_end() - end session
 pirogue_test_execute('_pirogue_user_session_end - end session', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
+    pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $GLOBALS['._pirogue-testing.user_session.user'];
     _pirogue_user_session_end();
     return null == pirogue_user_session_current() ? [] : ['User session not properly ended.'];

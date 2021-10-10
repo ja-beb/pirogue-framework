@@ -15,13 +15,15 @@ require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test'
 
 // test pirogue_user_session_current() - check for emtpy initialized session
 pirogue_test_execute('pirogue_user_session_current', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
+    pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     return null == pirogue_user_session_current() ? [] : ['User session contains values before being set.'];
 });
 
 // test pirogue_user_session_current() - check for session after set manually.
 pirogue_test_execute('pirogue_user_session_current', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
+    pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $GLOBALS['._pirogue-testing.user_session.user'];
     return match (pirogue_user_session_current()) {
         null => ['User data not set.'],

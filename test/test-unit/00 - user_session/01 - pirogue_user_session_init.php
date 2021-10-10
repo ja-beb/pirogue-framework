@@ -15,7 +15,7 @@ require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test'
 
 // test pirogue_user_session_init() - ._pirogue.user_session.label_user
 pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_session.label_user', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 
     if (false == array_key_exists('._pirogue.user_session.label_user', $GLOBALS)) {
@@ -29,7 +29,7 @@ pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_sessi
 
 // test pirogue_user_session_init() - ._pirogue.user_session.label_data
 pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_session.label_data', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 
     if (false == array_key_exists('._pirogue.user_session.label_data', $GLOBALS)) {
@@ -43,7 +43,7 @@ pirogue_test_execute('pirogue_user_session_init: initialize ._pirogue.user_sessi
 
 // test pirogue_user_session_init() - check user data
 pirogue_test_execute('pirogue_user_session_init: user data', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $index = sprintf('%s_user', _PIROGUE_TESTING_USER_SESSION_LABEL);
     if (false == array_key_exists($index, $_SESSION)) {
@@ -61,7 +61,7 @@ pirogue_test_execute('pirogue_user_session_init: user data', function () {
 
 // test pirogue_user_session_init() - check data
 pirogue_test_execute('pirogue_user_session_init: user data', function () {
-    _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+    $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     $index = sprintf('%s_data', _PIROGUE_TESTING_USER_SESSION_LABEL);
     if (false == array_key_exists($index, $_SESSION)) {

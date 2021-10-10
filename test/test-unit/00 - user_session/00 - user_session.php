@@ -13,77 +13,19 @@
     require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', '_PirogueTestObject.php']);
     require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'user_session.php']);
 
-
-    // test pirogue_user_session_init()
-    pirogue_test_execute('pirogue_user_session_init:', function () {
-        _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
-        pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-        $errors = [];
-
-        // test init - user.
-        if (false == array_key_exists('._pirogue.user_session.label_user', $GLOBALS)) {
-            array_push($errors, '00 - var "._pirogue.user_session.label_user" not initialized.');
-        } elseif (sprintf('%s_user', _PIROGUE_TESTING_USER_SESSION_LABEL) != $GLOBALS['._pirogue.user_session.label_user']) {
-            array_push($errors, '01 - var "._pirogue.user_session.label_user" not properly set.');
-        }
-
-        // test init - data.
-        if (false == array_key_exists('._pirogue.user_session.label_data', $GLOBALS)) {
-            array_push($errors, '02 - var "._pirogue.user_session.label_data" not initialized.');
-        } elseif (sprintf('%s_data', _PIROGUE_TESTING_USER_SESSION_LABEL) != $GLOBALS['._pirogue.user_session.label_data']) {
-            array_push($errors, '03 - var "._pirogue.user_session.label_data" not properly set.');
-        }
-
-        // test init - user data.
-        if (false == array_key_exists($GLOBALS['._pirogue.user_session.label_user'], $_SESSION)) {
-            array_push(
-                $errors,
-                "04 - session variable '{$GLOBALS['._pirogue.user_session.label_user']}' not initialized."
-            );
-        } elseif (null != $_SESSION[$GLOBALS['._pirogue.user_session.label_user']]) {
-            array_push(
-                $errors,
-                sprintf(
-                    "05 - session variable '{$GLOBALS['._pirogue.user_session.label_user']}' not properly set (type=%s).",
-                    gettype($_SESSION[$GLOBALS['._pirogue.user_session.label_user']])
-                )
-            );
-        }
-
-        // test init - data list.
-        if (false == array_key_exists($GLOBALS['._pirogue.user_session.label_data'], $_SESSION)) {
-            array_push(
-                $errors,
-                "06 - session variable '{$GLOBALS['._pirogue.user_session.label_data']}' not initialized."
-            );
-        } elseif (!is_array($_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
-            array_push(
-                $errors,
-                sprintf(
-                    "07 - session variable '{$GLOBALS['._pirogue.user_session.label_data']}' not properly set (type=%s).",
-                    gettype($_SESSION[$GLOBALS['._pirogue.user_session.label_data']])
-                )
-            );
-        } elseif (!empty($_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
-            array_push(
-                $errors,
-                "08 - session variable '{$GLOBALS['._pirogue.user_session.label_data']}' not properly set."
-            );
-        }
-
-        return $errors;
-    });
-
     // Test pirogue_user_session_set()
     pirogue_test_execute('pirogue_user_session_set', function () {
-        _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+        $_SESSION = [];
+        pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
         array_walk($GLOBALS['._pirogue-testing.user_session.list'], fn(mixed $value, string $key) => pirogue_user_session_set($key, $value));
         return _user_session_compare($GLOBALS['._pirogue-testing.user_session.list'], $_SESSION[$GLOBALS['._pirogue.user_session.label_data']], []);
     });
 
     // function pirogue_user_session_get(string $label): ?string
     pirogue_test_execute('pirogue_user_session_get', function () {
-        _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, $GLOBALS['._pirogue-testing.user_session.list']);
+        $_SESSION = [];
+        pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
+        $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
         $errors = [];
         foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
             if ($value != pirogue_user_session_get($key)) {
@@ -95,7 +37,10 @@
 
     // function pirogue_user_session_remove(string $label): ?string
     pirogue_test_execute('pirogue_user_session_remove', function () {
-        _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, $GLOBALS['._pirogue-testing.user_session.list']);
+        $_SESSION = [];
+        pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
+        $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
+
         $errors = [];
         foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
             if ($value != pirogue_user_session_remove($key)) {
@@ -111,7 +56,8 @@
 
     // function pirogue_user_session_exists(string $label): bool
     pirogue_test_execute('pirogue_user_session_exists', function () {
-        _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
+        $_SESSION = [];
+        pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
         $errors = [];
         $key_list = array_keys($GLOBALS['._pirogue-testing.user_session.list']);
 
@@ -134,7 +80,9 @@
 
     // pirogue_user_session_clear(): array
     pirogue_test_execute('pirogue_user_session_clear', function () {
-        _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, $GLOBALS['._pirogue-testing.user_session.list']);
+        $_SESSION = [];
+        pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
+        $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
         $errors = [];
         if ($GLOBALS['._pirogue-testing.user_session.list'] != pirogue_user_session_clear()) {
             array_push($errors, '00 - returned variables do not match initial state.');
