@@ -11,5 +11,5 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirog
 
 pirogue_test_execute('_pirogue_database_collection_destruct()', function () {
     _pirogue_database_collection_destruct();
-    return empty($GLOBALS['._pirogue.database_collection.connections']) ? [] : ['registered connections exist.'];
+    return empty($GLOBALS['._pirogue.database_collection.connections']) ? '' : 'registered connections exist.';
 });

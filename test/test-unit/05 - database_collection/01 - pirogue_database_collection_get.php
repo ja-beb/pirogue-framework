@@ -14,7 +14,7 @@ function _pirogue_test_database_collection_query(?mysqli $database_connection)
     $_sql_results = mysqli_query($database_connection, 'SELECT COUNT(id) AS user_count FROM users ORDER BY username');
     $_sql_data = mysqli_fetch_assoc($_sql_results);
     mysqli_free_result($_sql_results);
-    return array_key_exists('user_count', $_sql_data) ? [] : ['unable to get count of website.users rows.'];
+    return array_key_exists('user_count', $_sql_data) ? '' : 'unable to get count of website.users rows.';
 }
 
 // test pirogue_database_collection_init(): invalid directory
@@ -24,9 +24,9 @@ pirogue_test_execute('pirogue_database_collection_init: invalid config directory
             implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_CONFIG, 'config-invalid']),
             'website'
         );
-        return [ 'Invalid database config directory accepted.' ];
+        return 'Invalid database config directory accepted.';
     } catch (InvalidArgumentException) {
-        return [];
+        return '';
     }
 });
 
@@ -35,9 +35,9 @@ pirogue_test_execute('pirogue_database_collection_get(): invalid label', functio
     try {
         pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website');
         _pirogue_test_database_collection_query(pirogue_database_collection_get('no-such-connection'));
-        return [ 'Invalid database connection returned.' ];
+        return 'Invalid database connection returned.';
     } catch (ErrorException) {
-        return [];
+        return '';
     }
 });
 
