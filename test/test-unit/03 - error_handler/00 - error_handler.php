@@ -13,8 +13,8 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirog
 pirogue_test_execute('_pirogue_error_handler()', function () {
     try {
         _pirogue_error_handler(42, 'my custom error', __FILE__, __LINE__);
-        return ['Error not thrown.'];
+        return 'Error not thrown.';
     } catch (Throwable) {
-        return [];
+        return '';
     }
 });
