@@ -21,5 +21,5 @@ pirogue_test_execute("pirogue_dispatcher_create_url(): \$GLOBALS['.pirogue.dispa
         $GLOBALS['.pirogue-testing.dispatcher.request_path'],
         $GLOBALS['.pirogue-testing.dispatcher.request_data']
     );
-    return  $url_build == $url ? [] : ['invalid url returned.'];
+    return  $url_build == $url ? '' : 'invalid url returned.';
 });
