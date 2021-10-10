@@ -183,24 +183,27 @@ function _user_session_compare(array $list_src, array $list, array $errors = [])
     });
 
     // function pirogue_user_session_exists(string $label): bool
-    pirogue_test_execute('pirogue_user_session_exists', function () {
+    pirogue_test_execute(
+        'pirogue_user_session_exists',
+        function () {
             _user_session_reset();
-            $label = '!pirogue_user_session_exists.key';
-            $value = "@my value";
             $errors = [];
+            $key_list = array_keys($GLOBALS['._pirogue-testing.user_session.list']);
+            foreach ($key_list as $key) {
+                if (pirogue_user_session_exists($key)) {
+                    array_push($errors, "00 - value '{$key}' exists before set.");
+                }
+            }
 
-        if (pirogue_user_session_exists($label)) {
-            array_push($errors, '00 - value exists before set.');
-        }
-
-            $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
-
-        if (!pirogue_user_session_exists($label)) {
-            array_push($errors, '01 - value does not exists after set.');
-        }
-
+            $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
+            foreach ($key_list as $key) {
+                if (!pirogue_user_session_exists($key)) {
+                    array_push($errors, "01 - value '{$key}' does not exists after being set.");
+                }
+            }
             return $errors;
-    });
+        }
+    );
 
     // pirogue_user_session_clear(): array
         pirogue_test_execute('pirogue_user_session_clear', function () {
