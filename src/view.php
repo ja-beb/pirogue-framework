@@ -43,13 +43,12 @@ function pirogue_view_init(string $path, string $extension = 'phtml'): void
 /**
  * Translate view name to the respective view file.
  *
- * @internal use by dispatcher only.
  * @uses $GLOBALS['._pirogue.view.extension']
  * @uses $GLOBALS['._pirogue.view.path']
  * @param string $file the name of the desired view file relative to the base view directory.
  * @return string the absolute filename of the view file if found or an empty string if not found.
  */
-function _pirogue_view_get_path(string $file): ?string
+function pirogue_view_get_path(string $file): ?string
 {
     $view_file = sprintf(
         '%s.%s',
