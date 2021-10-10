@@ -12,9 +12,9 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirog
 pirogue_test_execute('pirogue_import_init(): invalid directory', function () {
     try {
         pirogue_import_init('/invalid/path');
-        return ['Set library to invalid file.'];
+        return 'Set library to invalid file.';
     } catch (InvalidArgumentException) {
-        return [];
+        return '';
     }
 });
 
