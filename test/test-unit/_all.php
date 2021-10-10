@@ -32,12 +32,12 @@ $GLOBALS['._pirogue_test.count_errors'] = 0;
 function _pirogue_test_log(string $label, array $errors): void
 {
     if (empty($errors)) {
-        echo "+ PASSED >> {$label}\n";
+        echo "[PASSED] {$label}\n";
     } else {
         $GLOBALS['._pirogue_test.count_errors']++;
-        echo "- FAILED >> {$label}\n";
+        echo "[FAILED] {$label}\n";
         foreach ($errors as $_message) {
-            echo "  * {$_message}\n";
+            echo $_message, "\n";
         }
     }
 }
@@ -59,31 +59,31 @@ function pirogue_test_execute(string $label, $callable): void
     }
 }
 
-/**
- * Load test file.
- *
- * @param string $path directory containing test file.
- * @param string $filename name of test file.
- */
-function _pirogue_test_load(string $path, string $filename): void
-{
-    try {
-        require(implode(DIRECTORY_SEPARATOR, [__DIR__, $filename]));
-    } catch (Throwable $e) {
-        _pirogue_test_log(
-            "_pirogue_test_load::load({$filename})",
-            [sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())]
-        );
+// scan for child directories and execute any /^[^_].*.php$/ files encountered.
+$_test_files_loaded = 0;
+foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_dir') as $_test_group) {
+    foreach (scandir($_test_group) as $_test_file) {
+        $_test_path = implode(DIRECTORY_SEPARATOR, [$_test_group, $_test_file]);
+        if (!is_dir($_test_path) && preg_match('/^[^_].*\.php$/', $_test_file)) {
+            try {
+                printf("%s/%s\n", basename($_test_group), basename($_test_file));
+                $_test_files_loaded++;
+                require $_test_path;
+            } catch (Throwable $e) {
+                _pirogue_test_log(
+                    "require $_test_path",
+                    [sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())]
+                );
+            } finally {
+                echo "\n";
+            }
+        }
     }
 }
 
-// scan current folder for /^[^_].*.php$/ files to execute.
-foreach (scandir(__DIR__) as $_filename) {
-    if (preg_match('/^[^_](.*)\.php$/', $_filename)) {
-        _pirogue_test_load(__DIR__, $_filename);
-    }
-}
+// Report result counts.
 echo "\n";
-echo "Tests performed___: {$GLOBALS['._pirogue_test.count_test']} test(s)\n";
+echo "Files loaded______: {$_test_files_loaded}\n";
+echo "Tests performed___: {$GLOBALS['._pirogue_test.count_test']}\n";
 echo "Errors encountered: {$GLOBALS['._pirogue_test.count_errors']}\n";
 echo "\n";
