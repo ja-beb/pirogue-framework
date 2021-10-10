@@ -38,25 +38,3 @@ $GLOBALS['._pirogue-testing.user_session.user'] = [
     '.username' => 'admin',
     '@display name' => 'Admin User',
 ];
-
-/**
- * Compare two arrays to check for values from list_src in list
- *
- * @param array $list_src the source array to use for checking contents.
- * @param array $list the array to check for contents in.
- * @param array $errors the errors already encountered.
- * @return array list of errors encountered.
- */
-function _user_session_compare(array $list_src, array $list, array $errors = []): array
-{
-    if (!empty($list_src)) {
-        $key = key($list_src);
-        if (!array_key_exists($key, $list)) {
-            array_push($errors, "00 - variable '{$key}' not registered.");
-        } elseif ($list_src[$key] != $list[$key]) {
-            array_push($errors, "01 - variable '{$key}' values do not match.");
-        }
-        return _user_session_compare(array_slice($list_src, 1), $list, $errors);
-    }
-    return $errors;
-}

@@ -17,8 +17,8 @@ pirogue_test_execute('_pirogue_user_session_start(): null session', function () 
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     return null != pirogue_user_session_current()
-        ? ['User session contains values before being set.']
-        : [];
+        ? 'User session contains values before being set.'
+        : '';
 });
 
 // test pirogue_user_session_start() - check for session set.
@@ -27,6 +27,6 @@ pirogue_test_execute('_pirogue_user_session_start(): session set', function () {
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
     _pirogue_user_session_start($GLOBALS['._pirogue-testing.user_session.user']);
     return $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] == $GLOBALS['._pirogue-testing.user_session.user']
-        ? []
-        : ['User session not properly set.'];
+        ? ''
+        : 'User session not properly set.';
 });

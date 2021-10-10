@@ -12,10 +12,39 @@
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']);
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'user_session.php']);
 
+
+/**
+ * Compare two arrays to check for values from list_src in list
+ *
+ * @param array $list_src the source array to use for checking contents.
+ * @param array $list the array to check for contents in.
+ * @param array $errors the errors already encountered.
+ * @return array list of errors encountered.
+ */
+function _user_session_compare(array $list_src, array $list, array $errors = []): array
+{
+    if (!empty($list_src)) {
+        $key = key($list_src);
+        if (!array_key_exists($key, $list)) {
+            array_push($errors, "00 - variable '{$key}' not registered.");
+        } elseif ($list_src[$key] != $list[$key]) {
+            array_push($errors, "01 - variable '{$key}' values do not match.");
+        }
+        return _user_session_compare(array_slice($list_src, 1), $list, $errors);
+    }
+    return $errors;
+}
+
+
 // test _pirogue_user_session_set()
 pirogue_test_execute('_pirogue_user_session_set()', function () {
     $_SESSION = [];
     pirogue_user_session_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-    array_walk($GLOBALS['._pirogue-testing.user_session.list'], fn(mixed $value, string $key) => pirogue_user_session_set($key, $value));
-    return _user_session_compare($GLOBALS['._pirogue-testing.user_session.list'], $_SESSION[$GLOBALS['._pirogue.user_session.label_data']], []);
+    foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
+        pirogue_user_session_set($key, $value);
+        if ($value != $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$key]) {
+            return "invalid value for {$key}.";
+        }
+    }
+    return '';
 });

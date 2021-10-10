@@ -19,8 +19,8 @@ pirogue_test_execute('pirogue_user_session_clear() - verify return value.', func
 
     // clear and check if return equals set values.
     return $GLOBALS['._pirogue-testing.user_session.list'] != pirogue_user_session_clear()
-        ?  ['Returned variables do not match initial state.']
-        : [];
+        ?  'Returned variables do not match initial state.'
+        : '';
 });
 
 pirogue_test_execute('pirogue_user_session_clear(): value not cleard.', function () {
@@ -29,6 +29,6 @@ pirogue_test_execute('pirogue_user_session_clear(): value not cleard.', function
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
 
     return empty($_SESSION[$GLOBALS['._pirogue.user_session.label_data']])
-        ? ['Registered variables did not cleared.']
-        : [];
+        ? 'Registered variables did not cleared.'
+        : '';
 });
