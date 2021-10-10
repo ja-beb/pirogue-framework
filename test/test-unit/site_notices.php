@@ -9,6 +9,8 @@
      */
 
     require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'site_notices.php']));
+
+    // init session variables (reset for testing).
     $_SESSION = [];
 
     // test pirogue_site_notices_init(string $index): void
