@@ -11,10 +11,10 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirog
 
 pirogue_test_execute('_pirogue_view_get_path: invalid file', function () {
     $view = pirogue_view_get_path('invalid-file');
-    return '' == $view ? [] : [ 'Loaded invalid view.'] ;
+    return '' == $view ? '' : 'Loaded invalid view.';
 });
 
 pirogue_test_execute('_pirogue_view_get_path: valid file', function () {
     $view = pirogue_view_get_path('test');
-    return '' == $view ? [ 'Unable to load view.'] : [];
+    return '' == $view ? 'Unable to load view.' : '';
 });
