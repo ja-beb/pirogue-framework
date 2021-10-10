@@ -26,7 +26,6 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
 
 /**
  * Initialize user session library.
- * This function will call session_start() if no session exists.
  *
  * @uses _pirogue_user_session_destruct
  * @uses $GLOBALS['._pirogue.user_session.label_user']
