@@ -19,7 +19,7 @@ pirogue_test_execute('_pirogue_user_session_start: null session', function () {
     return null != pirogue_user_session_current() ? ['User session contains values before being set.'] : [];
 });
 
-// test _pirogue_user_session_start()
+// test _pirogue_user_session_start() - check for session set.
 pirogue_test_execute('_pirogue_user_session_start: session set', function () {
     _user_session_test_init(_PIROGUE_TESTING_USER_SESSION_LABEL, []);
     _pirogue_user_session_start($GLOBALS['._pirogue-testing.user_session.user']);
