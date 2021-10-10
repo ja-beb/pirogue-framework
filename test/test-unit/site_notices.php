@@ -10,7 +10,12 @@
 
     require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'site_notices.php']));
 
-    // init session variables (reset for testing).
+    // init variables.
+    $GLOBALS['.pirogue-testing.session_notices.notices'] = [
+        ['error', 'test error message.'],
+        ['info', 'test info message.'],
+        ['warning', 'test warning message.'],
+    ];
     $_SESSION = [];
 
     // test pirogue_site_notices_init(string $index): void
@@ -43,6 +48,16 @@
     // test pirogue_site_notices_clear(): array
     pirogue_test_execute('pirogue_site_notices_clear()', function () {
         $errors = [];
+        $_SESSION[$GLOBALS['._pirogue.site_notices.index']] = $GLOBALS['.pirogue-testing.session_notices.notices'];
+        $notices = pirogue_site_notices_clear();
+
+        if (!empty($_SESSION[$GLOBALS['._pirogue.site_notices.index']])) {
+            array_push($errors, '00 - site notice list not cleared.');
+        }
+
+        if ($notices != $GLOBALS['.pirogue-testing.session_notices.notices']) {
+            array_push($errors, '01 - returned wrong list.');
+        }
         return $errors;
     });
 
