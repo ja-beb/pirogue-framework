@@ -8,6 +8,9 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
+ // load test object.
+require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'Tuple.php']);
+
  /**
   * Label to use for initializing the user_session library.
   * @var string _PIROGUE_TESTING_USER_SESSION_LABEL
@@ -23,7 +26,7 @@ $GLOBALS['._pirogue-testing.user_session.list'] = [
     'function results' => sqrt(9),
     '.function' => fn(string $msg) => "I display '{$msg}'",
     '!array' => [1. . .10],
-    '@object' => new PirogueTestObject('label', 'value'),
+    '@object' => new Pirogue\Test\Tuple('label', 'value'),
 ];
 
 /**
