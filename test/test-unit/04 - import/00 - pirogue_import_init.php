@@ -23,8 +23,7 @@ pirogue_test_execute(
     fn() => pirogue_import_init(_PIROGUE_TESTING_PATH_INCLUDE)
 );
 
-pirogue_test_execute("pirogue_import_init(): \$GLOBALS['._pirogue.import.path']", function () { 
+pirogue_test_execute("pirogue_import_init(): \$GLOBALS['._pirogue.import.path']", function () {
     pirogue_import_init(_PIROGUE_TESTING_PATH_INCLUDE);
     return _PIROGUE_TESTING_PATH_INCLUDE == $GLOBALS['._pirogue.import.path'] ? '' : "invalid value for \$GLOBALS['._pirogue.import.path']";
 });
-
