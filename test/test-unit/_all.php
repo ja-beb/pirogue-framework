@@ -29,16 +29,14 @@ $GLOBALS['._pirogue_test.count_errors'] = 0;
  * @param string $label the test's label.
  * @param array $errors list of errors encoutered. if successful the array is empty.
  */
-function _pirogue_test_log(string $label, array $errors): void
+function _pirogue_test_log(string $label, string $error_message = ''): void
 {
-    if (empty($errors)) {
+    if ('' == $error_message) {
         echo "[PASSED] {$label}\n";
     } else {
         $GLOBALS['._pirogue_test.count_errors']++;
         echo "[FAILED] {$label}\n";
-        foreach ($errors as $_message) {
-            echo $_message, "\n";
-        }
+        echo $error_message, "\n";
     }
 }
 
@@ -53,9 +51,9 @@ function pirogue_test_execute(string $label, $callable): void
 {
     try {
         $GLOBALS['._pirogue_test.count_test']++;
-        _pirogue_test_log($label, $callable() ?? []);
+        _pirogue_test_log($label, $callable() ?? '');
     } catch (Throwable $e) {
-        _pirogue_test_log($label, [sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())]);
+        _pirogue_test_log($label, sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine()));
     }
 }
 
@@ -72,7 +70,7 @@ foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_di
             } catch (Throwable $e) {
                 _pirogue_test_log(
                     "require $_test_path",
-                    [sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())]
+                    sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())
                 );
             } finally {
                 echo "\n";
