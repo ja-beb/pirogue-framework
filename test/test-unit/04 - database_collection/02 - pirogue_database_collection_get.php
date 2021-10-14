@@ -7,7 +7,9 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'database_collection.php']));
+define('_PIROGUE_TESTING_PATH_CONFIG', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config']));
+
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'database_collection.php']));
 
 function _pirogue_test_database_collection_query(?mysqli $database_connection)
 {

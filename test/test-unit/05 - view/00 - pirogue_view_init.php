@@ -7,7 +7,7 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'view.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'view.php']));
 
 pirogue_test_execute("pirogue_view_init(): \$GLOBALS['._pirogue.view.path']", function () {
     $format = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view', '%s.phtml']);

@@ -8,8 +8,8 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'site_notices.php']));
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'site_notices.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'site_notices.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'site_notices.php']));
 
 // test pirogue_site_notices_init(string $index)
 pirogue_test_execute("pirogue_site_notices_create()", function () {

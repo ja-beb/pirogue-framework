@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'dispatcher.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
 pirogue_test_execute('_pirogue_dispatcher_error_handler(): call directly', function () {
     try {

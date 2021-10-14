@@ -7,7 +7,7 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'database_collection.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include'f, 'pirogue', 'database_collection.php']));
 
 pirogue_test_execute('_pirogue_database_collection_destruct()', function () {
     _pirogue_database_collection_destruct();

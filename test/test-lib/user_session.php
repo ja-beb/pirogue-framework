@@ -9,7 +9,7 @@
  */
 
  // load test object.
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'Tuple.php']);
+require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'Tuple.php']);
 
  /**
   * Label to use for initializing the user_session library.

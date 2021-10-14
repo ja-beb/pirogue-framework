@@ -7,6 +7,7 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
+define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'import.php']));
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'import.php']));
 
 pirogue_test_execute('pirogue_import_load(): invalid file', function () {

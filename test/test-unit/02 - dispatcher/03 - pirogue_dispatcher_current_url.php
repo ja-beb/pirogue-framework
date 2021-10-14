@@ -7,7 +7,7 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'dispatcher.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
 $GLOBALS['._pirogue-testing.dispatcher.url'] = pirogue_dispatcher_create_url(
     $GLOBALS['.pirogue.dispatcher.request_path'],

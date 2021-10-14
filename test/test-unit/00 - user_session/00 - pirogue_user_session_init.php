@@ -9,8 +9,8 @@
  */
 
 // load required library.
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'user_session.php']);
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'test', 'user_session.php']);
+require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'user_session.php']);
+require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'user_session.php']);
 
 // test pirogue_user_session_init(): ._pirogue.user_session.label_user exists
 pirogue_test_execute('pirogue_user_session_init(): initialize ._pirogue.user_session.label_user', function () {
