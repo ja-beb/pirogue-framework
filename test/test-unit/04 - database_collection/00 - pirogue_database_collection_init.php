@@ -48,3 +48,13 @@ pirogue_test_execute("pirogue_database_collection_init(): \$GLOBALS['._pirogue.d
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.connections']";
 });
+
+pirogue_test_execute("pirogue_database_collection_init(): invalid default database", function () {
+    try {
+        pirogue_database_collection_init($GLOBALS['.pirogue-testing.database_collection.config_path'], 'invalid');
+        $database_connection = pirogue_database_collection_get();
+        return 'invalid database connnection was returned.';
+    } catch (Throwable) {
+        return '';
+    }
+});
