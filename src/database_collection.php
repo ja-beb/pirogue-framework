@@ -1,8 +1,8 @@
 <?php
 
 /**
- * Database connections for a MySQL backend.
- * Handles the opening, storing, retrieving and closing of database connections 
+ * database connections for a MySQL backend.
+ * handles the opening, storing, retrieving and closing of database connections
  * by translating requested name into config file.
  * php version 8.0.0
  *
@@ -11,8 +11,8 @@
  */
 
 /**
- * Config folder's path.
- * Used to store database connection information ini files.
+ * config folder's path.
+ * directory path where the database connection information ini files exist.
  *
  * @internal used by library only.
  * @var string $GLOBALS['._pirogue.database_collection.config_path']
@@ -20,8 +20,8 @@
 $GLOBALS['._pirogue.database_collection.config_path'] = null;
 
 /**
- * Default database connection.
- * Used when no database is specified (or in single database sites).
+ * default database connection.
+ * used when no database is specified (or in single database sites).
  *
  * @internal used by library only.
  * @var string $GLOBALS['._pirogue.database_collection.default']
@@ -29,7 +29,7 @@ $GLOBALS['._pirogue.database_collection.config_path'] = null;
 $GLOBALS['._pirogue.database_collection.default'] = '';
 
 /**
- * Collection of open database connections.
+ * open database connections.
  *
  * @internal used by library only.
  * @var array $GLOBALS['._pirogue.database_collection.connections']
@@ -37,9 +37,8 @@ $GLOBALS['._pirogue.database_collection.default'] = '';
 $GLOBALS['._pirogue.database_collection.connections'] = [];
 
 /**
- * Initialize database collection library. 
- * 
- * Verify and initialzie database collection library variables as well as
+ * initialize database collection library.
+ * verify and initialzie database collection library variables as well as
  * register database collection's destruct function as a shutdown function.
  *
  * @throws InvalidArgumentException if $config_path directory does not exist.
@@ -56,7 +55,7 @@ function pirogue_database_collection_init(string $config_path, string $default):
             sprintf('Directory does not exist: "%s"', $config_path)
         );
     }
-    
+
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
     $GLOBALS['._pirogue.database_collection.default'] = $default;
     $GLOBALS['._pirogue.database_collection.connections'] = [];
@@ -66,7 +65,7 @@ function pirogue_database_collection_init(string $config_path, string $default):
 }
 
 /**
- * Close and dealocate all registered mysqli connections.
+ * close and dealocate all registered mysqli connections.
  *
  * @internal used by library only.
  * @uses $GLOBALS['._pirogue.database_collection.connections']
@@ -82,9 +81,9 @@ function _pirogue_database_collection_destruct(): void
 }
 
 /**
- * Open database connection.
- * Fetches connection based on name by translating nane to a config 
- * file ("{$config_path}\mysqli-{$name}.ini") which contain the attributes for 
+ * open database connection.
+ * fetches connection based on name by translating nane to a config
+ * file ("{$config_path}\mysqli-{$name}.ini") which contain the attributes for
  * 'name' and 'options' as defined by the mysqli_connect() function.
  *
  * @throws ErrorException if database is not found or unable to conect.
