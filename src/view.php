@@ -9,9 +9,9 @@
  */
 
 /**
- * Library file format.
- * The format to use to load library files - including file extension.
- *
+ * view file format.
+ * the format to use to load the view - including file extension.
+ * 
  * @internal use by libary only.
  * @var string $GLOBALS['._pirogue.view.format']
  */
@@ -30,7 +30,7 @@ function pirogue_view_init(string $format): void
 }
 
 /**
- * Translate view name to the respective view file.
+ * translate view name to the respective view file.
  *
  * @uses $GLOBALS['._pirogue.view.extension']
  * @uses $GLOBALS['._pirogue.view.path']
