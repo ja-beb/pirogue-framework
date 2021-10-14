@@ -31,6 +31,8 @@ function pirogue_view_init(string $format): void
 
 /**
  * translate view name to the respective view file.
+ * responsible for translating the views name to the file to load. Does not verify
+ * that the view is in the view folder (ie ../ is passed to it).
  *
  * @uses $GLOBALS['._pirogue.view.extension']
  * @uses $GLOBALS['._pirogue.view.path']
