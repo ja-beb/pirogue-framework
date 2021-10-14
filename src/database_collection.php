@@ -97,7 +97,7 @@ function pirogue_database_collection_get(?string $name = null): mysqli
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
         $file = sprintf('%s/mysqli-%s.ini', $GLOBALS['._pirogue.database_collection.config_path'], $name);
         if (!file_exists($file)) {
-            throw new ErrorException(sprintf('Unable to find database connection "%s"', $default, $file));
+            throw new ErrorException(sprintf('Unable to find database connection "%s"', $name));
         }
         $config = parse_ini_file($file);
         $GLOBALS['._pirogue.database_collection.connections'][$name] = mysqli_connect(
