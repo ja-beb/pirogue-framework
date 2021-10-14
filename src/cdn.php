@@ -9,7 +9,8 @@
  */
 
 /**
- * A list of CDN server addresses.
+ * cdn server list.
+ * a list of cdn server urls.
  *
  * @internal used by library only.
  * @var string[] $GLOBALS['._pirogue.cdn.address_list']
@@ -17,7 +18,8 @@
 $GLOBALS['._pirogue.cdn.address_list'] = [];
 
 /**
- * Current CDN array index.
+ * cnd array index.
+ * the array index for the next cdn server to be used.
  *
  * @internal used by library only.
  * @var int $GLOBALS['._pirogue.cdn.current_index']
@@ -38,8 +40,9 @@ function pirogue_cdn_init(array $address_list): void
 }
 
 /**
- * Create url to resource relative to the cdn base.
- * Allocates CDN for usaged based on a round robin scheduling.
+ * create url to resource relative to the cdn base.
+ * responsible for building an url for the cdn server using a round robin 
+ * scheduling.
  *
  * @throws LogicException if there are no registered CDN servers.
  * @uses $GLOBALS['._pirogue.cdn.address_list']
