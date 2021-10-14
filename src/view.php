@@ -39,6 +39,6 @@ function pirogue_view_init(string $format): void
  */
 function pirogue_view_get_path(string $file): ?string
 {
-    $view_file = sprintf($GLOBALS['._pirogue.view.format'], $file);
-    return file_exists($view_file) ? $view_file : null;
+    $view = sprintf($GLOBALS['._pirogue.view.format'], $file);
+    return file_exists($view) ? $view : null;
 }
