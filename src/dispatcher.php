@@ -10,18 +10,21 @@
 
 /**
  * The site's base address.
+ * 
  * @var string $GLOBALS['.pirogue.dispatcher.address']
  */
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
- * The path the the client's current requested resource.
+ * Client requested path.
+ * 
  * @var string $GLOBALS['.pirogue.dispatcher.request_path']
  */
 $GLOBALS['.pirogue.dispatcher.request_path'] = '';
 
 /**
- * The client's requested data.
+ * Client requested data.
+ * 
  * @var string $GLOBALS['.pirogue.dispatcher.request_data']
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = [];
@@ -29,7 +32,6 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = [];
 /**
  * Setup dispatcher library.
  *
- * @internal called from dispatcher only.
  * @uses $GLOBALS['.pirogue.dispatcher.address'] = $address;
  * @uses $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
  * @uses $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
@@ -45,10 +47,9 @@ function pirogue_dispatcher_init(string $address, string $request_path, array $r
 }
 
 /**
- * Send content to user and exit.
+ * send content to user.
  *
  * @internal Called from dispatcher only.
- * @uses _pirogue_dispatcher_exit
  * @param string $content the content that will be sent to the client.
  */
 function _pirogue_dispatcher_send(string $content): void
@@ -56,23 +57,22 @@ function _pirogue_dispatcher_send(string $content): void
     // Cache control:
     ob_start('ob_gzhandler');
     $etag = md5($content);
-    header("ETAG: {$etag}");
+    header(sprintf('ETAG: %s', $etag));
     $http_status_code = http_response_code();
     if (false == array_key_exists('HTTP_IF_NONE_MATCH', $_SERVER)) {
         http_response_code($http_status_code);
         echo $content;
     } elseif ($etag == $_SERVER['HTTP_IF_NONE_MATCH']) {
-        http_response_code((200 == $http_status_code) ? 304 : $http_status_code);
+        http_response_code(200 == $http_status_code ? 304 : $http_status_code);
     } else {
         http_response_code($http_status_code);
         echo $content;
     }
     ob_end_flush();
-    _pirogue_dispatcher_exit();
 }
 
 /**
- * Redirect user to new address.
+ * redirect user to new address.
  *
  * @uses pirogue_dispatcher_create_url
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
