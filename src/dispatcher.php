@@ -117,7 +117,7 @@ function pirogue_dispatcher_create_url(string $path, array $data): string
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @return string the current requested url.
  */
-function pirogue_dispatcher_current_url(string $path, array $data): string
+function pirogue_dispatcher_current_url(): string
 {
     return pirogue_dispatcher_create_url(
         $GLOBALS['.pirogue.dispatcher.request_path'],
