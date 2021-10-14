@@ -54,3 +54,14 @@ pirogue_test_execute('pirogue_database_collection_get(): default label', functio
     pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website');
     _pirogue_test_database_collection_query(pirogue_database_collection_get());
 });
+
+// test pirogue_database_collection_get: default label
+pirogue_test_execute('pirogue_database_collection_get(): website-invalid', function () {
+    try {
+        pirogue_database_collection_init(_PIROGUE_TESTING_PATH_CONFIG, 'website');
+        _pirogue_test_database_collection_query(pirogue_database_collection_get('website-invalid'));
+        return 'invalid database connection returned.';
+    } catch (Throwable) {
+        return '';
+    }
+});
