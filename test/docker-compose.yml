@@ -2,7 +2,7 @@
 version: "3.8"
 services: 
     database:
-        container_name: "pirogue-database-instance"
+        container_name: "pirogue-database"
         image: mariadb:latest
         environment:
             - MYSQL_ROOT_PASSWORD=root-password
@@ -15,15 +15,15 @@ services:
             - 3306:3306        
 
     php-test:
-        container_name: "pirogue-test-instance"
-        image: "pirogue-test"
+        container_name: "pirogue-test"
+        image: "img_pirogue-test"
         build: .
         volumes:
-            - ./test-unit:/var/pirogue/test:rw
-            - ./test-config:/var/pirogue/config:ro
-            - ./test-view:/var/pirogue/view:ro
-            - ./test-lib:/var/pirogue/include/test:rw
-            - ../src:/var/pirogue/include/pirogue:rw
+            - ./test-unit:/pirogue/test:rw
+            - ./test-config:/pirogue/config:ro
+            - ./test-view:/pirogue/view:ro
+            - ./test-lib:/pirogue/include/test:rw
+            - ../src:/pirogue/include/pirogue:rw
         depends_on:
             - database
         links:
