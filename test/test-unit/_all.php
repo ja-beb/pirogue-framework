@@ -16,7 +16,6 @@ error_reporting(E_ALL | E_STRICT);
 // '/var/pirogue';
 define('_PIROGUE_TESTING_PATH', '/pirogue');
 define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include']));
-define('_PIROGUE_TESTING_PATH_VIEW', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view']));
 define('_PIROGUE_TESTING_PATH_CONFIG', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config']));
 
 // Global variables for test counts
