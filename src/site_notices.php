@@ -29,7 +29,7 @@ function pirogue_site_notices_init(string $index): void
 }
 
 /**
- * Fetch existing notices from sessioned list and clear list.
+ * Fetch existing notices from session list and clear list.
  *
  * @uses $GLOBALS['._pirogue.site_notices.index']
  * @return array the list of cleared session notices in a [type,text] format.
@@ -50,8 +50,5 @@ function pirogue_site_notices_clear(): array
  */
 function pirogue_site_notices_create(string $type, string $message): void
 {
-    array_push($_SESSION[$GLOBALS['._pirogue.site_notices.index']], [
-        $type,
-        $message
-    ]);
+    array_push($_SESSION[$GLOBALS['._pirogue.site_notices.index']], [$type, $message]);
 }
