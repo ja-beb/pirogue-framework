@@ -97,7 +97,7 @@ function pirogue_dispatcher_redirect(string $address, int $status_code = 301): v
  */
 function pirogue_dispatcher_create_url(string $path, array $data): string
 {
-    $pattern = match (('' == $path ? 0 : 1) || (empty($data) ? 0 : 2)) {
+    $pattern = match (('' == $path ? 0 : 1) | (empty($data) ? 0 : 2)) {
         0 => '%s',
         1 => '%s/%s',
         2 => '%s?%s',
