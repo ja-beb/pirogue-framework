@@ -11,7 +11,7 @@
 /**
  * view file format.
  * the format to use to load the view - including file extension.
- * 
+ *
  * @internal use by libary only.
  * @var string $GLOBALS['._pirogue.view.format']
  */

@@ -10,21 +10,21 @@
 
 /**
  * The site's base address.
- * 
+ *
  * @var string $GLOBALS['.pirogue.dispatcher.address']
  */
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
  * Client requested path.
- * 
+ *
  * @var string $GLOBALS['.pirogue.dispatcher.request_path']
  */
 $GLOBALS['.pirogue.dispatcher.request_path'] = '';
 
 /**
  * Client requested data.
- * 
+ *
  * @var string $GLOBALS['.pirogue.dispatcher.request_data']
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = [];
@@ -98,7 +98,7 @@ function pirogue_dispatcher_redirect(string $address, int $status_code = 301): v
  */
 function pirogue_dispatcher_create_url(string $path, array $data): string
 {
-    $pattern = match(('' == $path ? 0 : 1) || (empty($data) ? 0 : 2)) {
+    $pattern = match (('' == $path ? 0 : 1) || (empty($data) ? 0 : 2)) {
         0 => '%s',
         1 => '%s/%s',
         2 => '%s?%s',

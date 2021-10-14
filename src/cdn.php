@@ -41,7 +41,7 @@ function pirogue_cdn_init(array $address_list): void
 
 /**
  * create url to resource relative to the cdn base.
- * responsible for building an url for the cdn server using a round robin 
+ * responsible for building an url for the cdn server using a round robin
  * scheduling.
  *
  * @throws LogicException if there are no registered CDN servers.
@@ -58,7 +58,7 @@ function pirogue_cdn_create_url(string $path, array $data): string
     }
 
     $base_url = $GLOBALS['._pirogue.cdn.address_list'][$GLOBALS['._pirogue.cdn.current_index']];
-    $GLOBALS['._pirogue.cdn.current_index'] = 
+    $GLOBALS['._pirogue.cdn.current_index'] =
         ($GLOBALS['._pirogue.cdn.current_index'] + 1) % count($GLOBALS['._pirogue.cdn.address_list']);
     $url_pattern = empty($path) ? '%s' : '%s/%s';
     $base_url = sprintf($url_pattern, $base_url, $path);

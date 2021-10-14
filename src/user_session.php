@@ -46,7 +46,7 @@ function pirogue_user_session_init(string $label): void
 }
 
 /**
- * user session destructor. 
+ * user session destructor.
  * writes session data before exiting.
  *
  * @internal used by library only.
