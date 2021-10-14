@@ -77,18 +77,17 @@ function _pirogue_dispatcher_send(string $content): void
  * @uses pirogue_dispatcher_create_url
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
- * @uses _pirogue_dispatcher_exit
  * @param string $address the address to redirect too. If no address is specified the page is refreshed.
  * @param int $status_code the http status code to use in the redirect process.
  */
 function pirogue_dispatcher_redirect(string $address, int $status_code = 301): void
 {
     header(sprintf('Location: %s', $address), true, $status_code);
-    _pirogue_dispatcher_exit();
+    exit();
 }
 
 /**
- * Create url to resource relative to site base.
+ * create url to resource relative to site base.
  *
  * @uses _dispatcher_create_url
  * @uses $GLOBALS['.pirogue.dispatcher.address']
@@ -108,7 +107,7 @@ function pirogue_dispatcher_create_url(string $path, array $data): string
 }
 
 /**
- * Get current uri.
+ * get the current url.
  *
  * @uses _dispatcher_create_url
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
@@ -124,11 +123,11 @@ function pirogue_dispatcher_current_url(): string
 }
 
 /**
- * Translate PHP triggered errors into SPL ErrorException instance.
+ * translate PHP triggered errors into SPL ErrorException instance.
  *
- * @internal
  *
  * @throws ErrorException
+ * @internal registered to error handler by dispatcher.
  * @param int $number the error code encountered.
  * @param string $message a message describing the error.
  * @param string $file the file the error was encountered in.
@@ -141,14 +140,4 @@ function _pirogue_dispatcher_error_handler(int $number, string $message, string 
         throw new ErrorException($message, 0, $number, $file, $line);
     }
     return false;
-}
-
-/**
- * Exit dispatcher - close session if open.
- *
- * @internal uses by dispatcher and library only.
- */
-function _pirogue_dispatcher_exit(): void
-{
-    exit();
 }
