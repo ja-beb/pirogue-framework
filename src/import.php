@@ -42,7 +42,7 @@ function pirogue_import_load(string $name): void
 {
     $include_file = sprintf('%s.php', implode(DIRECTORY_SEPARATOR, [ $GLOBALS['._pirogue.import.path'], $name]));
     if (false == file_exists($include_file)) {
-        throw new ErrorException("Unable to find library: {$name} ({$include_file}).");
+        throw new ErrorException(sprintf('Unable to find library: %s (%s).', $name, $include_file));
     }
     include_once $include_file;
 }

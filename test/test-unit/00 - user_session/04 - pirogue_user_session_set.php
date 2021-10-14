@@ -26,9 +26,9 @@ function _user_session_compare(array $list_src, array $list, array $errors = [])
     if (!empty($list_src)) {
         $key = key($list_src);
         if (!array_key_exists($key, $list)) {
-            array_push($errors, "00 - variable '{$key}' not registered.");
+            array_push($errors, sprintf('00 - variable "%s" not registered.', $key));
         } elseif ($list_src[$key] != $list[$key]) {
-            array_push($errors, "01 - variable '{$key}' values do not match.");
+            array_push($errors, sprintf('01 - variable "%s"" values do not match.', $key));
         }
         return _user_session_compare(array_slice($list_src, 1), $list, $errors);
     }
@@ -43,7 +43,7 @@ pirogue_test_execute('_pirogue_user_session_set()', function () {
     foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
         pirogue_user_session_set($key, $value);
         if ($value != $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$key]) {
-            return "invalid value for {$key}.";
+            return sprintf('invalid value for "%s"', $key);
         }
     }
     return '';

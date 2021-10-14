@@ -47,7 +47,7 @@ pirogue_test_execute('pirogue_user_session_init(): user data', function () {
     $index = sprintf('%s_user', _PIROGUE_TESTING_USER_SESSION_LABEL);
 
     if (false == array_key_exists($index, $_SESSION)) {
-        return ["00 - session variable '{$index}' not initialized."];
+        return [sprintf('00 - session variable "%s" not initialized.', $index)];
     } elseif (null != $_SESSION[$index]) {
         return sprintf(
             '01 - session variable "%s" not properly set (type=%s).',
@@ -66,7 +66,7 @@ pirogue_test_execute('pirogue_user_session_init(): user data', function () {
     $index = sprintf('%s_data', _PIROGUE_TESTING_USER_SESSION_LABEL);
 
     if (false == array_key_exists($index, $_SESSION)) {
-        return ["00 - session variable '{$index}' is not initialized."];
+        return [sprintf('00 - session variable "%s" is not initialized.', $index)];
     } elseif (!empty($_SESSION[$index])) {
         return sprintf(
             '01 - session variable "%s" not properly set (type=%s).',

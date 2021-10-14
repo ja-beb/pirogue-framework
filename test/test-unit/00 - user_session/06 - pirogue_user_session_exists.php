@@ -19,7 +19,7 @@ pirogue_test_execute('pirogue_user_session_exists(): verify values not in array 
     // test for values before set.
     foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
         if (pirogue_user_session_exists($key)) {
-            return "Value '{$key}' exists before set.";
+            return sprintf('Value "%s" exists before set.', $key);
         }
     }
     return '';
@@ -34,7 +34,7 @@ pirogue_test_execute('pirogue_user_session_exists(): verify values are exist aft
     foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
         pirogue_user_session_set($key, $value);
         if (!pirogue_user_session_exists($key)) {
-            return "Value '{$key}' does not exists after being set.";
+            return sprintf('Value "%s" does not exists after being set.', $key);
         }
     }
     return '';

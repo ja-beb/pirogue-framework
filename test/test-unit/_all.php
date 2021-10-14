@@ -14,7 +14,7 @@ error_reporting(E_ALL | E_STRICT);
 
 // define base folder.
 // '/var/pirogue';
-define('_PIROGUE_TESTING_PATH', '/var/pirogue');
+define('_PIROGUE_TESTING_PATH', '/pirogue');
 define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include']));
 define('_PIROGUE_TESTING_PATH_VIEW', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view']));
 define('_PIROGUE_TESTING_PATH_CONFIG', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config']));
@@ -32,11 +32,11 @@ $GLOBALS['._pirogue_test.count_errors'] = 0;
 function _pirogue_test_log(string $label, string $error_message = ''): void
 {
     if ('' == $error_message) {
-        echo "[PASSED] {$label}\n";
+        printf("[PASSED] %s\n", $label);
     } else {
         $GLOBALS['._pirogue_test.count_errors']++;
-        echo "[FAILED] {$label}\n";
-        echo $error_message, "\n";
+        printf("[FAILED] %s\n", $label);
+        printf("%s\n", $error_message);
     }
 }
 
@@ -81,7 +81,7 @@ foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_di
 
 // Report result counts.
 echo "\n";
-echo "Files loaded______: {$_test_files_loaded}\n";
-echo "Tests performed___: {$GLOBALS['._pirogue_test.count_test']}\n";
-echo "Errors encountered: {$GLOBALS['._pirogue_test.count_errors']}\n";
+printf("Files loaded______: %s\n", $_test_files_loaded);
+printf("Tests performed___: %s\n", $GLOBALS['._pirogue_test.count_test']);
+printf("Errors encountered: %s\n", $GLOBALS['._pirogue_test.count_errors']);
 echo "\n";

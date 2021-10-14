@@ -51,9 +51,7 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
 function pirogue_database_collection_init(string $config_path, string $default): void
 {
     if (!is_dir($config_path)) {
-        throw new InvalidArgumentException(
-            sprintf('Directory does not exist: "%s"', $config_path)
-        );
+        throw new InvalidArgumentException(sprintf('Directory does not exist: "%s"', $config_path));
     }
 
     $GLOBALS['._pirogue.database_collection.config_path'] = $config_path;
@@ -112,7 +110,7 @@ function pirogue_database_collection_get(?string $name = null): mysqli
         );
 
         if (false === $GLOBALS['._pirogue.database_collection.connections'][$name]) {
-            throw new ErrorException("Unable to open database connection '{$name}'.");
+            throw new ErrorException(sprintf('Unable to open database connection "%s"', $name));
         }
     }
     return $GLOBALS['._pirogue.database_collection.connections'][$name];

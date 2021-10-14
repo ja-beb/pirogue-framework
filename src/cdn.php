@@ -58,8 +58,7 @@ function pirogue_cdn_create_url(string $path, array $data): string
     }
 
     $base_url = $GLOBALS['._pirogue.cdn.address_list'][$GLOBALS['._pirogue.cdn.current_index']];
-    $GLOBALS['._pirogue.cdn.current_index'] =
-        ($GLOBALS['._pirogue.cdn.current_index'] + 1) % count($GLOBALS['._pirogue.cdn.address_list']);
+    $GLOBALS['._pirogue.cdn.current_index'] = ($GLOBALS['._pirogue.cdn.current_index'] + 1) % count($GLOBALS['._pirogue.cdn.address_list']);
     $url_pattern = empty($path) ? '%s' : '%s/%s';
     $base_url = sprintf($url_pattern, $base_url, $path);
     return (0 == count($data)) ? $base_url : sprintf('%s?%s', $base_url, http_build_query($data));

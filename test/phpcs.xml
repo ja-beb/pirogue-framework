@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
-<ruleset name="PHP_CodeSniffer">
-  <description>PHPCS configuration file.</description>
+<ruleset name="custom">
+  <description>PSR12 with expanded file types and without line limit and side effects.</description>
   <rule ref="PSR12" />
   <arg name="extensions" value="php,inc,phtml" />
   <exclude-pattern>*/migrations/*</exclude-pattern>
   <rule ref="PSR1">
     <exclude name="PSR1.Files.SideEffects" />
   </rule>
+  <rule ref="PSR12">
+    <exclude name="Generic.Files.LineLength"/>
+   </rule>
 </ruleset>

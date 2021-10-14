@@ -24,7 +24,7 @@ define('_PIROGUE_TESTING_USER_SESSION_LABEL', '._pirogue-testing.user_session.la
 $GLOBALS['._pirogue-testing.user_session.list'] = [
     'int_val' => 3.14,
     'function results' => sqrt(9),
-    '.function' => fn(string $msg) => "I display '{$msg}'",
+    '.function' => fn(string $msg) => sprintf('I display %s', $msg),
     '!array' => [1. . .10],
     '@object' => new Pirogue\Test\Tuple('label', 'value'),
 ];

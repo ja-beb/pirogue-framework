@@ -19,7 +19,7 @@ pirogue_test_execute('pirogue_user_session_remove(): return values', function ()
 
     foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
         if ($value != pirogue_user_session_remove($key)) {
-            return "returned incorrect value for '{$key}'.";
+            return sprintf('returned incorrect value for "%s"', $key);
         }
     }
     return '';
@@ -33,7 +33,7 @@ pirogue_test_execute('pirogue_user_session_remove(): ', function () {
     foreach ($GLOBALS['._pirogue-testing.user_session.list'] as $key => $value) {
         pirogue_user_session_remove($key);
         if (array_key_exists($key, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']])) {
-            return "variable '{$key}' not removed.";
+            return sprintf('variable "%s" not removed.', $key);
         }
     }
     return '';

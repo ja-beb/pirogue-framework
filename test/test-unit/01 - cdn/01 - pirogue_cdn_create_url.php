@@ -39,7 +39,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirog
 
   pirogue_test_execute("pirogue_cdn_create_url(): create valid url with params", function () {
     pirogue_cdn_init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
-    $url = "{$GLOBALS['._pirogue-testing.cdn.list'][0]}/path/to/resource.css?id=1";
+    $url = sprintf('%s/path/to/resource.css?id=1', $GLOBALS['._pirogue-testing.cdn.list'][0]);
     return $url == pirogue_cdn_create_url('path/to/resource.css', ['id' => 1])
         ? ''
         : 'Invalid url returned.';
