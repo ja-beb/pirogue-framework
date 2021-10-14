@@ -125,6 +125,25 @@ function pirogue_dispatcher_current_url(): string
     );
 }
 
+/**
+ * Translate PHP triggered errors into SPL ErrorException instance.
+ *
+ * @internal
+ *
+ * @throws ErrorException
+ * @param int $number the error code encountered.
+ * @param string $message a message describing the error.
+ * @param string $file the file the error was encountered in.
+ * @param int $line the line that the error was encountered at.
+ * @return boolean continuation flag.
+ */
+function _pirogue_dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
+{
+    if ($number & error_reporting()) {
+        throw new ErrorException($message, 0, $number, $file, $line);
+    }
+    return false;
+}
 
 /**
  * Exit dispatcher - close session if open.
