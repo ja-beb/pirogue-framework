@@ -81,14 +81,8 @@ function _pirogue_dispatcher_send(string $content): void
  * @param string $address the address to redirect too. If no address is specified the page is refreshed.
  * @param int $status_code the http status code to use in the redirect process.
  */
-function pirogue_dispatcher_redirect(string $address = '', int $status_code = 301): void
+function pirogue_dispatcher_redirect(string $address, int $status_code = 301): void
 {
-    $address = '' == $address
-        ? pirogue_dispatcher_create_url(
-            $GLOBALS['.pirogue.dispatcher.request_path'],
-            $GLOBALS['.pirogue.dispatcher.request_data']
-        )
-        : $address;
     header(sprintf('Location: %s', $address), true, $status_code);
     _pirogue_dispatcher_exit();
 }
