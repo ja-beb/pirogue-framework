@@ -3,6 +3,7 @@
 /**
  * A collection of user session functions. Used to start, end and retrieve
  * user session and user sessioned data.
+ * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -25,7 +26,7 @@ $GLOBALS['._pirogue.user_session.label_user'] = '';
 $GLOBALS['._pirogue.user_session.label_data'] = '';
 
 /**
- * Initialize user session library.
+ * initialize user session library.
  *
  * @uses _pirogue_user_session_destruct
  * @uses $GLOBALS['._pirogue.user_session.label_user']
@@ -34,8 +35,8 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
  */
 function pirogue_user_session_init(string $label): void
 {
-    $GLOBALS['._pirogue.user_session.label_user'] = "{$label}_user";
-    $GLOBALS['._pirogue.user_session.label_data'] = "{$label}_data";
+    $GLOBALS['._pirogue.user_session.label_user'] = sprintf('%s_user', $label);
+    $GLOBALS['._pirogue.user_session.label_data'] = sprintf('%s_data', $label);
 
     // initialize session variables if needed.
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] ??= null;
@@ -45,7 +46,8 @@ function pirogue_user_session_init(string $label): void
 }
 
 /**
- * User Session destructor. Writes session data before exiting.
+ * user session destructor. 
+ * writes session data before exiting.
  *
  * @internal used by library only.
  */
@@ -55,7 +57,7 @@ function _pirogue_user_session_destruct(): void
 }
 
 /**
- * Get current user's information.
+ * get current user's information.
  *
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @return array current user session data or null if no session data exists.
@@ -66,7 +68,7 @@ function pirogue_user_session_current(): ?array
 }
 
 /**
- * Save session variable.
+ * save session variable.
  *
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @param string $label the label of the session variable to save.
@@ -78,12 +80,11 @@ function pirogue_user_session_set(string $label, mixed $value): void
 }
 
 /**
- * Fetch session variable.
- * Returns null if not found.
+ * fetch a saved session variable.
  *
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @param string $label the label of the session variable to fetch.
- * @return string sessioned variable or null if not found.
+ * @return string stored variable or null if not found.
  */
 function pirogue_user_session_get(string $label): mixed
 {
@@ -91,7 +92,7 @@ function pirogue_user_session_get(string $label): mixed
 }
 
 /**
- * Delete sessioned variable and return value.
+ * remove a session variable and return value.
  *
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @param string $label the label of the session variable to fetch.
@@ -105,7 +106,7 @@ function pirogue_user_session_remove(string $label): mixed
 }
 
 /**
- * Check if session variable exists.
+ * check if session variable exists.
  *
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @param string $label the value to check for.
@@ -117,7 +118,7 @@ function pirogue_user_session_exists(string $label): bool
 }
 
 /**
- * Clear all sessioned variables.
+ * clear all sessioned variables.
  *
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @return array the sessioned variables before cleared.
@@ -130,15 +131,15 @@ function pirogue_user_session_clear(): array
 }
 
 /**
- * Start user session.
+ * start user session.
  *
- * @internal used by dispatcher or login/logout modules only.
+ * @internal used by dispatcher or login/logout only.
  * @uses $GLOBALS['._pirogue.user_session.label_user']
- * @param array $user_data the user's account data.
+ * @param array $user the user's account data.
  */
-function _pirogue_user_session_start(array $user_data): void
+function _pirogue_user_session_start(array $user): void
 {
-    $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $user_data;
+    $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $user;
 }
 
 /**
@@ -146,14 +147,13 @@ function _pirogue_user_session_start(array $user_data): void
  *
  * @internal used by disaptcher or login/logout modules only.
  * @uses $GLOBALS['._pirogue.user_session.label_user']
- * @param bool $clear_data flag used to determine if session data should be cleared.
- * @internal Use by dispatcher or login/logout modules only.
+ * @param bool $clear flag used to determine if session data should be cleared.
  */
-function _pirogue_user_session_end(bool $clear_data = false): void
+function _pirogue_user_session_end(bool $clear = false): void
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = null;
 
-    if ($clear_data) {
+    if ($clear) {
         $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
     }
 }
