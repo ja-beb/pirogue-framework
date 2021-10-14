@@ -98,9 +98,13 @@ function pirogue_dispatcher_redirect(string $address, int $status_code = 301): v
  */
 function pirogue_dispatcher_create_url(string $path, array $data): string
 {
-    $url_pattern = empty($path) ? '%s' : '%s/%s';
-    $url_pattern = 0 == count($data) ? $url_pattern : "{$url_pattern}?%s";
-    return sprintf($url_pattern, $GLOBALS['.pirogue.dispatcher.address'], $path, http_build_query($data));
+    $pattern = match(('' == $path ? 0 : 1) || (empty($data) ? 0 : 2)) {
+        0 => '%s',
+        1 => '%s/%s',
+        2 => '%s?%s',
+        3 => '%s/%s?%s',
+    };
+    return sprintf($pattern, $GLOBALS['.pirogue.dispatcher.address'], $path, http_build_query($data));
 }
 
 /**
