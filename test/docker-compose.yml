@@ -19,10 +19,11 @@ services:
         image: "img_pirogue-test"
         build: .
         volumes:
-            - ./test-unit:/pirogue/test:rw
-            - ./test-config:/pirogue/config:ro
-            - ./test-view:/pirogue/view:ro
-            - ./test-lib:/pirogue/include/test:rw
+            - ./tests:/pirogue/tests:rw
+            - ./config:/pirogue/config:ro
+            - ./view:/pirogue/view:ro
+            - ./include:/pirogue/include/test:rw
+            - ./controllers:/pirogue/controllers/test:rw
             - ../src:/pirogue/include/pirogue:rw
         depends_on:
             - database
