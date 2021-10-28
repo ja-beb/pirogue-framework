@@ -9,6 +9,8 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
+namespace pirogue;
+
 /**
  * Session array index label for user's account.
  *
@@ -28,12 +30,12 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
 /**
  * initialize user session library.
  *
- * @uses _pirogue_user_session_destruct
+ * @uses _user_session_destruct
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
  */
-function pirogue_user_session_init(string $label): void
+function user_session_init(string $label): void
 {
     $GLOBALS['._pirogue.user_session.label_user'] = sprintf('%s_user', $label);
     $GLOBALS['._pirogue.user_session.label_data'] = sprintf('%s_data', $label);
@@ -42,7 +44,7 @@ function pirogue_user_session_init(string $label): void
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] ??= null;
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] ??= [];
 
-    register_shutdown_function('_pirogue_user_session_destruct');
+    register_shutdown_function('_user_session_destruct');
 }
 
 /**
@@ -51,7 +53,7 @@ function pirogue_user_session_init(string $label): void
  *
  * @internal used by library only.
  */
-function _pirogue_user_session_destruct(): void
+function _user_session_destruct(): void
 {
     session_id() && session_write_close();
 }
@@ -62,7 +64,7 @@ function _pirogue_user_session_destruct(): void
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @return array current user session data or null if no session data exists.
  */
-function pirogue_user_session_current(): ?array
+function user_session_current(): ?array
 {
     return $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] ?? null;
 }
@@ -74,7 +76,7 @@ function pirogue_user_session_current(): ?array
  * @param string $label the label of the session variable to save.
  * @param string $value the value to store.
  */
-function pirogue_user_session_set(string $label, mixed $value): void
+function user_session_set(string $label, mixed $value): void
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] = $value;
 }
@@ -86,7 +88,7 @@ function pirogue_user_session_set(string $label, mixed $value): void
  * @param string $label the label of the session variable to fetch.
  * @return string stored variable or null if not found.
  */
-function pirogue_user_session_get(string $label): mixed
+function user_session_get(string $label): mixed
 {
     return $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] ?? null;
 }
@@ -98,7 +100,7 @@ function pirogue_user_session_get(string $label): mixed
  * @param string $label the label of the session variable to fetch.
  * @return string sessioned variable's value that was removed or null if not found.
  */
-function pirogue_user_session_remove(string $label): mixed
+function user_session_remove(string $label): mixed
 {
     $value = $_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label] ?? null;
     unset($_SESSION[$GLOBALS['._pirogue.user_session.label_data']][$label]);
@@ -112,7 +114,7 @@ function pirogue_user_session_remove(string $label): mixed
  * @param string $label the value to check for.
  * @return bool a flag representing if variable exists.
  */
-function pirogue_user_session_exists(string $label): bool
+function user_session_exists(string $label): bool
 {
     return array_key_exists($label, $_SESSION[$GLOBALS['._pirogue.user_session.label_data']]);
 }
@@ -123,7 +125,7 @@ function pirogue_user_session_exists(string $label): bool
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @return array the sessioned variables before cleared.
  */
-function pirogue_user_session_clear(): array
+function user_session_clear(): array
 {
     $data = $_SESSION[$GLOBALS['._pirogue.user_session.label_data']];
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
@@ -137,7 +139,7 @@ function pirogue_user_session_clear(): array
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @param array $user the user's account data.
  */
-function _pirogue_user_session_start(array $user): void
+function _user_session_start(array $user): void
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $user;
 }
@@ -149,7 +151,7 @@ function _pirogue_user_session_start(array $user): void
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @param bool $clear flag used to determine if session data should be cleared.
  */
-function _pirogue_user_session_end(bool $clear = false): void
+function _user_session_end(bool $clear = false): void
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = null;
 
