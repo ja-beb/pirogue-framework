@@ -38,12 +38,12 @@ function controller_import_init(string $controller_format): void
  * @uses $GLOBALS['._pirogue.controller_import.controller_format']
  * @param ?string $path returns null if no controller found.
  */
-function controller_import_get_controller(array $path): ?string
+function controller_import_get_path(array $path): ?string
 {
     if (empty($path)) {
         return null;
     } else {
         $file = sprintf($GLOBALS['._pirogue.controller_import.controller_format'], implode(DIRECTORY_SEPARATOR, $path));
-        return file_exists($file) ? $file : controller_import_get_controller(array_slice($path, 0, count($path) - 1));
+        return file_exists($file) ? $file : controller_import_get_path(array_slice($path, 0, count($path) - 1));
     }
 }
