@@ -8,6 +8,8 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
+namespace pirogue;
+
 /**
  * The site's base address.
  *
@@ -39,7 +41,7 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = [];
  * @param string $request_path a string containing the path the the client's requested resource.
  * @param array $request_data array containing the request data passed from the client.
  */
-function pirogue_dispatcher_init(string $address, string $request_path, array $request_data): void
+function dispatcher_init(string $address, string $request_path, array $request_data): void
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
@@ -52,7 +54,7 @@ function pirogue_dispatcher_init(string $address, string $request_path, array $r
  * @internal Called from dispatcher only.
  * @param string $content the content that will be sent to the client.
  */
-function _pirogue_dispatcher_send(string $content): void
+function _dispatcher_send(string $content): void
 {
     // Cache control:
     ob_start('ob_gzhandler');
@@ -74,13 +76,13 @@ function _pirogue_dispatcher_send(string $content): void
 /**
  * redirect user to new address.
  *
- * @uses pirogue_dispatcher_create_url
+ * @uses dispatcher_create_url
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @param string $address the address to redirect too. If no address is specified the page is refreshed.
  * @param int $status_code the http status code to use in the redirect process.
  */
-function pirogue_dispatcher_redirect(string $address, int $status_code = 301): void
+function dispatcher_redirect(string $address, int $status_code = 301): void
 {
     header(sprintf('Location: %s', $address), true, $status_code);
     exit();
@@ -95,7 +97,7 @@ function pirogue_dispatcher_redirect(string $address, int $status_code = 301): v
  * @param array $data an array containing key => value pairs of data use as request parameters.
  * @return string the url created from user input.
  */
-function pirogue_dispatcher_create_url(string $path, array $data): string
+function dispatcher_create_url(string $path, array $data): string
 {
     $pattern = match (('' == $path ? 0 : 1) | (empty($data) ? 0 : 2)) {
         0 => '%s',
@@ -114,9 +116,9 @@ function pirogue_dispatcher_create_url(string $path, array $data): string
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @return string the current requested url.
  */
-function pirogue_dispatcher_current_url(): string
+function dispatcher_current_url(): string
 {
-    return pirogue_dispatcher_create_url(
+    return dispatcher_create_url(
         $GLOBALS['.pirogue.dispatcher.request_path'],
         $GLOBALS['.pirogue.dispatcher.request_data']
     );
@@ -134,7 +136,7 @@ function pirogue_dispatcher_current_url(): string
  * @param int $line the line that the error was encountered at.
  * @return boolean continuation flag.
  */
-function _pirogue_dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
+function _dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
 {
     if ($number & error_reporting()) {
         throw new ErrorException($message, 0, $number, $file, $line);
@@ -181,7 +183,7 @@ function dispatcher_callback_parse(string $callback): string
     parse_str($_request_path, $_request_data);
     $_path = $_request_data['__execution_path'] ?? '';
     unset($_request_data['__execution_path']);
-    return pirogue_dispatcher_create_url($_path, $_request_data);
+    return dispatcher_create_url($_path, $_request_data);
 }
 
 /**
