@@ -11,7 +11,7 @@ use function pirogue\_dispatcher_buffer_clear;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
-pirogue_test_execute('dispatcher_current_url()', function () {
+pirogue_test_execute('_dispatcher_buffer_clear()', function () {
     for ($i = 0; $i < 5; $i++) {
         ob_start();
         printf('THIS IS BUFFER #%d', $i);
