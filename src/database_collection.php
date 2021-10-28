@@ -17,7 +17,6 @@ use ErrorException;
 use mysqli;
 
 /**
- * config folder's path.
  * directory path where the database connection information ini files exist.
  *
  * @internal used by library only.

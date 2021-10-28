@@ -14,6 +14,7 @@ namespace pirogue;
 /**
  * file path pattern for the html view file.
  *
+ * @internal
  * @var string $GLOBALS['._pirogue.html_view.pattern']
  */
 $GLOBALS['._pirogue.html_view.pattern'] = '';
@@ -22,7 +23,7 @@ $GLOBALS['._pirogue.html_view.pattern'] = '';
  * initialize view
  *
  * @uses $GLOBALS['._pirogue.html_view.pattern']
- * @param string $pattern
+ * @param string $pattern the pattern used to build view file paths.
  * @return void
  */
 function html_view_init(string $pattern)
@@ -70,10 +71,10 @@ function html_view_load(string $view, array $view_data = [], array $html_view = 
         return [];
     }
 
-    if (null == $html_view) {
-        $html_view = html_view_create();
-    }
+    // initialize html view if not provided.
+    $html_view = null == $html_view ? html_view_create() : $html_view;
 
+    // load view and return output as body content.
     ob_start();
     require $view_file;
     $html_view['body']['content'] = ob_get_clean();

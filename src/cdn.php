@@ -1,7 +1,7 @@
 <?php
 
 /**
- * CDN handler library.
+ * library for dealing with cdn storing and building links to cdn resources.
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -13,8 +13,7 @@ namespace pirogue;
 use LogicException;
 
 /**
- * cdn server list.
- * a list of cdn server urls.
+ * list of cdn server urls.
  *
  * @internal used by library only.
  * @var string[] $GLOBALS['._pirogue.cdn.address_list']
@@ -22,7 +21,6 @@ use LogicException;
 $GLOBALS['._pirogue.cdn.address_list'] = [];
 
 /**
- * cnd array index.
  * the array index for the next cdn server to be used.
  *
  * @internal used by library only.
@@ -35,6 +33,7 @@ $GLOBALS['._pirogue.cdn.current_index'] = 0;
  *
  * @uses $GLOBALS['._pirogue.cdn.current_index']
  * @uses $GLOBALS['._pirogue.cdn.address_list']
+ *
  * @param array $address_list an array containing a list of the base CDN server addresses.
  */
 function cdn_init(array $address_list): void
@@ -49,10 +48,14 @@ function cdn_init(array $address_list): void
  * scheduling.
  *
  * @throws LogicException if there are no registered CDN servers.
+ *
+ * @uses LogicException
  * @uses $GLOBALS['._pirogue.cdn.address_list']
  * @uses $GLOBALS['._pirogue.cdn.current_index']
+ *
  * @param string $path the path to the resource.
  * @param array $data the request data.
+ *
  * @return string url to cdn resource.
  */
 function cdn_create_url(string $path, array $data): string
