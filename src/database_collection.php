@@ -12,6 +12,10 @@
 
 namespace pirogue;
 
+use InvalidArgumentException;
+use ErrorException;
+use mysqli;
+
 /**
  * config folder's path.
  * directory path where the database connection information ini files exist.
@@ -61,7 +65,7 @@ function database_collection_init(string $config_path, string $default): void
     $GLOBALS['._pirogue.database_collection.connections'] = [];
 
     // register destruct function.
-    register_shutdown_function('_database_collection_destruct');
+    register_shutdown_function('pirogue\_database_collection_destruct');
 }
 
 /**

@@ -25,7 +25,8 @@ $GLOBALS['._pirogue.html_view.pattern'] = '';
  * @param string $pattern
  * @return void
  */
-function html_view_init(string $pattern) {
+function html_view_init(string $pattern)
+{
     $GLOBALS['._pirogue.html_view.pattern'] = $pattern;
 }
 
@@ -37,7 +38,8 @@ function html_view_init(string $pattern) {
  * @param string $page_class class of page.
  * @return array array to hold html view data.
  */
-function html_view_create( string $title = '', string $id = '', string $class = '', array $path = [] ): array {
+function html_view_create(string $title = '', string $id = '', string $class = '', array $path = []): array
+{
     return [
         'head' => ['title' => $title, 'content' => ''],
         'css' => ['files' => [], 'inline' => ''],
@@ -60,7 +62,8 @@ function html_view_create( string $title = '', string $id = '', string $class = 
  * @param array $page_data page data to use in building this page. Returns data from view.
  * @return array page data.
  */
-function html_view_load(string $view, array $view_data=[], array $html_view=null): array {
+function html_view_load(string $view, array $view_data = [], array $html_view = null): array
+{
     $view_file = sprintf($GLOBALS['._pirogue.html_view.pattern'], $view);
     if (!file_exists($view_file)) {
         trigger_error(sprintf('requested view file "%s" does not exists.', $view));
@@ -76,4 +79,3 @@ function html_view_load(string $view, array $view_data=[], array $html_view=null
     $html_view['body']['content'] = ob_get_clean();
     return $html_view;
 }
-
