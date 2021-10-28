@@ -141,3 +141,62 @@ function _pirogue_dispatcher_error_handler(int $number, string $message, string 
     }
     return false;
 }
+
+
+/**
+ * clear all output buffers and return contents.
+ *
+ * @return string contents of all buffers.
+ */
+function _dispatcher_buffer_clear(): string
+{
+    $buffer = '';
+    while (0 < ob_get_level()) {
+        $buffer = ob_get_clean();
+    }
+    return $buffer;
+}
+
+/**
+ * create request into callback.
+ * 
+ * @param array $request the request data.
+ * @return string parsed callback.
+ */
+function dispatcher_callback_create(array $request): string
+{
+    return urlencode(http_build_query($request));
+}
+
+/**
+ * parse request into callback.
+ * 
+ * @param string $callback the request data.
+ * @return array parsed callback in the form of a url.
+ */
+function dispatcher_callback_parse(string $callback): string
+{
+    $_request_data = [];
+    $_request_path = urldecode($callback);
+    parse_str($_request_path, $_request_data);
+    $_path = $_request_data['__execution_path'] ?? '';
+    unset($_request_data['__execution_path']);
+    return pirogue_dispatcher_create_url($_path, $_request_data);
+}
+
+/**
+ * convert path from string to array. removes 'protected' pathnames.
+ * 
+ * @param string $path the path to convert to array.
+ * @return array an array containing the path.
+ */
+function dispatcher_path_convert_to_array(string $path): array {
+    $result = [];
+    foreach (explode('/', $path) as $key => $value) {
+        $_tmp = preg_replace('/^_/', '', $value);
+        if ( '' != $_tmp ) {
+            $result[$key] = $_tmp;
+        }
+    }
+    return $result;
+}
