@@ -32,7 +32,7 @@ $GLOBALS['._pirogue.controller.default_access'] = '';
  *
  * @uses $GLOBALS['._pirogue.controller.name']
  * @uses $GLOBALS['._pirogue.controller.default_access']
- * 
+ *
  * @param string $name the name of the module to initialize.
  */
 function controller_init(string $name, bool $default_access = true): void
@@ -43,9 +43,9 @@ function controller_init(string $name, bool $default_access = true): void
 
 /**
  * build function name.
- * 
+ *
  * @internal
- * 
+ *
  * @param array $parts the parts of the function to build.
  * @return string function name.
  */

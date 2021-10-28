@@ -14,7 +14,7 @@ namespace pirogue;
 /**
  * controller file format.
  *
- * @internal 
+ * @internal
  * @var string $GLOBALS['._pirogue.controller_import.controller_format']
  */
 $GLOBALS['._pirogue.controller_import.controller_format'] = '';
@@ -24,7 +24,7 @@ $GLOBALS['._pirogue.controller_import.controller_format'] = '';
  * initialize site route library.
  *
  * @uses $GLOBALS['._pirogue.controller_import.controller_format']
- * 
+ *
  * @param string $controller_format
  */
 function controller_import_init(string $controller_format): void
