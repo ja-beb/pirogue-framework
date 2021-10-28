@@ -10,6 +10,8 @@
 
 namespace pirogue;
 
+use LogicException;
+
 /**
  * cdn server list.
  * a list of cdn server urls.
