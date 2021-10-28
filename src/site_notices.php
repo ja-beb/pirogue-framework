@@ -8,6 +8,8 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
+namespace pirogue;
+
 /**
  * Site notices index in session array.
  *
@@ -22,7 +24,7 @@ $GLOBALS['._pirogue.site_notices.index'] = '';
  * @uses $GLOBALS['._pirogue.site_notices.index']
  * @param string $index the session array index for site notices.
  */
-function pirogue_site_notices_init(string $index): void
+function site_notices_init(string $index): void
 {
     $GLOBALS['._pirogue.site_notices.index'] = $index;
     $_SESSION[$GLOBALS['._pirogue.site_notices.index']] ??= [];
@@ -34,7 +36,7 @@ function pirogue_site_notices_init(string $index): void
  * @uses $GLOBALS['._pirogue.site_notices.index']
  * @return array the list of cleared session notices in a [type,text] format.
  */
-function pirogue_site_notices_clear(): array
+function site_notices_clear(): array
 {
     $list = $_SESSION[$GLOBALS['._pirogue.site_notices.index']];
     $_SESSION[$GLOBALS['._pirogue.site_notices.index']] = [];
@@ -48,7 +50,7 @@ function pirogue_site_notices_clear(): array
  * @param int $type the code for the notice type to add.
  * @param string $message the notice's message.
  */
-function pirogue_site_notices_create(string $type, string $message): void
+function site_notices_create(string $type, string $message): void
 {
     array_push($_SESSION[$GLOBALS['._pirogue.site_notices.index']], [$type, $message]);
 }
