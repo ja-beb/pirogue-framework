@@ -10,6 +10,8 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
+namespace pirogue;
+
 /**
  * config folder's path.
  * directory path where the database connection information ini files exist.
@@ -48,7 +50,7 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * @param string $config_path the basse path to the stored the database ini files.
  * @param string $default the name of the default database.
  */
-function pirogue_database_collection_init(string $config_path, string $default): void
+function database_collection_init(string $config_path, string $default): void
 {
     if (!is_dir($config_path)) {
         throw new InvalidArgumentException(sprintf('Directory does not exist: "%s"', $config_path));
@@ -59,7 +61,7 @@ function pirogue_database_collection_init(string $config_path, string $default):
     $GLOBALS['._pirogue.database_collection.connections'] = [];
 
     // register destruct function.
-    register_shutdown_function('_pirogue_database_collection_destruct');
+    register_shutdown_function('_database_collection_destruct');
 }
 
 /**
@@ -68,7 +70,7 @@ function pirogue_database_collection_init(string $config_path, string $default):
  * @internal used by library only.
  * @uses $GLOBALS['._pirogue.database_collection.connections']
  */
-function _pirogue_database_collection_destruct(): void
+function _database_collection_destruct(): void
 {
     foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
         if ('mysqli' == get_class($connection)) {
@@ -91,7 +93,7 @@ function _pirogue_database_collection_destruct(): void
  * @param string $name
  * @return mysqli resource item.
  */
-function pirogue_database_collection_get(?string $name = null): mysqli
+function database_collection_get(?string $name = null): mysqli
 {
     $name = null == $name ? $GLOBALS['._pirogue.database_collection.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
