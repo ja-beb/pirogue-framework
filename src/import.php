@@ -11,6 +11,8 @@
 
 namespace pirogue;
 
+use ErrorException;
+use InvalidArgumentException;
 
 /**
  * Base folder for library import.

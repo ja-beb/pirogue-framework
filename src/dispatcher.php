@@ -10,6 +10,8 @@
 
 namespace pirogue;
 
+use ErrorException;
+
 /**
  * The site's base address.
  *
@@ -161,7 +163,7 @@ function _dispatcher_buffer_clear(): string
 
 /**
  * create request into callback.
- * 
+ *
  * @param array $request the request data.
  * @return string parsed callback.
  */
@@ -172,7 +174,7 @@ function dispatcher_callback_create(array $request): string
 
 /**
  * parse request into callback.
- * 
+ *
  * @param string $callback the request data.
  * @return array parsed callback in the form of a url.
  */
@@ -188,15 +190,16 @@ function dispatcher_callback_parse(string $callback): string
 
 /**
  * convert path from string to array. removes 'protected' pathnames.
- * 
+ *
  * @param string $path the path to convert to array.
  * @return array an array containing the path.
  */
-function dispatcher_path_convert_to_array(string $path): array {
+function dispatcher_path_convert_to_array(string $path): array
+{
     $result = [];
     foreach (explode('/', $path) as $key => $value) {
         $_tmp = preg_replace('/^_/', '', $value);
-        if ( '' != $_tmp ) {
+        if ('' != $_tmp) {
             $result[$key] = $_tmp;
         }
     }
