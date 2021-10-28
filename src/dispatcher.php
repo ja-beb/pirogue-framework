@@ -164,12 +164,12 @@ function dispatcher_current_url(): string
 /**
  * create request into callback.
  *
- * @param array $request the request data.
+ * @param string $url the url to create a callback from.
  * @return string parsed callback.
  */
-function dispatcher_callback_create(array $request): string
+function dispatcher_callback_create(string $url): string
 {
-    return urlencode(http_build_query($request));
+    return urlencode($url);
 }
 
 /**
@@ -180,12 +180,7 @@ function dispatcher_callback_create(array $request): string
  */
 function dispatcher_callback_parse(string $callback): string
 {
-    $_request_data = [];
-    $_request_path = urldecode($callback);
-    parse_str($_request_path, $_request_data);
-    $_path = $_request_data['__execution_path'] ?? '';
-    unset($_request_data['__execution_path']);
-    return dispatcher_create_url($_path, $_request_data);
+    return urldecode($callback);
 }
 
 /**
