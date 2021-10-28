@@ -138,14 +138,13 @@ function dispatcher_redirect(string $address, int $status_code = 301): void
 /**
  * create url to resource relative to site base.
  *
- * @uses _dispatcher_create_url()
  * @uses $GLOBALS['.pirogue.dispatcher.address']
  *
  * @param string $path the path to the resource.
  * @param array $data an array containing key => value pairs of data use as request parameters.
  * @return string the url created from user input.
  */
-function dispatcher_create_url(string $path, array $data): string
+function dispatcher_url_create(string $path, array $data): string
 {
     return sprintf(
         match (('' == $path ? 0 : 1) | (empty($data) ? 0 : 2)) {
@@ -163,15 +162,15 @@ function dispatcher_create_url(string $path, array $data): string
 /**
  * get the current url.
  *
- * @uses _dispatcher_create_url()
+ * @uses _dispatcher_url_create()
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  *
  * @return string the current requested url.
  */
-function dispatcher_current_url(): string
+function dispatcher_url_current(): string
 {
-    return dispatcher_create_url(
+    return dispatcher_url_create(
         $GLOBALS['.pirogue.dispatcher.request_path'],
         $GLOBALS['.pirogue.dispatcher.request_data']
     );

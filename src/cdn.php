@@ -58,7 +58,7 @@ function cdn_init(array $address_list): void
  *
  * @return string url to cdn resource.
  */
-function cdn_create_url(string $path, array $data): string
+function cdn_url_create(string $path, array $data): string
 {
     if (empty($GLOBALS['._pirogue.cdn.address_list'])) {
         throw new LogicException('There are no registered CDN servers.');
