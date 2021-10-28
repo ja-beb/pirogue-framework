@@ -18,31 +18,69 @@ namespace pirogue;
  */
 $GLOBALS['._pirogue.controller.name'] = '';
 
+
+/**
+ * default access level - used when no access is provided by dispatcher.
+ *
+ * @internal use by libary only.
+ * @var bool $GLOBALS['._pirogue.controller.default_access']
+ */
+$GLOBALS['._pirogue.controller.default_access'] = '';
+
 /**
  * initialize view library.
  *
  * @uses $GLOBALS['._pirogue.controller.name']
+ * @uses $GLOBALS['._pirogue.controller.default_access']
+ * 
  * @param string $name the name of the module to initialize.
  */
-function controller_init(string $name): void
+function controller_init(string $name, bool $default_access = true): void
 {
     $GLOBALS['._pirogue.controller.name'] = $name;
+    $GLOBALS['._pirogue.controller.default_access'] = $default_access;
 }
 
 /**
- * check if user has access.
+ * build function name.
+ * 
+ * @internal
+ * 
+ * @param array $parts the parts of the function to build.
+ * @return string function name.
+ */
+function _controller_build_function_name(array $parts): string
+{
+    return str_replace('-', '_', strtolower(implode('_', $parts)));
+}
+
+/**
+ * return current controller's name.
  *
  * @uses $GLOBALS['._pirogue.controller.name']
+ *
+ * @return string name of the current controller.
+ */
+function controller_current(): ?string
+{
+    return $GLOBALS['._pirogue.controller.name'];
+}
+
+/**
+ * check if user has access - will use controller library's default access value if no access function is defined by the current controller.
+ *
+ * @uses $GLOBALS['._pirogue.controller.name']
+ * @uses $GLOBALS['._pirogue.controller.default_access']
  * @uses _controller_build_function_name()
  *
  * @param ?int $user_id user id to check
- * @return bool has access boolean flag.
+ * @return bool has access boolean flag
  */
 function controller_has_access(?int $user_id): bool
 {
     // check for action level
     $func = _controller_build_function_name([$GLOBALS['._pirogue.controller.name'], 'has_access']);
-    return function_exists($func) ? call_user_func($func, $user_id) : true;
+    return function_exists($func) ? call_user_func($func, $user_id) : $GLOBALS['._pirogue.controller.default_access'];
 }
 
 /**
@@ -50,7 +88,6 @@ function controller_has_access(?int $user_id): bool
  *
  * @uses $GLOBALS['._pirogue.controller.name']
  * @uses _controller_build_function_name()
- * @uses controller_get_action()
  *
  * @param string $action the action to check for.
  * @param string $method the http method to check for route action.
@@ -64,15 +101,4 @@ function controller_get_action(string $action, string $method = 'GET'): ?string
     } else {
         return 'GET' == $method ? null : controller_get_action($action, 'GET');
     }
-}
-
-/**
- * build function name.
- * @internal
- * @param array $parts the parts of the function to build.
- * @return string function name.
- */
-function _controller_build_function_name(array $parts): string
-{
-    return str_replace('-', '_', strtolower(implode('_', $parts)));
 }
