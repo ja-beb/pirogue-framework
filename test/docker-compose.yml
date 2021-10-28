@@ -23,7 +23,7 @@ services:
             - ./config:/pirogue/config:ro
             - ./view:/pirogue/view:ro
             - ./include:/pirogue/include/test:rw
-            - ./controllers:/pirogue/controllers/test:rw
+            - ./controllers:/pirogue/controllers:rw
             - ../src:/pirogue/include/pirogue:rw
         depends_on:
             - database
