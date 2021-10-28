@@ -23,8 +23,4 @@ pirogue_test_execute("controller_import_get_controller(): valid controller", fun
     controller_import_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', '%s.php']));
     $controller = controller_import_get_controller(['testing']);
     require $controller;
-    $path = 'one/two';
-    return testing_index_get(explode('/', $path), []) == $path
-        ? ''
-        : 'invalid function directory.';
 });

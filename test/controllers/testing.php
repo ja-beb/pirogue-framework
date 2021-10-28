@@ -1,12 +1,54 @@
 <?php
 
 /**
- * testing function for controller - returns input.
+ * initialize controller.
  * 
- * @param array $path path for this request.
- * @param array $data data for this request.
- * @return string path parsed.
+ * @param string $name controller name.
  */
-function testing_index_get(array $path, array $data): string {
-    return implode('/', $path);
+function testing_init(string $name) {
+    
+}
+
+/**
+ * validate access.
+ *
+ * @param integer|null $user_id
+ * @return bool returns false if user id is null.
+ */
+function testing_has_access(?int $user_id): bool{
+    return null != $user_id;
+}
+
+/**
+ * index get action.
+ * 
+ * @param array $path
+ * @param array $data
+ * @return array
+ */
+function testing_index_get(array $path, array $data): array {
+    return ['file' => __FILE__, 'function' => __FUNCTION__, 'path' => $path, 'data' => $data];
+}
+
+/**
+ * index post action.
+ * 
+ * @param array $path
+ * @param array $data
+ * @param array $form_data
+ * @return array
+ */
+function testing_index_post(array $path, array $data, array $form_data): array {
+    return ['file' => __FILE__, 'function' => __FUNCTION__, 'path' => $path, 'data' => $data, 'form_data' => $form_data];
+}
+
+/**
+ * fallback get action.
+ * 
+ * @param array $path
+ * @param array $data
+ * @return array
+ */
+function testing_fallback_get(array $path, array $data): array {
+    return ['file' => __FILE__, 'function' => __FUNCTION__, 'path' => $path, 'data' => $data];
 }
