@@ -8,6 +8,8 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
+namespace pirogue;
+
 /**
  * view file format.
  * the format to use to load the view - including file extension.
@@ -24,7 +26,7 @@ $GLOBALS['._pirogue.view.format'] = '';
  * @uses $GLOBALS['._pirogue.view.path']
  * @param string $format A sprintf() format string for file name and path.
  */
-function pirogue_view_init(string $format): void
+function view_init(string $format): void
 {
     $GLOBALS['._pirogue.view.format'] = $format;
 }
@@ -39,7 +41,7 @@ function pirogue_view_init(string $format): void
  * @param string $file the name of the desired view file relative to the base view directory.
  * @return string the absolute filename of the view file if found or an empty string if not found.
  */
-function pirogue_view_get_path(string $file): ?string
+function view_get_path(string $file): ?string
 {
     $view = sprintf($GLOBALS['._pirogue.view.format'], $file);
     return file_exists($view) ? $view : null;
