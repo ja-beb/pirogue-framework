@@ -13,8 +13,8 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
 
 pirogue_test_execute('dispatcher_path_convert_to_array()', function () {
     $data = [
-        'output' => ['default', 'default'],
-        'input' => 'default/_default',
+        'output' => ['first', 'second', 'third'],
+        'input' => 'first/_second/__third',
     ];
     $results = dispatcher_path_convert_to_array($data['input']);
 
