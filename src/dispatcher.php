@@ -76,6 +76,41 @@ function _dispatcher_send(string $content): void
 }
 
 /**
+ * translate PHP triggered errors into SPL ErrorException instance.
+ *
+ *
+ * @throws ErrorException
+ * @internal registered to error handler by dispatcher.
+ * @param int $number the error code encountered.
+ * @param string $message a message describing the error.
+ * @param string $file the file the error was encountered in.
+ * @param int $line the line that the error was encountered at.
+ * @return boolean continuation flag.
+ */
+function _dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
+{
+    if ($number & error_reporting()) {
+        throw new ErrorException($message, 0, $number, $file, $line);
+    }
+    return false;
+}
+
+
+/**
+ * clear all output buffers and return contents.
+ *
+ * @return string contents of all buffers.
+ */
+function _dispatcher_buffer_clear(): string
+{
+    $buffer = '';
+    while (0 < ob_get_level()) {
+        $buffer = ob_get_clean();
+    }
+    return $buffer;
+}
+
+/**
  * redirect user to new address.
  *
  * @uses dispatcher_create_url
@@ -124,41 +159,6 @@ function dispatcher_current_url(): string
         $GLOBALS['.pirogue.dispatcher.request_path'],
         $GLOBALS['.pirogue.dispatcher.request_data']
     );
-}
-
-/**
- * translate PHP triggered errors into SPL ErrorException instance.
- *
- *
- * @throws ErrorException
- * @internal registered to error handler by dispatcher.
- * @param int $number the error code encountered.
- * @param string $message a message describing the error.
- * @param string $file the file the error was encountered in.
- * @param int $line the line that the error was encountered at.
- * @return boolean continuation flag.
- */
-function _dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
-{
-    if ($number & error_reporting()) {
-        throw new ErrorException($message, 0, $number, $file, $line);
-    }
-    return false;
-}
-
-
-/**
- * clear all output buffers and return contents.
- *
- * @return string contents of all buffers.
- */
-function _dispatcher_buffer_clear(): string
-{
-    $buffer = '';
-    while (0 < ob_get_level()) {
-        $buffer = ob_get_clean();
-    }
-    return $buffer;
 }
 
 /**
