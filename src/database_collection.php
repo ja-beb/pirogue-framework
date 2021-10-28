@@ -14,8 +14,6 @@ namespace pirogue;
 
 use mysqli;
 
-use function trigger_error;
-
 /**
  * a sprintf format string used to build file path based on inputed name.
  *
