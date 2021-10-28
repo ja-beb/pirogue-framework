@@ -9,24 +9,10 @@
 
 use function pirogue\import_init;
 
-define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include']));
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'import.php']));
+define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', '%s.php']));
+require_once(sprintf(_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue/import'));
 
-pirogue_test_execute('import_init(): invalid directory', function () {
-    try {
-        import_init('/invalid/path');
-        return 'Set library to invalid file.';
-    } catch (InvalidArgumentException) {
-        return '';
-    }
-});
-
-pirogue_test_execute(
-    'import_init(): valid directory',
-    fn() => import_init(_PIROGUE_TESTING_PATH_INCLUDE)
-);
-
-pirogue_test_execute("import_init(): \$GLOBALS['._pirogue.import.path']", function () {
+pirogue_test_execute("import_init():", function () {
     import_init(_PIROGUE_TESTING_PATH_INCLUDE);
-    return _PIROGUE_TESTING_PATH_INCLUDE == $GLOBALS['._pirogue.import.path'] ? '' : "invalid value for \$GLOBALS['._pirogue.import.path']";
+    return _PIROGUE_TESTING_PATH_INCLUDE == $GLOBALS['._pirogue.import.pattern'] ? '' : "invalid value for \$GLOBALS['._pirogue.import.pattern']";
 });

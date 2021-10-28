@@ -10,7 +10,10 @@
 use function pirogue\import_init;
 use function pirogue\import_load;
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue', 'import.php']));
+if (!defined('_PIROGUE_TESTING_PATH_INCLUDE')) {
+    define('_PIROGUE_TESTING_PATH_INCLUDE', implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', '%s.php']));
+}
+require_once(sprintf(_PIROGUE_TESTING_PATH_INCLUDE, 'pirogue/import'));
 
 pirogue_test_execute('import_load(): invalid file', function () {
     try {
