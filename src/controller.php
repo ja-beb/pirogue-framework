@@ -77,7 +77,7 @@ function controller_current(): ?string
 function controller_has_access(?int $user_id): bool
 {
     // check for action level
-    $function_name = controller_string_convert(sprintf('%s\has_access', $GLOBALS['._pirogue.controller.name']));
+    $function_name = '' == $GLOBALS['._pirogue.controller.name'] ? '' : controller_string_convert(sprintf('%s\_has_access', $GLOBALS['._pirogue.controller.name']));
     return function_exists($function_name) ? call_user_func($function_name, $user_id) : $GLOBALS['._pirogue.controller.default_access'];
 }
 
