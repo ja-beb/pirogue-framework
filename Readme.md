@@ -47,3 +47,29 @@ Controllers are loaded from a seperate folder and should implement the following
 ## Views
 Views are stored in a seperate folder and are loaded by the controller's action function.
 
+## Example project layout
+The following defines the directory structure for a trival example site that allows users to log in, view account information and update their information.
+```
+/include
+  -- pirogue/
+  -- website/
+/config
+  -- mysqli-website.ini
+/controller
+  -- _default.php
+  -- account.php
+  -- session.php
+/htdocs
+  -- css/
+  -- script/
+  -- fonts/
+  -- _dispatcher.php
+/view
+  -- _page.phtml
+  -- account-index.phtml
+  -- account-update-password.phtml
+  -- account-update-info.phtml
+  -- index.phtml
+  -- login-form.phtml
+
+```
