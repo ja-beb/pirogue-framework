@@ -21,6 +21,6 @@ pirogue_test_execute("controller_import_get_path(): invalid controller", functio
 
 pirogue_test_execute("controller_import_get_path(): valid controller", function () {
     controller_import_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', '%s.php']));
-    $controller = controller_import_get_path(['testing']);
+    $controller = controller_import_get_path(['testing-access']);
     require $controller;
 });
