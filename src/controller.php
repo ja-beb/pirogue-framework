@@ -42,16 +42,14 @@ function controller_init(string $name, bool $default_access = true): void
 }
 
 /**
- * build function name.
+ * convert string from kebab case to camel case.
  *
- * @internal
- *
- * @param array $parts the parts of the function to build.
- * @return string function name.
+ * @param string $value string to be converted.
+ * @return string converted stgring.
  */
-function _controller_build_function_name(array $parts): string
+function controller_string_convert(string $value): string
 {
-    return str_replace('-', '_', strtolower(implode('_', $parts)));
+    return strtolower(str_replace('-', '_', $value));
 }
 
 /**
@@ -79,8 +77,8 @@ function controller_current(): ?string
 function controller_has_access(?int $user_id): bool
 {
     // check for action level
-    $func = _controller_build_function_name([$GLOBALS['._pirogue.controller.name'], 'has_access']);
-    return function_exists($func) ? call_user_func($func, $user_id) : $GLOBALS['._pirogue.controller.default_access'];
+    $function_name = controller_string_convert(sprintf('%s\has_access', $GLOBALS['._pirogue.controller.name']));
+    return function_exists($function_name) ? call_user_func($function_name, $user_id) : $GLOBALS['._pirogue.controller.default_access'];
 }
 
 /**
@@ -95,9 +93,10 @@ function controller_has_access(?int $user_id): bool
  */
 function controller_get_action(string $action, string $method = 'GET'): ?string
 {
-    $route_name = _controller_build_function_name([$GLOBALS['._pirogue.controller.name'], $action, $method]);
-    if (function_exists($route_name)) {
-        return $route_name;
+    $function_name = controller_string_convert(sprintf('%s\%s_%s', $GLOBALS['._pirogue.controller.name'], $action, $method));
+    echo $function_name;
+    if (function_exists($function_name)) {
+        return $function_name;
     } else {
         return 'GET' == $method ? null : controller_get_action($action, 'GET');
     }

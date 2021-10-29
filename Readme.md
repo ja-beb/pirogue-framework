@@ -27,14 +27,14 @@ Any parts of a path that are prefixed with a '_' character are considered "prote
 - _private/end-point.phtml = internal file.
 - public/_private.phtml = internal file.
 ## Controllers
-Controllers are loaded from a seperate folder and should implement the following functions:
-- "{$controller name}_init" - required
-- "{$controller name}_has_access" - optional, will default to access set by controller_init().
-- "{$controller name}_error_403" - optional, intercepts and handles HTTP 403 errors form default controller.
-- "{$controller name}_error_404" - optional, intercepts and handles HTTP 404 errors form default controller.
-- "{$controller name}_error_405" - optional, intercepts and handles HTTP 405 errors form default controller.
-- "{$controller name}_error_500" - optional, intercepts and handles HTTP 500 errors form default controller.
-- "{$controller name}_{$action}_{$request method}" - action invoked in controller. For example, if the user requests account/index.html then this request would mapp to the function account_index_get().
+Controllers are loaded from a seperate folder and should implement the following functions within their own namespace.
+- "{$controller name}\_init" - required
+- "{$controller name}\_has_access" - optional, will default to access set by controller_init().
+- "{$controller name}\_error_403" - optional, intercepts and handles HTTP 403 errors form default controller.
+- "{$controller name}\_error_404" - optional, intercepts and handles HTTP 404 errors form default controller.
+- "{$controller name}\_error_405" - optional, intercepts and handles HTTP 405 errors form default controller.
+- "{$controller name}\_error_500" - optional, intercepts and handles HTTP 500 errors form default controller.
+- "{$controller name}\{$action}_{$request method}" - action invoked in controller. For example, if the user requests account/index.html then this request would mapp to the function account_index_get().
 ## Views
 Views are stored in a seperate folder and are loaded by the controller's action function.
 ## Example project layout
