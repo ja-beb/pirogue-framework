@@ -94,7 +94,6 @@ function controller_has_access(?int $user_id): bool
 function controller_get_action(string $action, string $method = 'GET'): ?string
 {
     $function_name = controller_string_convert(sprintf('%s\%s_%s', $GLOBALS['._pirogue.controller.name'], $action, $method));
-    echo $function_name;
     if (function_exists($function_name)) {
         return $function_name;
     } else {
