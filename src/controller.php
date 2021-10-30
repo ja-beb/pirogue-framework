@@ -20,14 +20,6 @@ $GLOBALS['._pirogue.controller.name'] = '';
 
 
 /**
- * default access level - used when no access is provided by dispatcher.
- *
- * @internal use by libary only.
- * @var bool $GLOBALS['._pirogue.controller.default_access']
- */
-$GLOBALS['._pirogue.controller.default_access'] = '';
-
-/**
  * initialize view library.
  *
  * @uses $GLOBALS['._pirogue.controller.name']
@@ -38,7 +30,6 @@ $GLOBALS['._pirogue.controller.default_access'] = '';
 function controller_init(string $name, bool $default_access = true): void
 {
     $GLOBALS['._pirogue.controller.name'] = $name;
-    $GLOBALS['._pirogue.controller.default_access'] = $default_access;
 }
 
 /**
@@ -62,23 +53,6 @@ function controller_string_convert(string $value): string
 function controller_current(): ?string
 {
     return $GLOBALS['._pirogue.controller.name'];
-}
-
-/**
- * check if user has access - will use controller library's default access value if no access function is defined by the current controller.
- *
- * @uses $GLOBALS['._pirogue.controller.name']
- * @uses $GLOBALS['._pirogue.controller.default_access']
- * @uses _controller_build_function_name()
- *
- * @param ?int $user_id user id to check
- * @return bool has access boolean flag
- */
-function controller_has_access(?int $user_id): bool
-{
-    // check for action level
-    $function_name = controller_string_convert(sprintf('%s\has_access', $GLOBALS['._pirogue.controller.name']));
-    return function_exists($function_name) ? call_user_func($function_name, $user_id) : $GLOBALS['._pirogue.controller.default_access'];
 }
 
 /**
