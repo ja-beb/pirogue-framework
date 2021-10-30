@@ -75,7 +75,7 @@ function convert_case(string $value): string
  *
  * @return string name of the current controller or null if no controller has been registered.
  */
-function current(): ?string
+function current_controller(): ?string
 {
     return current($GLOBALS['._pirogue.controller_import.call_stack']);
 }
@@ -93,7 +93,7 @@ function register(string $name): int
 }
 
 /**
- * build the path to the desired controller given user inputed array. 
+ * build the path to the desired controller given user inputed array.
  * will remove last element of the array until it is empty or the file has been found.
  *
  * @uses $GLOBALS['._pirogue.controller_import.controller_format']
@@ -105,14 +105,13 @@ function build_path(array $path): ?string
     if (empty($path)) {
         return null;
     } else {
-        $file = sprintf($GLOBALS['._pirogue.controller_import.controller_format'], implode(DIRECTORY_SEPARATOR, $path));
-        return file_exists($file) ? $file : controller_import_get_path(array_slice($path, 0, count($path) - 1));
+        $file = sprintf($GLOBALS['._pirogue.controller_import.path_format'], implode(DIRECTORY_SEPARATOR, $path));
+        return file_exists($file) ? $file : build_path(array_slice($path, 0, count($path) - 1));
     }
 }
 
-
 /**
- * translate (controller name, action name, request method) to the routing function. 
+ * translate (controller name, action name, request method) to the routing function.
  * this will default to request method 'get' if none found.
  *
  * @uses pirogue\controller\convert_case() to clean string of kebab case passed in from the HTTP request path.
@@ -124,11 +123,10 @@ function build_path(array $path): ?string
  */
 function build_action(string $controller_name, string $action_name, string $request_method = 'GET'): ?string
 {
-    $function_name = convert_case(sprintf('%s\%s_%s', controller_name, $action_name, $request_method));
-    echo $function_name;
+    $function_name = convert_case(sprintf('%s\%s_%s', $controller_name, $action_name, $request_method));
     if (function_exists($function_name)) {
         return $function_name;
     } else {
-        return 'GET' == $method ? null : controller_get_action($action, 'GET');
+        return 'GET' == $request_method ? null : build_action($controller_name, $action_name, 'GET');
     }
 }
