@@ -11,7 +11,7 @@ use function pirogue\controller_init;
 use function pirogue\controller_get_action;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'controller.php']));
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', 'testing-access.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', 'example-controller.php']));
 
 function _controller_get_action_test(string $action, string $method, string $results): string
 {
@@ -19,7 +19,7 @@ function _controller_get_action_test(string $action, string $method, string $res
     return $results == $action ? '' : sprintf('invalid action returned: returned "%s" but expected "%s"', $action, $results);
 }
 
-controller_init('testing-access');
+controller_init('example-controller');
 pirogue_test_execute("controller_get_action(): testing_access_update_get", function () {
     return _controller_get_action_test('update', 'GET', '');
 });

@@ -7,7 +7,7 @@
  * @return void
  */
 
-namespace testing_access;
+namespace example_controller;
 
 function _init(string $name){}
 
