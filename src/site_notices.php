@@ -3,7 +3,6 @@
 /**
  * library for passing user notifications between pages.
  * php version 8.0.0
- *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
@@ -12,18 +11,15 @@ namespace pirogue\site_notices;
 
 /**
  * index for storing site notices in the global session array.
- *
- * @internal used by library only.
+ * @internal
  * @var string $GLOBALS['._pirogue.site_notices.index']
  */
 $GLOBALS['._pirogue.site_notices.index'] = '';
 
 /**
  * setup site notices library.
- *
  * @internal
  * @uses $GLOBALS['._pirogue.site_notices.index']
- *
  * @param string $index the session array index for site notices.
  * @return void
  */
@@ -37,10 +33,8 @@ function _init(string $index): void
 
 /**
  * clean up library variables.
- *
  * @internal
  * @uses $GLOBALS['._pirogue.site_notices.index']
- *
  * @return void
  */
 function _dispose(): void
@@ -51,10 +45,8 @@ function _dispose(): void
 }
 
 /**
- * cear existing notices from session list and return removed notices.
- *
+ * clear existing notices from session list and return removed notices.
  * @uses $GLOBALS['._pirogue.site_notices.index']
- *
  * @return array the list of cleared session notices in a [type,text] format.
  */
 function clear(): array
@@ -66,9 +58,7 @@ function clear(): array
 
 /**
  * append site notice to list of existing notices.
- *
  * @uses $GLOBALS['._pirogue.site_notices.index']
- *
  * @param int $type the code for the notice type to add.
  * @param string $message the notice's message.
  */

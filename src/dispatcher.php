@@ -3,7 +3,6 @@
 /**
  * library for handling basic dispatcher actions.
  * php version 8.0.0
- *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
@@ -14,32 +13,28 @@ use ErrorException;
 
 /**
  * the site's base address.
- *
  * @var string $GLOBALS['.pirogue.dispatcher.address']
  */
 $GLOBALS['.pirogue.dispatcher.address'] = '';
 
 /**
- * the client's requested path.
- *
+ * the requested path.
  * @var string $GLOBALS['.pirogue.dispatcher.request_path']
  */
 $GLOBALS['.pirogue.dispatcher.request_path'] = '';
 
 /**
- * the client's requested data.
- *
+ * the requested data.
  * @var string $GLOBALS['.pirogue.dispatcher.request_data']
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = [];
 
 /**
  * setup dispatcher library.
- *
+ * @internal
  * @uses $GLOBALS['.pirogue.dispatcher.address']
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
- *
  * @param string $address the base address for the site.
  * @param string $request_path a string containing the path the the client's requested resource.
  * @param array $request_data array containing the request data passed from the client.
@@ -54,11 +49,10 @@ function _init(string $address, string $request_path, array $request_data): void
 
 /**
  * clean up memory for library
- *
+ * @internal
  * @uses $GLOBALS['.pirogue.dispatcher.address']
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
- *
  * @return void
  */
 function _dispose(): void
@@ -72,9 +66,7 @@ function _dispose(): void
 
 /**
  * send content to user.
- *
  * @internal
- *
  * @param string $content the content that will be sent to the client.
  * @return void
  */
@@ -106,14 +98,9 @@ function _send(string $content): void
 
 /**
  * translate a PHP triggered errors into SPL ErrorException instance.
- *
- *
  * @throws ErrorException
- *
  * @uses ErrorException
- *
- * @internal registered to error handler by dispatcher.
- *
+ * @internal
  * @param int $number the error code encountered.
  * @param string $message a message describing the error.
  * @param string $file the file the error was encountered in.
@@ -130,7 +117,7 @@ function _error_handler(int $number, string $message, string $file, int $line): 
 
 /**
  * clear all output buffers and return contents.
- *
+ * @internal
  * @return string contents of all buffers.
  */
 function _buffer_clear(): string
@@ -144,7 +131,6 @@ function _buffer_clear(): string
 
 /**
  * redirect user to new address. this function calls exit() to terminated any further code execution.
- *
  * @param string $address the address to redirect too. If no address is specified the page is refreshed.
  * @param int $status_code the http status code to use in the redirect process.
  * @return void.
@@ -157,17 +143,16 @@ function redirect(string $address, int $status_code = 301): void
 
 /**
  * create url to resource relative to site base.
- *
  * @uses $GLOBALS['.pirogue.dispatcher.address']
- *
  * @param string $path the path to the resource.
  * @param array $data an array containing key => value pairs of data use as request parameters.
  * @return string the url created from user input.
  */
 function url_create(string $path, array $data): string
 {
+    $pattern_code = ('' == $path ? 0 : 1) | (empty($data) ? 0 : 2);
     return sprintf(
-        match (('' == $path ? 0 : 1) | (empty($data) ? 0 : 2)) {
+        match ($pattern_code) {
             0 => '%s',
             1 => '%s/%s',
             2 => '%s?%s',
@@ -181,11 +166,9 @@ function url_create(string $path, array $data): string
 
 /**
  * get the current url.
- *
  * @uses _url_create()
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
- *
  * @return string the current requested url.
  */
 function url_current(): string
@@ -198,7 +181,6 @@ function url_current(): string
 
 /**
  * convert url into a callback string to be passed as a http query variable.
- *
  * @param string $url the url to create a callback from.
  * @return string parsed callback.
  */
@@ -209,7 +191,6 @@ function callback_create(string $url): string
 
 /**
  * parse callback string into a url.
- *
  * @param string $callback the request data.
  * @return array parsed callback in the form of a url.
  */
@@ -220,7 +201,6 @@ function callback_parse(string $callback): string
 
 /**
  * convert path from string to array and removes the '_' prefix that denotes a internal path name.
- *
  * @param string $path the path to convert to array.
  * @return array an array containing the path.
  */

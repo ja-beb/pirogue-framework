@@ -58,9 +58,11 @@ function _init(string $label): void
 function _dispose(): void
 {
     session_id() && session_write_close();
+
     if (array_key_exists('._pirogue.user_session.label_user', $GLOBALS)) {
         unset($GLOBALS['._pirogue.user_session.label_user']);
     }
+
     if (array_key_exists('._pirogue.user_session.label_data', $GLOBALS)) {
         unset($GLOBALS['._pirogue.user_session.label_data']);
     }

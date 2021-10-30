@@ -7,14 +7,12 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\dispatcher\_init;
-use function pirogue\dispatcher\_dispose;
-use function pirogue\dispatcher\url_create;
+use pirogue\dispatcher;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'dispatcher.php']));
 
-_init(
+dispatcher\_init(
     $GLOBALS['.pirogue-testing.dispatcher.address'],
     $GLOBALS['.pirogue-testing.dispatcher.request_path'],
     $GLOBALS['.pirogue-testing.dispatcher.request_data']
@@ -28,7 +26,7 @@ $GLOBALS['._pirogue-testing.dispatcher.url'] = sprintf(
 );
 
 pirogue_test_execute(sprintf('url_create(): "%s"', $GLOBALS['._pirogue-testing.dispatcher.url']), function () {
-    $url_build = url_create(
+    $url_build = dispatcher\url_create(
         $GLOBALS['.pirogue-testing.dispatcher.request_path'],
         $GLOBALS['.pirogue-testing.dispatcher.request_data']
     );
@@ -41,7 +39,7 @@ $GLOBALS['._pirogue-testing.dispatcher.url'] = sprintf(
     $GLOBALS['.pirogue-testing.dispatcher.request_path']
 );
 pirogue_test_execute(sprintf('url_create(): "%s"', $GLOBALS['._pirogue-testing.dispatcher.url']), function () {
-    $url_build = url_create(
+    $url_build = dispatcher\url_create(
         $GLOBALS['.pirogue-testing.dispatcher.request_path'],
         []
     );
@@ -50,10 +48,7 @@ pirogue_test_execute(sprintf('url_create(): "%s"', $GLOBALS['._pirogue-testing.d
 
 $GLOBALS['._pirogue-testing.dispatcher.url'] = $GLOBALS['.pirogue-testing.dispatcher.address'];
 pirogue_test_execute(sprintf('url_create(): "%s"', $GLOBALS['._pirogue-testing.dispatcher.url']), function () {
-    $url_build = url_create(
-        '',
-        []
-    );
+    $url_build = dispatcher\url_create('', []);
     return  $url_build == $GLOBALS['._pirogue-testing.dispatcher.url'] ? '' : sprintf('invalid url returned "%s"', $url_build);
 });
 
@@ -64,11 +59,11 @@ $GLOBALS['._pirogue-testing.dispatcher.url'] = sprintf(
     http_build_query(['list' => [ 'true', 'true', 'false']]),
 );
 pirogue_test_execute(sprintf('url_create(): "%s"', $GLOBALS['._pirogue-testing.dispatcher.url']), function () {
-    $url_build = url_create(
+    $url_build = dispatcher\url_create(
         $GLOBALS['.pirogue-testing.dispatcher.request_path'],
         ['list' => [ 'true', 'true', 'false']]
     );
     return  $url_build == $GLOBALS['._pirogue-testing.dispatcher.url'] ? '' : sprintf('invalid url returned "%s"', $url_build);
 });
 
-_dispose();
+dispatcher\_dispose();

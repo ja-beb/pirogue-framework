@@ -8,10 +8,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-use function pirogue\user_session\_init;
-use function pirogue\user_session\_end;
-use function pirogue\user_session\_dispose;
-use function pirogue\user_session\current_session;
+use pirogue\user_session;
 
 /**
  * Helper function to test session end.
@@ -25,7 +22,7 @@ use function pirogue\user_session\current_session;
 function _user_session_test_end(bool $clear_data, string $message_cleared = '', string $message_not_cleared = ''): string
 {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = $GLOBALS['._pirogue-testing.user_session.list'];
-    _end($clear_data);
+    user_session\_end($clear_data);
     return empty($_SESSION[$GLOBALS['._pirogue.user_session.label_data']]) ? $message_cleared : $message_not_cleared;
 }
 
@@ -34,24 +31,22 @@ require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'user_session.php']);
 
 $_SESSION = [];
-_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-pirogue_test_execute('_user_session_end(): end session', function () {
+user_session\_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
+pirogue_test_execute('_end(): end session', function () {
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] = $GLOBALS['._pirogue-testing.user_session.user'];
-    _end();
-    return null == current_session() ? '' : 'User session not properly ended.';
+    user_session\_end();
+    return null == user_session\current_session() ? '' : 'User session not properly ended.';
 });
-_dispose();
 
-_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-pirogue_test_execute('_user_session_end(): session data not cleared', fn () => _user_session_test_end(
+pirogue_test_execute('_end(): session data not cleared', fn () => _user_session_test_end(
     clear_data: true,
     message_not_cleared: 'User session data not cleared.',
 ));
-_dispose();
 
-_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
-pirogue_test_execute('_user_session_end(): session data cleared', fn () => _user_session_test_end(
+pirogue_test_execute('_end(): session data cleared', fn () => _user_session_test_end(
     clear_data: false,
     message_cleared: 'User session data cleared.',
 ));
-_dispose();
+
+user_session\_dispose();
+unset($_SESSION);

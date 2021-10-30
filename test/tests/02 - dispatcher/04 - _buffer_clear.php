@@ -7,7 +7,7 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\dispatcher\_buffer_clear;
+use pirogue\dispatcher;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
@@ -16,8 +16,7 @@ pirogue_test_execute('_buffer_clear()', function () {
         ob_start();
         printf('THIS IS BUFFER #%d', $i);
     }
-    _buffer_clear();
-
+    dispatcher\_buffer_clear();
     $buffer = ob_get_clean();
     return empty($buffer) ? '' : 'buffer not cleared.';
 });

@@ -8,13 +8,13 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-use function pirogue\dispatcher\_error_handler;
+use pirogue\dispatcher;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
 pirogue_test_execute('_error_handler(): call directly', function () {
     try {
-        _error_handler(42, 'my custom error', __FILE__, __LINE__);
+        dispatcher\_error_handler(42, 'my custom error', __FILE__, __LINE__);
         return 'Error not thrown.';
     } catch (Throwable) {
         return '';

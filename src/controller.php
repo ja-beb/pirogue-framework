@@ -1,9 +1,8 @@
 <?php
 
 /**
- * library used to work with controllers at a high level.
- * php version 8.0.0
- *
+ * controller handing.
+ * php version 8.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
@@ -11,16 +10,14 @@
 namespace pirogue\controller;
 
 /**
- * controller file format.
- *
+ * controller file's path format for sprintf().
  * @internal
  * @var string $GLOBALS['._pirogue.controller.path_format']
  */
 $GLOBALS['._pirogue.controller_import.path_format'] = '';
 
 /**
- * controller call stack.
- *
+ * a stack containing reegistered controllers.
  * @internal
  * @var string $GLOBALS['._pirogue.controller.call_stack']
  */
@@ -28,10 +25,9 @@ $GLOBALS['._pirogue.controller_import.call_stack'] = [];
 
 /**
  * initialize controller library.
- *
+ * @internal
  * @uses $GLOBALS['._pirogue.controller_import.call_stack']
  * @uses $GLOBALS['._pirogue.controller_import.path_format']
- *
  * @param string $name the name of the module to initialize.
  * @return void
  */
@@ -43,10 +39,9 @@ function _init(string $name): void
 
 /**
  * finalize controller library.
- *
+ * @internal
  * @uses $GLOBALS['._pirogue.controller_import.call_stack']
  * @uses $GLOBALS['._pirogue.controller_import.path_format']
- *
  * @return void
  */
 function _dispose(): void
@@ -59,7 +54,6 @@ function _dispose(): void
 
 /**
  * convert string from kebab case to camel case.
- *
  * @param string $value string to be converted.
  * @return string converted string.
  */
@@ -70,14 +64,12 @@ function convert_case(string $value): string
 
 /**
  * return the name of the current controller on the callstack.
- *
- * @uses $GLOBALS['._pirogue.controller_import.call_stack'],
- *
+ * @uses $GLOBALS['._pirogue.controller_import.call_stack']
  * @return string name of the current controller or null if no controller has been registered.
  */
-function current_controller(): ?string
+function current(): ?string
 {
-    return current($GLOBALS['._pirogue.controller_import.call_stack']);
+    return \current($GLOBALS['._pirogue.controller_import.call_stack']) ?? null;
 }
 
 /**
@@ -93,9 +85,7 @@ function register(string $name): int
 }
 
 /**
- * build the path to the desired controller given user inputed array.
- * will remove last element of the array until it is empty or the file has been found.
- *
+ * find the path to a controller file.
  * @uses $GLOBALS['._pirogue.controller_import.controller_format']
  * @param array $path an array of strings to build the path from.
  * @return ?string path if file is found or null.
@@ -111,11 +101,8 @@ function build_path(array $path): ?string
 }
 
 /**
- * translate (controller name, action name, request method) to the routing function.
- * this will default to request method 'get' if none found.
- *
- * @uses pirogue\controller\convert_case() to clean string of kebab case passed in from the HTTP request path.
- *
+ * translate (controller name, action name, request method) to the routing function - defaults to the request method 'get' if not found.
+ * @uses pirogue\controller\convert_case()
  * @param string $controller_name name of the controller.
  * @param string $action_name name of the requested action.
  * @param string $request_method the http request method to check for route action.

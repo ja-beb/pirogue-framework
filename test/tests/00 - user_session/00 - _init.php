@@ -8,15 +8,14 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-use function pirogue\user_session\_init;
-use function pirogue\user_session\_dispose;
+use pirogue\user_session;
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'user_session.php']);
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'user_session.php']);
 
 $_SESSION = [];
-_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
+user_session\_init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 pirogue_test_execute('_init(): initialize ._pirogue.user_session.label_user', function () {
     if (false == array_key_exists('._pirogue.user_session.label_user', $GLOBALS)) {
         return ['00 - var "._pirogue.user_session.label_user" not initialized.'];
@@ -67,7 +66,7 @@ pirogue_test_execute('_init(): user data', function () {
         return '';
     }
 });
-_dispose();
+user_session\_dispose();
 
 pirogue_test_execute('_dispose(): $GLOBALS[\'._pirogue.user_session.label_user\']', function () {
     return array_key_exists('._pirogue.user_session.label_user', $GLOBALS) ? 'value still set.' : '';

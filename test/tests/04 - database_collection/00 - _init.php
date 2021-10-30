@@ -1,45 +1,40 @@
 <?php
 
 /**
- * Testing _init().
+ * Testing _init() and _dispose().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\database_collection\_init;
-use function pirogue\database_collection\_dispose;
+use pirogue\database_collection;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'database_collection.php']));
 
-$GLOBALS['.pirogue-testing.database_collection.pattern'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config', 'mysqli-%s.ini']);
+$GLOBALS['.pirogue-testing.database_collection.path_format'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config', 'mysqli-%s.ini']);
 
-_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
-pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.pattern']", function () {
-    return $GLOBALS['.pirogue-testing.database_collection.pattern'] == $GLOBALS['._pirogue.database_collection.pattern']
+database_collection\_init($GLOBALS['.pirogue-testing.database_collection.path_format'], 'website');
+pirogue_test_execute('_init()', function () {
+    return $GLOBALS['.pirogue-testing.database_collection.path_format'] == $GLOBALS['._pirogue.database_collection.path_format']
         ? ''
-        : "invalid value for \$GLOBALS['._pirogue.database_collection.pattern']";
+        : 'invalid value for path format';
 });
-_dispose();
 
-_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
-pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.default']", function () {
+pirogue_test_execute('_init()', function () {
     return 'website' == $GLOBALS['._pirogue.database_collection.default']
         ? ''
-        : "invalid value for \$GLOBALS['._pirogue.database_collection.default']]";
+        : 'invalid value for default conneection';
 });
-_dispose();
 
-_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
-pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.connections']", function () {
+pirogue_test_execute('_init()', function () {
     return empty($GLOBALS['._pirogue.database_collection.connections'])
         ? ''
-        : "invalid value for \$GLOBALS['._pirogue.database_collection.connections']";
+        : 'invalid value for collections';
 });
-_dispose();
+database_collection\_dispose();
 
-_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'invalid');
-pirogue_test_execute("_init(): invalid default database", function () {
+database_collection\_init($GLOBALS['.pirogue-testing.database_collection.path_format'], 'invalid');
+pirogue_test_execute('_init()', function () {
     try {
         $database_connection = pirogue_database_collection_get();
         return 'invalid database connnection was returned.';
@@ -47,4 +42,8 @@ pirogue_test_execute("_init(): invalid default database", function () {
         return '';
     }
 });
-_dispose();
+
+database_collection\_dispose();
+pirogue_test_execute('_dispose()', fn () => array_key_exists('._pirogue.database_collection.path_format', $GLOBALS) ? 'did not unset "._pirogue.database_collection.path_format"' : '');
+pirogue_test_execute('_dispose()', fn () => array_key_exists('._pirogue.database_collection.default', $GLOBALS) ? 'did not unset "._pirogue.database_collection.default"' : '');
+pirogue_test_execute('_dispose()', fn () => array_key_exists('._pirogue.database_collection.connections', $GLOBALS) ? 'did not unset "._pirogue.database_collection.connections"' : '');

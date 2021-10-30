@@ -7,7 +7,7 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\dispatcher\request_path_parse;
+use pirogue\dispatcher;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
@@ -16,7 +16,7 @@ pirogue_test_execute('request_path_parse()', function () {
         'output' => ['first', 'second', 'third'],
         'input' => 'first/_second/__third',
     ];
-    $results = request_path_parse($data['input']);
+    $results = dispatcher\request_path_parse($data['input']);
 
     for ($i = 0; $i < count($results); $i++) {
         if ($results[$i] != $data['output'][$i]) {

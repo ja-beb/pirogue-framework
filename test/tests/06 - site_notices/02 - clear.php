@@ -8,18 +8,17 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-use function pirogue\site_notices\_init;
-use function pirogue\site_notices\_dispose;
-use function pirogue\site_notices\clear;
+use pirogue\site_notices;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'site_notices.php']));
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'site_notices.php']));
 
-pirogue_test_execute("clear()", function () {
-    $_SESSION = [];
-    _init(_PIROGUE_TESTING_SITE_NOTICES_LABEL);
+$_SESSION = [];
+site_notices\_init(_PIROGUE_TESTING_SITE_NOTICES_LABEL);
+
+pirogue_test_execute('clear()', function () {
     $_SESSION[_PIROGUE_TESTING_SITE_NOTICES_LABEL] = $GLOBALS['.pirogue-testing.session_notices.notices'];
-    $list = clear();
+    $list = site_notices\clear();
     if (!empty($_SESSION[_PIROGUE_TESTING_SITE_NOTICES_LABEL])) {
         return '00 - site notices were not cleared.';
     } elseif ($list != $GLOBALS['.pirogue-testing.session_notices.notices']) {
@@ -28,3 +27,4 @@ pirogue_test_execute("clear()", function () {
         return '';
     }
 });
+site_notices\_dispose();

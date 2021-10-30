@@ -7,22 +7,20 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\controller\_init;
-use function pirogue\controller\_dispose;
-use function pirogue\controller\build_path;
+use pirogue\controller;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'controller.php']));
 
-pirogue_test_execute("controller_current(): valid controller", function () {
-    _init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', '%s.php']));
-    $path = build_path(['example-controller', 'index']);
-    _dispose();
+controller\_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', '%s.php']));
+pirogue_test_execute('controller_current(): valid controller', function () {
+    $path = controller\build_path(['example-controller', 'index']);
+    controller\_dispose();
     return '/pirogue/controllers/example-controller.php' == $path ? '' : sprintf('invalid controller path returned "%s".', $path);
 });
 
-pirogue_test_execute("controller_current(): invalid controller", function () {
-    _init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', '%s.php']));
-    $path = build_path(['missing-controller', 'index']);
-    _dispose();
+pirogue_test_execute('controller_current(): invalid controller', function () {
+    controller\_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controllers', '%s.php']));
+    $path = controller\build_path(['missing-controller', 'index']);
     return '' == $path ? '' : sprintf('invalid controller path returned "%s".', $path);
 });
+controller\_dispose();
