@@ -9,28 +9,39 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue;
+namespace pirogue\view_html;
 
 /**
  * file path pattern for the html view file.
  *
  * @internal
- * @var string $GLOBALS['._pirogue.html_view.pattern']
+ * @var string $GLOBALS['._pirogue.view_html.pattern']
  */
-$GLOBALS['._pirogue.html_view.pattern'] = '';
+$GLOBALS['._pirogue.view_html.pattern'] = '';
 
 /**
  * initialize view
- *
- * @uses $GLOBALS['._pirogue.html_view.pattern']
+ * @internal
+ * @uses $GLOBALS['._pirogue.view_html.pattern']
  * @param string $pattern the pattern used to build view file paths.
  * @return void
  */
-function html_view_init(string $pattern)
+function _init(string $pattern): void
 {
-    $GLOBALS['._pirogue.html_view.pattern'] = $pattern;
+    $GLOBALS['._pirogue.view_html.pattern'] = $pattern;
 }
 
+/**
+ * clean up library before exit.
+ * @internal
+ * @uses $GLOBALS['._pirogue.view_html.pattern']
+ *
+ * @return void
+ */
+function _finalize(): void
+{
+    unset($GLOBALS['._pirogue.view_html.pattern']);
+}
 /**
  * create html view array.
  *
@@ -39,7 +50,7 @@ function html_view_init(string $pattern)
  * @param string $page_class class of page.
  * @return array array to hold html view data.
  */
-function html_view_create(string $title = '', string $id = '', string $class = '', array $path = []): array
+function create(string $title = '', string $id = '', string $class = '', array $path = []): array
 {
     return [
         'head' => ['title' => $title, 'content' => ''],
@@ -57,26 +68,26 @@ function html_view_create(string $title = '', string $id = '', string $class = '
 /**
  * load view file.
  *
- * @uses $GLOBALS['._pirogue.html_view.pattern']
+ * @uses $GLOBALS['._pirogue.view_html.pattern']
  * @param string $view view to load.
  * @param array $view_data data to pass to view.
  * @param array $page_data page data to use in building this page. Returns data from view.
  * @return array page data.
  */
-function html_view_load(string $view, array $view_data = [], array $html_view = null): array
+function load(string $view, array $view_data = [], array $view_html = null): array
 {
-    $view_file = sprintf($GLOBALS['._pirogue.html_view.pattern'], $view);
+    $view_file = sprintf($GLOBALS['._pirogue.view_html.pattern'], $view);
     if (!file_exists($view_file)) {
         trigger_error(sprintf('requested view file "%s" does not exists.', $view));
         return [];
     }
 
     // initialize html view if not provided.
-    $html_view = null == $html_view ? html_view_create() : $html_view;
+    $view_html = null == $view_html ? create() : $view_html;
 
     // load view and return output as body content.
     ob_start();
     require $view_file;
-    $html_view['body']['content'] = ob_get_clean();
-    return $html_view;
+    $view_html['body']['content'] = ob_get_clean();
+    return $view_html;
 }
