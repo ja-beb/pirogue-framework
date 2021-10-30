@@ -9,7 +9,22 @@
 
 namespace example_controller;
 
-function _init(string $name){}
+/**
+ * initialize this library.
+ *
+ * @internal
+ * @param string $name
+ * @return void
+ */
+function _init(string $name): void{}
+
+/**
+ * finalize this library.
+ * 
+ * @internal
+ * @return void
+ */
+function _finalize(): void{}
 
 /**
  * validate access.

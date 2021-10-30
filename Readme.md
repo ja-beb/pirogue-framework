@@ -27,9 +27,10 @@ Any parts of a path that are prefixed with a '_' character are considered "prote
 - _private/end-point.phtml = internal file.
 - public/_private.phtml = internal file.
 ## Controllers
-Controllers are loaded from a seperate folder and should implement the following functions within their own namespace.
-- "{$controller name}\_init" - required
-- "{$controller name}\_has_access" - optional, will default to access set by controller_init().
+Controllers are loaded from a seperate folder and should implement the following interface. within their own namespace.
+- "{$controller name}\_init"
+- "{$controller name}\_finalize" 
+- "{$controller name}\_has_access"
 - "{$controller name}\_error_403" - optional, intercepts and handles HTTP 403 errors form default controller.
 - "{$controller name}\_error_404" - optional, intercepts and handles HTTP 404 errors form default controller.
 - "{$controller name}\_error_405" - optional, intercepts and handles HTTP 405 errors form default controller.
