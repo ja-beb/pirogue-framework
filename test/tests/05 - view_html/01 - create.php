@@ -1,23 +1,23 @@
 <?php
 
 /**
- * Testing html_view_create()
+ * Testing create()
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\html_view_create;
+use function pirogue\view_html\create;
 
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'html_view.php']));
+require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'view_html.php']));
 
-pirogue_test_execute("html_view_create(): check return value", function () {
+pirogue_test_execute("create(): check return value", function () {
     $title = 'my title';
     $id = 'my id';
     $class = 'my class';
     $path = 'my/path';
 
-    $html_view = html_view_create(title: $title, id: $id, class: $class, path: explode('/', $path));
+    $html_view = create(title: $title, id: $id, class: $class, path: explode('/', $path));
 
     if ($html_view['head']['title'] != $title) {
         return 'title not properly updated . ';
