@@ -7,22 +7,24 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\dispatcher_init;
-use function pirogue\dispatcher_callback_create;
-use function pirogue\dispatcher_url_current;
+use function pirogue\dispatcher\_init;
+use function pirogue\dispatcher\_finalize;
+use function pirogue\dispatcher\callback_create;
+use function pirogue\dispatcher\url_current;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'dispatcher.php']));
 
 
-dispatcher_init(
+_init(
     $GLOBALS['.pirogue-testing.dispatcher.address'],
     $GLOBALS['.pirogue-testing.dispatcher.request_path'],
     $GLOBALS['.pirogue-testing.dispatcher.request_data']
 );
 
-pirogue_test_execute(sprintf('dispatcher_callback_create(): %s', dispatcher_url_current()), function () {
-    return dispatcher_callback_create(dispatcher_url_current()) == urlencode(dispatcher_url_current())
+pirogue_test_execute(sprintf('callback_create(): %s', url_current()), function () {
+    return callback_create(url_current()) == urlencode(url_current())
         ? ''
         : 'invalid return value';
 });
+_finalize();

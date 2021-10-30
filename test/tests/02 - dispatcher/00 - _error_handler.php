@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-use function pirogue\_error_handler;
+use function pirogue\dispatcher\_error_handler;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
@@ -23,7 +23,7 @@ pirogue_test_execute('_error_handler(): call directly', function () {
 
 pirogue_test_execute('_error_handler(): register and throw exception', function () {
     try {
-        set_error_handler('pirogue\_error_handler');
+        set_error_handler('pirogue\dispatcher\_error_handler');
         throw new Exception("thrown exception");
         return 'Error not thrown.';
     } catch (Throwable) {
@@ -33,7 +33,7 @@ pirogue_test_execute('_error_handler(): register and throw exception', function 
 
 pirogue_test_execute('_error_handler(): register and throw error', function () {
     try {
-        set_error_handler('pirogue\_error_handler');
+        set_error_handler('pirogue\dispatcher\_error_handler');
         trigger_error('My triggered error');
         return 'Error not thrown.';
     } catch (Throwable) {
@@ -43,7 +43,7 @@ pirogue_test_execute('_error_handler(): register and throw error', function () {
 
 pirogue_test_execute('_dispatcher_error_handler(): register and case error', function () {
     try {
-        set_error_handler('pirogue\_dispatcher_error_handler');
+        set_error_handler('pirogue\dispatcher\_error_handler');
         1 / 0;
         return 'Error not thrown.';
     } catch (Throwable) {

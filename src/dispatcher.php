@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue;
+namespace pirogue\dispatcher;
 
 use ErrorException;
 
@@ -45,11 +45,29 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = [];
  * @param array $request_data array containing the request data passed from the client.
  * @return void
  */
-function dispatcher_init(string $address, string $request_path, array $request_data): void
+function _init(string $address, string $request_path, array $request_data): void
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
     $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
+}
+
+/**
+ * clean up memory for library
+ *
+ * @uses $GLOBALS['.pirogue.dispatcher.address']
+ * @uses $GLOBALS['.pirogue.dispatcher.request_path']
+ * @uses $GLOBALS['.pirogue.dispatcher.request_data']
+ *
+ * @return void
+ */
+function _finalize(): void
+{
+    unset(
+        $GLOBALS['.pirogue.dispatcher.address'],
+        $GLOBALS['.pirogue.dispatcher.request_path'],
+        $GLOBALS['.pirogue.dispatcher.request_data'],
+    );
 }
 
 /**
@@ -60,7 +78,7 @@ function dispatcher_init(string $address, string $request_path, array $request_d
  * @param string $content the content that will be sent to the client.
  * @return void
  */
-function _dispatcher_send(string $content): void
+function _send(string $content): void
 {
     ob_start('ob_gzhandler');
 
@@ -92,6 +110,8 @@ function _dispatcher_send(string $content): void
  *
  * @throws ErrorException
  *
+ * @uses ErrorException
+ *
  * @internal registered to error handler by dispatcher.
  *
  * @param int $number the error code encountered.
@@ -100,7 +120,7 @@ function _dispatcher_send(string $content): void
  * @param int $line the line that the error was encountered at.
  * @return boolean continuation flag.
  */
-function _dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
+function _error_handler(int $number, string $message, string $file, int $line): bool
 {
     if ($number & error_reporting()) {
         throw new ErrorException($message, 0, $number, $file, $line);
@@ -113,7 +133,7 @@ function _dispatcher_error_handler(int $number, string $message, string $file, i
  *
  * @return string contents of all buffers.
  */
-function _dispatcher_buffer_clear(): string
+function _buffer_clear(): string
 {
     $buffer = '';
     while (0 < ob_get_level()) {
@@ -129,7 +149,7 @@ function _dispatcher_buffer_clear(): string
  * @param int $status_code the http status code to use in the redirect process.
  * @return void.
  */
-function dispatcher_redirect(string $address, int $status_code = 301): void
+function redirect(string $address, int $status_code = 301): void
 {
     header(sprintf('Location: %s', $address), true, $status_code);
     exit();
@@ -144,7 +164,7 @@ function dispatcher_redirect(string $address, int $status_code = 301): void
  * @param array $data an array containing key => value pairs of data use as request parameters.
  * @return string the url created from user input.
  */
-function dispatcher_url_create(string $path, array $data): string
+function url_create(string $path, array $data): string
 {
     return sprintf(
         match (('' == $path ? 0 : 1) | (empty($data) ? 0 : 2)) {
@@ -162,15 +182,15 @@ function dispatcher_url_create(string $path, array $data): string
 /**
  * get the current url.
  *
- * @uses _dispatcher_url_create()
+ * @uses _url_create()
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  *
  * @return string the current requested url.
  */
-function dispatcher_url_current(): string
+function url_current(): string
 {
-    return dispatcher_url_create(
+    return url_create(
         $GLOBALS['.pirogue.dispatcher.request_path'],
         $GLOBALS['.pirogue.dispatcher.request_data']
     );
@@ -182,7 +202,7 @@ function dispatcher_url_current(): string
  * @param string $url the url to create a callback from.
  * @return string parsed callback.
  */
-function dispatcher_callback_create(string $url): string
+function callback_create(string $url): string
 {
     return urlencode($url);
 }
@@ -193,7 +213,7 @@ function dispatcher_callback_create(string $url): string
  * @param string $callback the request data.
  * @return array parsed callback in the form of a url.
  */
-function dispatcher_callback_parse(string $callback): string
+function callback_parse(string $callback): string
 {
     return urldecode($callback);
 }
@@ -204,7 +224,7 @@ function dispatcher_callback_parse(string $callback): string
  * @param string $path the path to convert to array.
  * @return array an array containing the path.
  */
-function dispatcher_path_convert_to_array(string $path): array
+function request_path_parse(string $path): array
 {
     $result = [];
     foreach (explode('/', $path) as $key => $value) {
