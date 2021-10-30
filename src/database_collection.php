@@ -56,7 +56,7 @@ function database_collection_init(string $pattern, string $default): void
     $GLOBALS['._pirogue.database_collection.connections'] = [];
 
     // register destruct function.
-    register_shutdown_function('pirogue\_database_collection_destruct');
+    register_shutdown_function('pirogue\_database_collection_finalize');
 }
 
 /**
@@ -67,7 +67,7 @@ function database_collection_init(string $pattern, string $default): void
  *
  * @return void
  */
-function _database_collection_destruct(): void
+function _database_collection_finalize(): void
 {
     foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
         if ('mysqli' == get_class($connection)) {

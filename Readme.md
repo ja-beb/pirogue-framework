@@ -11,7 +11,7 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 - kebab case for path components, array labels, and form input labels (example: site-users/user-assignment.json).
 ### Functions
 - pirogue\ibrary_init() = library initialize function.
-- pirogue\_library_destruct() = internal function, library destructor function registered when library is initialized.
+- pirogue\_library_finalize() = internal function, library destructor function registered when library is initialized.
 - pirogue\library_name_func() = public function within a library (ie dispatcher_route()).
 - pirogue\_library_name_func() = internal function, used within dispatcher and library only. 
 ### Global Variables

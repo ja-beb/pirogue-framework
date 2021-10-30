@@ -29,7 +29,7 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
 /**
  * initialize user session library.
  *
- * @uses _user_session_destruct()
+ * @uses _user_session_finalize()
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  *
@@ -44,7 +44,7 @@ function user_session_init(string $label): void
     $_SESSION[$GLOBALS['._pirogue.user_session.label_user']] ??= null;
     $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] ??= [];
 
-    register_shutdown_function('pirogue\_user_session_destruct');
+    register_shutdown_function('pirogue\_user_session_finalize');
 }
 
 /**
@@ -54,7 +54,7 @@ function user_session_init(string $label): void
  *
  * @return void
  */
-function _user_session_destruct(): void
+function _user_session_finalize(): void
 {
     session_id() && session_write_close();
 }
