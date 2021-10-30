@@ -8,10 +8,14 @@
  */
 
 use function pirogue\controller\current_controller;
+use function pirogue\controller\_init;
+use function pirogue\controller\_finalize;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'controller.php']));
 
+_init('');
 pirogue_test_execute("current()", function () {
     $name = $GLOBALS['._pirogue.controller_import.call_stack'][0] ?? '';
     return current_controller() == $name ? '' : 'invalid controller name.';
 });
+_finalize();

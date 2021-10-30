@@ -7,39 +7,44 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
- use function pirogue\database_collection\_init;
+use function pirogue\database_collection\_init;
+use function pirogue\database_collection\_finalize;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'database_collection.php']));
 
 $GLOBALS['.pirogue-testing.database_collection.pattern'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config', 'mysqli-%s.ini']);
 
+_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
 pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.pattern']", function () {
-    _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
     return $GLOBALS['.pirogue-testing.database_collection.pattern'] == $GLOBALS['._pirogue.database_collection.pattern']
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.pattern']";
 });
+_finalize();
 
+_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
 pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.default']", function () {
-    _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
     return 'website' == $GLOBALS['._pirogue.database_collection.default']
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.default']]";
 });
+_finalize();
 
+_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
 pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.connections']", function () {
-    _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
     return empty($GLOBALS['._pirogue.database_collection.connections'])
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.connections']";
 });
+_finalize();
 
+_init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'invalid');
 pirogue_test_execute("_init(): invalid default database", function () {
     try {
-        _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'invalid');
         $database_connection = pirogue_database_collection_get();
         return 'invalid database connnection was returned.';
     } catch (Throwable) {
         return '';
     }
 });
+_finalize();

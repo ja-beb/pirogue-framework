@@ -7,7 +7,8 @@
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
- use function pirogue\cdn\_init;
+use function pirogue\cdn\_init;
+use function pirogue\cdn\_finalize;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'cdn.php']));
 
@@ -25,3 +26,5 @@ pirogue_test_execute("_init(): \$GLOBALS['._pirogue.cdn.current_index']", functi
         ? ''
         : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";
 });
+
+_finalize();

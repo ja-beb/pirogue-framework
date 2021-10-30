@@ -9,52 +9,54 @@
 
 use function pirogue\cdn\url_create;
 use function pirogue\cdn\_init;
+use function pirogue\cdn\_finalize;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'cdn.php']));
 
 /**
-  * Sample cdn list.
-  * @var array $GLOBALS['._pirogue-testing.cdn.list']
-  */
-  $GLOBALS['._pirogue-testing.cdn.list'] = [
-    'https://cdn00.localhost.localdomain',
-    'https://cdn01.localhost.localdomain',
-    'https://cdn02.localhost.localdomain',
-    'https://cdn03.localhost.localdomain',
-  ];
+ * Sample cdn list.
+ * @var array $GLOBALS['._pirogue-testing.cdn.list']
+ */
+$GLOBALS['._pirogue-testing.cdn.list'] = [
+  'https://cdn00.localhost.localdomain',
+  'https://cdn01.localhost.localdomain',
+  'https://cdn02.localhost.localdomain',
+  'https://cdn03.localhost.localdomain',
+];
 
-  pirogue_test_execute("url_create(): create valid url", function () {
-    _init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
-    return $GLOBALS['._pirogue-testing.cdn.list'][0] == url_create('', [])
-        ? ''
-        : 'Invalid url returned.';
-  });
+_init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
+pirogue_test_execute("url_create(): create valid url", function () {
+    return $GLOBALS['._pirogue-testing.cdn.list'][0] == url_create('', []) ? '' : 'Invalid url returned.';
+});
+_finalize();
 
-  pirogue_test_execute("url_create(): empty cdn list", function () {
+_init([]);
+pirogue_test_execute("url_create(): empty cdn list", function () {
     try {
-        _init([]);
         $GLOBALS['._pirogue-testing.cdn.list'][0] == url_create('', []);
         return 'Created url form empty list of servers.';
     } catch (\LogicException) {
         return '';
+    } finally {
     }
-  });
+});
+_finalize();
 
-  pirogue_test_execute("cdn_url_create(): create valid url with params", function () {
-    _init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
+_init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
+pirogue_test_execute("cdn_url_create(): create valid url with params", function () {
     $url = sprintf('%s/path/to/resource.css?id=1', $GLOBALS['._pirogue-testing.cdn.list'][0]);
-    return $url == url_create('path/to/resource.css', ['id' => 1])
-        ? ''
-        : 'Invalid url returned.';
-  });
+    return $url == url_create('path/to/resource.css', ['id' => 1]) ? '' : 'Invalid url returned.';
+});
+_finalize();
 
-  pirogue_test_execute("cdn_url_create(): verify \$GLOBALS['._pirogue.cdn.current_index'] starts at 0.", function () {
-    _init($GLOBALS['._pirogue-testing.cdn.list']);
+_init($GLOBALS['._pirogue-testing.cdn.list']);
+pirogue_test_execute("cdn_url_create(): verify \$GLOBALS['._pirogue.cdn.current_index'] starts at 0.", function () {
     return 0 == $GLOBALS['._pirogue.cdn.current_index'] ? '' : 'Invalid start index.';
-  });
+});
+_finalize();
 
-  pirogue_test_execute("cdn_url_create(): verify \$GLOBALS['._pirogue.cdn.current_index'] increments.", function () {
-    _init($GLOBALS['._pirogue-testing.cdn.list']);
+_init($GLOBALS['._pirogue-testing.cdn.list']);
+pirogue_test_execute("cdn_url_create(): verify \$GLOBALS['._pirogue.cdn.current_index'] increments.", function () {
     $count = count($GLOBALS['._pirogue-testing.cdn.list']);
     for ($i = 0; $i < $count; $i++) {
         url_create('path/to/resource.css', ['id' => 1]);
@@ -63,4 +65,5 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
         }
     }
     return '';
-  });
+});
+_finalize();
