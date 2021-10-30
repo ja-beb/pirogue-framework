@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing for _init() && _finalize().
+ * Testing for _init() && _dispose().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -9,7 +9,7 @@
  */
 
 use function pirogue\user_session\_init;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'user_session.php']);
@@ -67,12 +67,12 @@ pirogue_test_execute('_init(): user data', function () {
         return '';
     }
 });
-_finalize();
+_dispose();
 
-pirogue_test_execute('_finalize(): $GLOBALS[\'._pirogue.user_session.label_user\']', function () {
+pirogue_test_execute('_dispose(): $GLOBALS[\'._pirogue.user_session.label_user\']', function () {
     return array_key_exists('._pirogue.user_session.label_user', $GLOBALS) ? 'value still set.' : '';
 });
 
-pirogue_test_execute('_finalize(): $GLOBALS[\'._pirogue.user_session.label_data\']', function () {
+pirogue_test_execute('_dispose(): $GLOBALS[\'._pirogue.user_session.label_data\']', function () {
     return array_key_exists('._pirogue.user_session.label_data', $GLOBALS) ? 'value still set.' : '';
 });

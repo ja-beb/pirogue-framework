@@ -11,7 +11,7 @@
 use function pirogue\user_session\exists;
 use function pirogue\user_session\_init;
 use function pirogue\user_session\_end;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 use function pirogue\user_session\save;
 
 // load required library.
@@ -41,4 +41,4 @@ pirogue_test_execute('user_session_exists(): verify values are exist after being
 
 // clean up testing.
 _end(true);
-_finalize();
+_dispose();

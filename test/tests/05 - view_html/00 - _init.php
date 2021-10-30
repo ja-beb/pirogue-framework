@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Testing _init() and _finalize()
+ * Testing _init() and _dispose()
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
 use function pirogue\view_html\_init;
-use function pirogue\view_html\_finalize;
+use function pirogue\view_html\_dispose;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'view_html.php']));
 
@@ -20,8 +20,8 @@ pirogue_test_execute("_init()", function () {
         : 'invalid view pattern.';
 });
 
-_finalize();
-pirogue_test_execute("_finalize()", function () {
+_dispose();
+pirogue_test_execute("_dispose()", function () {
     return array_key_exists('._pirogue.view_html.pattern', $GLOBALS)
         ? 'invalid view pattern.'
         : '';

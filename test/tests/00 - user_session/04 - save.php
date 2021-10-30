@@ -10,7 +10,7 @@
 
 use function pirogue\user_session\_init;
 use function pirogue\user_session\_end;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 use function pirogue\user_session\save;
 
 // load required library.
@@ -29,4 +29,4 @@ pirogue_test_execute('save()', function () {
     return '';
 });
 _end(true);
-_finalize();
+_dispose();

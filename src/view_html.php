@@ -38,7 +38,7 @@ function _init(string $pattern): void
  *
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     unset($GLOBALS['._pirogue.view_html.pattern']);
 }

@@ -38,7 +38,7 @@ function _init(string $path_pattern): void
  * @uses $GLOBALS['._pirogue.import.path_pattern']
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     unset(
         $GLOBALS['._pirogue.import.path_pattern']

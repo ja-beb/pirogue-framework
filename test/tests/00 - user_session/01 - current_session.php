@@ -10,7 +10,7 @@
 
 use function pirogue\user_session\current_session;
 use function pirogue\user_session\_init;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'user_session.php']);
@@ -32,4 +32,4 @@ pirogue_test_execute('current_session(): verify that session exists', function (
         default => ''
     };
 });
-_finalize();
+_dispose();

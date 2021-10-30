@@ -43,7 +43,7 @@ function _init(string $index): void
  *
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     unset(
         $GLOBALS['._pirogue.site_notices.index']

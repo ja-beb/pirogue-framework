@@ -25,7 +25,7 @@ $GLOBALS['._pirogue.user_session.label_data'] = '';
 
 /**
  * initialize user session library.
- * @uses _finalize()
+ * @uses _dispose()
  * @uses $GLOBALS['._pirogue.user_session.label_user']
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
@@ -45,7 +45,7 @@ function _init(string $label): void
         $_SESSION[$GLOBALS['._pirogue.user_session.label_data']] = [];
     }
 
-    register_shutdown_function('pirogue\user_session\_finalize');
+    register_shutdown_function('pirogue\user_session\_dispose');
 }
 
 /**
@@ -55,7 +55,7 @@ function _init(string $label): void
  * @uses $GLOBALS['._pirogue.user_session.label_data']
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     session_id() && session_write_close();
     if (array_key_exists('._pirogue.user_session.label_user', $GLOBALS)) {

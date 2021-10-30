@@ -8,7 +8,7 @@
  */
 
 use function pirogue\dispatcher\_init;
-use function pirogue\dispatcher\_finalize;
+use function pirogue\dispatcher\_dispose;
 use function pirogue\dispatcher\callback_parse;
 use function pirogue\dispatcher\url_current;
 
@@ -29,4 +29,4 @@ pirogue_test_execute(sprintf('callback_parse(): %s', url_current()), function ()
         ? ''
         : 'invalid return value';
 });
-_finalize();
+_dispose();

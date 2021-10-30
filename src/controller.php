@@ -49,7 +49,7 @@ function _init(string $name): void
  *
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     unset(
         $GLOBALS['._pirogue.controller_import.path_format'],

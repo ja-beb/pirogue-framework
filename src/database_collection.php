@@ -56,7 +56,7 @@ function _init(string $pattern, string $default): void
     $GLOBALS['._pirogue.database_collection.connections'] = [];
 
     // register destruct function.
-    register_shutdown_function('pirogue\database_collection\_finalize');
+    register_shutdown_function('pirogue\database_collection\_dispose');
 }
 
 /**
@@ -67,7 +67,7 @@ function _init(string $pattern, string $default): void
  *
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     if (array_key_exists('._pirogue.database_collection.connections', $GLOBALS)) {
         foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {

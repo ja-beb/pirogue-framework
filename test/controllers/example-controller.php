@@ -24,7 +24,7 @@ function _init(string $name): void{}
  * @internal
  * @return void
  */
-function _finalize(): void{}
+function _dispose(): void{}
 
 /**
  * validate access.

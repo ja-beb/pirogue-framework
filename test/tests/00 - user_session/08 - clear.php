@@ -11,7 +11,7 @@
 use function pirogue\user_session\clear;
 use function pirogue\user_session\_init;
 use function pirogue\user_session\_end;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'user_session.php']);
@@ -44,4 +44,4 @@ pirogue_test_execute('clear(): value not cleard.', function () {
 
 // clean up enviroment
 _end(true);
-_finalize();
+_dispose();

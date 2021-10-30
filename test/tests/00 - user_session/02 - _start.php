@@ -10,7 +10,7 @@
 
 use function pirogue\user_session\_start;
 use function pirogue\user_session\_init;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 use function pirogue\user_session\_current;
 
 // load required library.
@@ -33,4 +33,4 @@ pirogue_test_execute('_user_session_start(): session set', function () {
         ? ''
         : 'User session not properly set.';
 });
-_finalize();
+_dispose();

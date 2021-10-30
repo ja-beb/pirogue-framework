@@ -8,7 +8,7 @@
  */
 
 use function pirogue\dispatcher\_init;
-use function pirogue\dispatcher\_finalize;
+use function pirogue\dispatcher\_dispose;
 use function pirogue\dispatcher\url_create;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
@@ -71,4 +71,4 @@ pirogue_test_execute(sprintf('url_create(): "%s"', $GLOBALS['._pirogue-testing.d
     return  $url_build == $GLOBALS['._pirogue-testing.dispatcher.url'] ? '' : sprintf('invalid url returned "%s"', $url_build);
 });
 
-_finalize();
+_dispose();

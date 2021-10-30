@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Test _init() and _finalize
+ * Test _init() and _dispose
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
 use function pirogue\import\_init;
-use function pirogue\import\_finalize;
+use function pirogue\import\_dispose;
 
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'import.php']);
 
@@ -21,6 +21,6 @@ pirogue_test_execute("imp_initort_init()", function () {
 });
 
 pirogue_test_execute("import_init():", function () {
-    _finalize();
+    _dispose();
     return array_key_exists('._pirogue.import.path_pattern', $GLOBALS) ? 'variables not unset.' : '';
 });

@@ -8,7 +8,7 @@
  */
 
 use function pirogue\database_collection\_init;
-use function pirogue\database_collection\_finalize;
+use function pirogue\database_collection\_dispose;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'database_collection.php']));
 
@@ -20,7 +20,7 @@ pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.pattern'
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.pattern']";
 });
-_finalize();
+_dispose();
 
 _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
 pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.default']", function () {
@@ -28,7 +28,7 @@ pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.default'
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.default']]";
 });
-_finalize();
+_dispose();
 
 _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'website');
 pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.connections']", function () {
@@ -36,7 +36,7 @@ pirogue_test_execute("_init(): \$GLOBALS['._pirogue.database_collection.connecti
         ? ''
         : "invalid value for \$GLOBALS['._pirogue.database_collection.connections']";
 });
-_finalize();
+_dispose();
 
 _init($GLOBALS['.pirogue-testing.database_collection.pattern'], 'invalid');
 pirogue_test_execute("_init(): invalid default database", function () {
@@ -47,4 +47,4 @@ pirogue_test_execute("_init(): invalid default database", function () {
         return '';
     }
 });
-_finalize();
+_dispose();

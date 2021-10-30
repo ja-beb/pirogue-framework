@@ -8,7 +8,7 @@
  */
 
 use function pirogue\controller\_init;
-use function pirogue\controller\_finalize;
+use function pirogue\controller\_dispose;
 use function pirogue\controller\build_action;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'controller.php']));
@@ -36,4 +36,4 @@ pirogue_test_execute("build_action(): testing_access_index_post", function () {
 pirogue_test_execute("build_action(): testing_access_fallback_post", function () {
     return _controller_get_action_test('example-controller', 'fallback', 'POST', 'example_controller\fallback_get');
 });
-_finalize();
+_dispose();

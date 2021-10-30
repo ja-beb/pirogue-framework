@@ -61,7 +61,7 @@ function _init(string $address, string $request_path, array $request_data): void
  *
  * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     unset(
         $GLOBALS['.pirogue.dispatcher.address'],

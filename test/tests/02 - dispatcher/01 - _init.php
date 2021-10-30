@@ -8,7 +8,7 @@
  */
 
 use function pirogue\dispatcher\_init;
-use function pirogue\dispatcher\_finalize;
+use function pirogue\dispatcher\_dispose;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'dispatcher.php']));
@@ -28,4 +28,4 @@ pirogue_test_execute("_init(): \$GLOBALS['.pirogue.dispatcher.request_data']", f
     return $GLOBALS['.pirogue-testing.dispatcher.request_data'] == $GLOBALS['.pirogue.dispatcher.request_data'] ? '' : 'invalid value.';
 });
 
-_finalize();
+_dispose();

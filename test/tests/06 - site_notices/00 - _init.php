@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing for _init() && _finalize.
+ * Testing for _init() && _dispose.
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -9,7 +9,7 @@
  */
 
 use function pirogue\site_notices\_init;
-use function pirogue\site_notices\_finalize;
+use function pirogue\site_notices\_dispose;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'site_notices.php']));
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'site_notices.php']));
@@ -24,7 +24,7 @@ pirogue_test_execute("_init(): \$GLOBALS['._pirogue.site_notices.index']", funct
         return '';
     }
 });
-_finalize();
+_dispose();
 
 pirogue_test_execute("_init(): \$_SESSION[\$GLOBALS['._pirogue.site_notices.index']]", function () {
     $_SESSION = [];
@@ -37,9 +37,9 @@ pirogue_test_execute("_init(): \$_SESSION[\$GLOBALS['._pirogue.site_notices.inde
         return '';
     }
 });
-_finalize();
+_dispose();
 
 
-pirogue_test_execute("_finalize()", function () {
+pirogue_test_execute("_dispose()", function () {
     return array_key_exists('._pirogue.site_notices.index', $GLOBALS) ? 'value not cleared.' : '';
 });

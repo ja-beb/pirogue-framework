@@ -8,7 +8,7 @@
  */
 
 use function pirogue\dispatcher\_init;
-use function pirogue\dispatcher\_finalize;
+use function pirogue\dispatcher\_dispose;
 use function pirogue\dispatcher\url_current;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
@@ -32,4 +32,4 @@ pirogue_test_execute(sprintf('url_current(): %s', $GLOBALS['._pirogue-testing.di
     return $url == $GLOBALS['._pirogue-testing.dispatcher.url'] ? '' : sprintf('invalid url returned "%s" - expecting "%s"', $url, $GLOBALS['._pirogue-testing.dispatcher.url']);
 });
 
-_finalize();
+_dispose();

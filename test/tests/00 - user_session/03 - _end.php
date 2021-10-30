@@ -10,7 +10,7 @@
 
 use function pirogue\user_session\_init;
 use function pirogue\user_session\_end;
-use function pirogue\user_session\_finalize;
+use function pirogue\user_session\_dispose;
 use function pirogue\user_session\current_session;
 
 /**
@@ -40,18 +40,18 @@ pirogue_test_execute('_user_session_end(): end session', function () {
     _end();
     return null == current_session() ? '' : 'User session not properly ended.';
 });
-_finalize();
+_dispose();
 
 _init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 pirogue_test_execute('_user_session_end(): session data not cleared', fn () => _user_session_test_end(
     clear_data: true,
     message_not_cleared: 'User session data not cleared.',
 ));
-_finalize();
+_dispose();
 
 _init(_PIROGUE_TESTING_USER_SESSION_LABEL);
 pirogue_test_execute('_user_session_end(): session data cleared', fn () => _user_session_test_end(
     clear_data: false,
     message_cleared: 'User session data cleared.',
 ));
-_finalize();
+_dispose();

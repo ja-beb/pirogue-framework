@@ -9,7 +9,7 @@
  */
 
 use function pirogue\site_notices\_init;
-use function pirogue\site_notices\_finalize;
+use function pirogue\site_notices\_dispose;
 use function pirogue\site_notices\create;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'site_notices.php']));
@@ -33,4 +33,4 @@ pirogue_test_execute("create()", function () {
         return '';
     }
 });
-_finalize();
+_dispose();
