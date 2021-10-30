@@ -65,9 +65,9 @@ function convert_case(string $value): string
 /**
  * return the name of the current controller on the callstack.
  * @uses $GLOBALS['._pirogue.controller_import.call_stack']
- * @return string name of the current controller or null if no controller has been registered.
+ * @return array the current route or null if stack is empty.
  */
-function current(): ?string
+function current(): ?array
 {
     return \current($GLOBALS['._pirogue.controller_import.call_stack']) ?? null;
 }
@@ -75,12 +75,20 @@ function current(): ?string
 /**
  * register new controller to callstack.
  * @uses $GLOBALS['._pirogue.controller_import.call_stack']
- * @param string $name name of controller to add to callstack.
+ * @param string controller_name the name of controller that is being routed.
+ * @param string string $action_name the name of the action that is being routed.
+ * @param string string $request_method the request method of this route.
  * @return int number of elements on the callstack.
  */
-function register(string $name): int
+function register(string $controller_name, string $action_name, string $request_method): int
 {
-    array_unshift($GLOBALS['._pirogue.controller_import.call_stack'], $name);
+    array_unshift($GLOBALS['._pirogue.controller_import.call_stack'], 
+        [
+            'controller_name' => $controller_name,
+            'action_name' => $action_name,
+            'request_method' => $request_method,
+        ]
+    );
     return count($GLOBALS['._pirogue.controller_import.call_stack']);
 }
 
