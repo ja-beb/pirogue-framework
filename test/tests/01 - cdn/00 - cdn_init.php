@@ -1,26 +1,26 @@
 <?php
 
 /**
- * Testing cdn_init()
+ * Testing _init()
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
- use function pirogue\cdn_init;
+ use function pirogue\cdn\_init;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'cdn.php']));
 
-pirogue_test_execute("cdn_init(): \$GLOBALS['._pirogue.cdn.address_list']", function () {
+pirogue_test_execute("_init(): \$GLOBALS['._pirogue.cdn.address_list']", function () {
     $list = ['https://cdn.localhost.localdomain'];
-    cdn_init($list);
+    _init($list);
     return $list == $GLOBALS['._pirogue.cdn.address_list']
         ? ''
         : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";
 });
 
-pirogue_test_execute("cdn_init(): \$GLOBALS['._pirogue.cdn.current_index']", function () {
-    cdn_init(['https://cdn.localhost.localdomain']);
+pirogue_test_execute("_init(): \$GLOBALS['._pirogue.cdn.current_index']", function () {
+    _init(['https://cdn.localhost.localdomain']);
     return 0 == $GLOBALS['._pirogue.cdn.current_index']
         ? ''
         : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";

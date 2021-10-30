@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Testing cdn_url_create()
+ * Testing url_create()
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\cdn_url_create;
-use function pirogue\cdn_init;
+use function pirogue\cdn\url_create;
+use function pirogue\cdn\_init;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'cdn.php']));
 
@@ -23,17 +23,17 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
     'https://cdn03.localhost.localdomain',
   ];
 
-  pirogue_test_execute("cdn_url_create(): create valid url", function () {
-    cdn_init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
-    return $GLOBALS['._pirogue-testing.cdn.list'][0] == cdn_url_create('', [])
+  pirogue_test_execute("url_create(): create valid url", function () {
+    _init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
+    return $GLOBALS['._pirogue-testing.cdn.list'][0] == url_create('', [])
         ? ''
         : 'Invalid url returned.';
   });
 
-  pirogue_test_execute("cdn_url_create(): empty cdn list", function () {
+  pirogue_test_execute("url_create(): empty cdn list", function () {
     try {
-        cdn_init([]);
-        $GLOBALS['._pirogue-testing.cdn.list'][0] == cdn_url_create('', []);
+        _init([]);
+        $GLOBALS['._pirogue-testing.cdn.list'][0] == url_create('', []);
         return 'Created url form empty list of servers.';
     } catch (\LogicException) {
         return '';
@@ -41,23 +41,23 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
   });
 
   pirogue_test_execute("cdn_url_create(): create valid url with params", function () {
-    cdn_init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
+    _init([$GLOBALS['._pirogue-testing.cdn.list'][0]]);
     $url = sprintf('%s/path/to/resource.css?id=1', $GLOBALS['._pirogue-testing.cdn.list'][0]);
-    return $url == cdn_url_create('path/to/resource.css', ['id' => 1])
+    return $url == url_create('path/to/resource.css', ['id' => 1])
         ? ''
         : 'Invalid url returned.';
   });
 
   pirogue_test_execute("cdn_url_create(): verify \$GLOBALS['._pirogue.cdn.current_index'] starts at 0.", function () {
-    cdn_init($GLOBALS['._pirogue-testing.cdn.list']);
+    _init($GLOBALS['._pirogue-testing.cdn.list']);
     return 0 == $GLOBALS['._pirogue.cdn.current_index'] ? '' : 'Invalid start index.';
   });
 
   pirogue_test_execute("cdn_url_create(): verify \$GLOBALS['._pirogue.cdn.current_index'] increments.", function () {
-    cdn_init($GLOBALS['._pirogue-testing.cdn.list']);
+    _init($GLOBALS['._pirogue-testing.cdn.list']);
     $count = count($GLOBALS['._pirogue-testing.cdn.list']);
     for ($i = 0; $i < $count; $i++) {
-        cdn_url_create('path/to/resource.css', ['id' => 1]);
+        url_create('path/to/resource.css', ['id' => 1]);
         if (($i + 1) % $count != $GLOBALS['._pirogue.cdn.current_index']) {
             return sprintf('Invalid index increment (%d,%d).', $i + 1, $GLOBALS['._pirogue.cdn.current_index']);
         }
