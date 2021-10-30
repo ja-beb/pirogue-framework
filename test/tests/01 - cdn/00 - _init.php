@@ -1,30 +1,30 @@
 <?php
 
 /**
- * Testing _init()
+ * Testing _init() && _dispose().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use function pirogue\cdn\_init;
-use function pirogue\cdn\_finalize;
+use pirogue\cdn;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'cdn.php']));
 
-pirogue_test_execute("_init(): \$GLOBALS['._pirogue.cdn.address_list']", function () {
-    $list = ['https://cdn.localhost.localdomain'];
-    _init($list);
-    return $list == $GLOBALS['._pirogue.cdn.address_list']
-        ? ''
-        : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";
+pirogue_test_execute('_init()', function () {
+    cdn\_init();
+    if (!array_key_exists('._pirogue.cdn.servers', $GLOBALS)) {
+        return 'server list is not initialized.';
+    } elseif (!is_array($GLOBALS['._pirogue.cdn.servers'])) {
+        return 'server list is not an array.';
+    } else {
+        return '';
+    }
 });
 
-pirogue_test_execute("_init(): \$GLOBALS['._pirogue.cdn.current_index']", function () {
-    _init(['https://cdn.localhost.localdomain']);
-    return 0 == $GLOBALS['._pirogue.cdn.current_index']
-        ? ''
-        : "Variable \$GLOBALS['._pirogue.cdn.address_list'] not set properly";
+pirogue_test_execute('_dispose()', function () {
+    $GLOBALS['._pirogue.cdn.servers'] = ['one' => 'example'];
+    cdn\_dispose();
+    return array_key_exists('._pirogue.cdn.servers', $GLOBALS) ? 'server list is not properly disposed of.' : '';
 });
-
-_finalize();
+unset($GLOBALS['._pirogue.cdn.servers']);
