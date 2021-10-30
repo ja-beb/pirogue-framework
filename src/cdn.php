@@ -8,7 +8,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue;
+namespace pirogue\cdn;
 
 use LogicException;
 
@@ -36,10 +36,25 @@ $GLOBALS['._pirogue.cdn.current_index'] = 0;
  *
  * @param array $address_list an array containing a list of the base CDN server addresses.
  */
-function cdn_init(array $address_list): void
+function _init(array $address_list): void
 {
     $GLOBALS['._pirogue.cdn.current_index'] = 0;
     $GLOBALS['._pirogue.cdn.address_list'] = $address_list;
+}
+
+/**
+ * clean up library variables.
+ *
+ * @uses $GLOBALS['._pirogue.cdn.current_index']
+ * @uses $GLOBALS['._pirogue.cdn.address_list']
+ *
+ */
+function _finalize(): void
+{
+    unset(
+        $GLOBALS['._pirogue.cdn.current_index'],
+        $GLOBALS['._pirogue.cdn.address_list'],
+    );
 }
 
 /**
@@ -58,7 +73,7 @@ function cdn_init(array $address_list): void
  *
  * @return string url to cdn resource.
  */
-function cdn_url_create(string $path, array $data): string
+function url_create(string $path, array $data): string
 {
     if (empty($GLOBALS['._pirogue.cdn.address_list'])) {
         throw new LogicException('There are no registered CDN servers.');
