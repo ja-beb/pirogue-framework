@@ -1,87 +1,70 @@
 <?php
 
 /**
- * library for dealing with cdn storing and building links to cdn resources.
+ * store and create urls for cdn resources.
  * php version 8.0.0
- *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
 namespace pirogue\cdn;
 
-use LogicException;
-
 /**
- * list of cdn server urls.
- *
- * @internal used by library only.
- * @var string[] $GLOBALS['._pirogue.cdn.address_list']
+ * registered cdn servers.
+ * @internal
+ * @var string[] $GLOBALS['._pirogue.cdn.servers']
  */
-$GLOBALS['._pirogue.cdn.address_list'] = [];
-
-/**
- * the array index for the next cdn server to be used.
- *
- * @internal used by library only.
- * @var int $GLOBALS['._pirogue.cdn.current_index']
- */
-$GLOBALS['._pirogue.cdn.current_index'] = 0;
+$GLOBALS['._pirogue.cdn.servers'] = [];
 
 /**
  * initialize the cdn library.
- *
  * @uses $GLOBALS['._pirogue.cdn.current_index']
- * @uses $GLOBALS['._pirogue.cdn.address_list']
- *
- * @param array $address_list an array containing a list of the base CDN server addresses.
+ * @uses $GLOBALS['._pirogue.cdn.servers']
+ * @internal
+ * @param array $servers an assocative array of servers to register.
+ * @return $void
  */
-function _init(array $address_list): void
+function _init(array $servers = []): void
 {
-    $GLOBALS['._pirogue.cdn.current_index'] = 0;
-    $GLOBALS['._pirogue.cdn.address_list'] = $address_list;
+    $GLOBALS['._pirogue.cdn.servers'] = [];
+    foreach ($servers as $name => $address) {
+        register($name, $address);
+    }
 }
 
 /**
  * clean up library variables.
- *
+ * @internal
  * @uses $GLOBALS['._pirogue.cdn.current_index']
- * @uses $GLOBALS['._pirogue.cdn.address_list']
- *
+ * @uses $GLOBALS['._pirogue.cdn.servers']
+ * @return void
  */
-function _finalize(): void
+function _dispose(): void
 {
     unset(
-        $GLOBALS['._pirogue.cdn.current_index'],
-        $GLOBALS['._pirogue.cdn.address_list'],
+        $GLOBALS['._pirogue.cdn.servers'],
     );
 }
 
 /**
- * create url to resource relative to the cdn base.
- * responsible for building an url for the cdn server using a round robin
- * scheduling.
- *
- * @throws LogicException if there are no registered CDN servers.
- *
- * @uses LogicException
- * @uses $GLOBALS['._pirogue.cdn.address_list']
- * @uses $GLOBALS['._pirogue.cdn.current_index']
- *
- * @param string $path the path to the resource.
- * @param array $data the request data.
- *
- * @return string url to cdn resource.
+ * registger new cdn server.
+ * @uses $GLOBALS['._pirogue.cdn.servers']
+ * @param string $name the name of the serer to register.
+ * @param string $address the address of the server to register.
+ * @return void.
  */
-function url_create(string $path, array $data): string
+function register(string $name, string $address): void
 {
-    if (empty($GLOBALS['._pirogue.cdn.address_list'])) {
-        throw new LogicException('There are no registered CDN servers.');
-    }
+    $GLOBALS['._pirogue.cdn.servers'][$name] = $address;
+}
 
-    $base_url = $GLOBALS['._pirogue.cdn.address_list'][$GLOBALS['._pirogue.cdn.current_index']];
-    $GLOBALS['._pirogue.cdn.current_index'] = ($GLOBALS['._pirogue.cdn.current_index'] + 1) % count($GLOBALS['._pirogue.cdn.address_list']);
-    $url_pattern = empty($path) ? '%s' : '%s/%s';
-    $base_url = sprintf($url_pattern, $base_url, $path);
-    return (0 == count($data)) ? $base_url : sprintf('%s?%s', $base_url, http_build_query($data));
+/**
+ * create url to resource relative to the cdn base using registered cdn.
+ * @uses $GLOBALS['._pirogue.cdn.servers']
+ * @param string $server_name the name of the server to retrieve the address of.
+ * @return string url to cdn sever
+ */
+function url(string $server_name): ?string
+{
+    return $GLOBALS['._pirogue.cdn.servers'][$server_name] ?? null;
 }
