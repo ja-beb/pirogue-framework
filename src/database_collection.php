@@ -5,107 +5,113 @@
  * handles the opening, storing, retrieving and closing of database connections
  * by translating requested name into config file.
  * php version 8.0.0
- *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue;
+namespace pirogue\database_collection;
 
 use mysqli;
 
 /**
  * a sprintf format string used to build file path based on inputed name.
- *
- * @internal used by library only.
- * @var string $GLOBALS['._pirogue.database_collection.pattern']
+ * @internal
+ * @var string $GLOBALS['._pirogue.database_collection.path_format']
  */
-$GLOBALS['._pirogue.database_collection.pattern'] = null;
+$GLOBALS['._pirogue.database_collection.path_format'] = null;
 
 /**
- * default database connection.
- * used when no database is specified (or in single database sites).
- *
- * @internal used by library only.
+ * default database connection that used.
+ * @internal
  * @var string $GLOBALS['._pirogue.database_collection.default']
  */
 $GLOBALS['._pirogue.database_collection.default'] = '';
 
 /**
- * open database connections.
- *
- * @internal used by library only.
+ * registered database connections.
+ * @internal
  * @var array $GLOBALS['._pirogue.database_collection.connections']
  */
 $GLOBALS['._pirogue.database_collection.connections'] = [];
 
 /**
  * initialize database collection library.
- *
- * @uses $GLOBALS['._pirogue.database_collection.pattern']
+ * @internal
+ * @uses $GLOBALS['._pirogue.database_collection.path_format']
  * @uses $GLOBALS['._pirogue.database_collection.default']
  * @uses $GLOBALS['._pirogue.database_collection.connections']
- *
- * @param string $pattern a sprintf pattern used to find the desired database config file based on inputed name.
+ * @uses _dispose()
+ * @param string $path_format a sprintf path_format used to find the desired database config file based on inputed name.
  * @param string $default the name of the default database.
+ * @return void
  */
-function database_collection_init(string $pattern, string $default): void
+function _init(string $path_format, string $default): void
 {
-    $GLOBALS['._pirogue.database_collection.pattern'] = $pattern;
+    $GLOBALS['._pirogue.database_collection.path_format'] = $path_format;
     $GLOBALS['._pirogue.database_collection.default'] = $default;
     $GLOBALS['._pirogue.database_collection.connections'] = [];
 
     // register destruct function.
-    register_shutdown_function('pirogue\_database_collection_destruct');
+    register_shutdown_function('pirogue\database_collection\_dispose');
 }
 
 /**
  * close and deallocate all registered mysqli connections.
- *
- * @internal used by library only.
+ * @internal
+ * @uses $GLOBALS['._pirogue.database_collection.path_format']
+ * @uses $GLOBALS['._pirogue.database_collection.default']
  * @uses $GLOBALS['._pirogue.database_collection.connections']
- *
  * @return void
  */
-function _database_collection_destruct(): void
+function _dispose(): void
 {
-    foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
-        if ('mysqli' == get_class($connection)) {
-            mysqli_close($connection);
+    if (array_key_exists('._pirogue.database_collection.connections', $GLOBALS)) {
+        foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
+            if ('mysqli' == get_class($connection)) {
+                mysqli_close($connection);
+            }
         }
+        unset(
+            $GLOBALS['._pirogue.database_collection.default'],
+            $GLOBALS['._pirogue.database_collection.path_format'],
+            $GLOBALS['._pirogue.database_collection.connections'],
+        );
     }
-    $GLOBALS['._pirogue.database_collection.connections'] = [];
 }
 
 /**
- * fetch a registerd database connection.
- * this function will fetch a previously opened database connection or create and save a new connection based on name by
- * translating nane to a config file using library's pattern. This function will trigger an error if no connection is found.
- *
- * @uses $GLOBALS['._pirogue.database_collection.pattern']
+ * fetch a registerd database connection or register a new connection.
+ * @throws error error tiggered if unable to connect or not registered.
+ * @uses $GLOBALS['._pirogue.database_collection.path_format']
  * @uses $GLOBALS['._pirogue.database_collection.connections']
  * @uses $GLOBALS['._pirogue.database_collection.default']
- * @uses trigger_error()
- *
  * @param string $name
  * @return mysqli resource item.
  */
-function database_collection_get(?string $name = null): mysqli
+function get(?string $name = null): mysqli
 {
-    // use default if not specified.
     $name = null == $name ? $GLOBALS['._pirogue.database_collection.default'] : $name;
-
-    // check for connection - if not open and register.
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_collection.connections'])) {
-        // load config file.
-        $file = sprintf($GLOBALS['._pirogue.database_collection.pattern'], $name);
-        if (!file_exists($file)) {
-            trigger_error(sprintf('Unable to find database connection "%s"', $name));
-        }
-        $config = parse_ini_file($file);
+        $GLOBALS['._pirogue.database_collection.connections'][$name] = _open($name);
+    }
+    return $GLOBALS['._pirogue.database_collection.connections'][$name];
+}
 
-        // open connection.
-        $GLOBALS['._pirogue.database_collection.connections'][$name] = mysqli_connect(
+/**
+ * open requested connection
+ * @internal
+ * @throws error error tiggered if unable to connect or not registered.
+ * @uses $connection()
+ * @param string $name name of connection to open.
+ * @return ?mysqli return null if not found or does not connect.
+ */
+function _open(string $name): mysqli
+{
+    $connection = false;
+    $file = sprintf($GLOBALS['._pirogue.database_collection.path_format'], $name);
+    if (file_exists($file)) {
+        $config = parse_ini_file($file);
+        $connection = mysqli_connect(
             $config['host'] ?? null,
             $config['username'] ?? null,
             $config['password'] ?? null,
@@ -113,13 +119,11 @@ function database_collection_get(?string $name = null): mysqli
             $config['port'] ?? '3306',
             $config['socket'] ?? null
         );
-
-        // unable to connect, throw eexception.
-        if (false === $GLOBALS['._pirogue.database_collection.connections'][$name]) {
-            trigger_error(sprintf('Unable to open database connection "%s"', $name));
+        if (false == $connection) {
+            trigger_error('unable to connect');
         }
+        return $connection;
+    } else {
+        trigger_error('database not registered');
     }
-
-    // return connection.
-    return $GLOBALS['._pirogue.database_collection.connections'][$name];
 }

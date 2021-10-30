@@ -28,9 +28,7 @@ $GLOBALS['._pirogue_test.count_errors'] = 0;
  */
 function _pirogue_test_log(string $label, string $error_message = ''): void
 {
-    if ('' == $error_message) {
-        printf("[PASSED] %s\n", $label);
-    } else {
+    if ('' != $error_message) {
         $GLOBALS['._pirogue_test.count_errors']++;
         printf("[FAILED] %s\n", $label);
         printf("%s\n", $error_message);
@@ -63,6 +61,7 @@ foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_di
             try {
                 printf("%s/%s\n", basename($_test_group), basename($_test_file));
                 $_test_files_loaded++;
+                $_offset_count_test = $GLOBALS['._pirogue_test.count_test'];
                 require $_test_path;
             } catch (Throwable $e) {
                 _pirogue_test_log(
@@ -70,6 +69,7 @@ foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_di
                     sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())
                 );
             } finally {
+                printf("number of test performed: %d\n", $GLOBALS['._pirogue_test.count_test'] - $_offset_count_test);
                 echo "\n";
             }
         }

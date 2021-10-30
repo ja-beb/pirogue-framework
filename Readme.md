@@ -10,10 +10,10 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 - snake case for functions and variables.
 - kebab case for path components, array labels, and form input labels (example: site-users/user-assignment.json).
 ### Functions
-- pirogue\ibrary_init() = library initialize function.
-- pirogue\_library_destruct() = internal function, library destructor function registered when library is initialized.
-- pirogue\library_name_func() = public function within a library (ie dispatcher_route()).
-- pirogue\_library_name_func() = internal function, used within dispatcher and library only. 
+- pirogue\ibrary\_init() = library initialize function.
+- pirogue\_library\_dispose() = internal function, library destructor function registered when library is initialized.
+- pirogue\library\name_func() = public function within a library (ie dispatcher_route()).
+- pirogue\library\_name_func() = internal function, used within dispatcher and library only. 
 ### Global Variables
 Variables registered with a global array ($GLOBALS or $_SESSION) are prefixed with the '.' character to prevent them from being exported to the current symbol table or being made available with the "register globals" (prevent user from impulating register_globals).
 - $GLOBALS['.\_pirogue.library-name'] = internal variable (prefixed with '.\_').
@@ -27,9 +27,10 @@ Any parts of a path that are prefixed with a '_' character are considered "prote
 - _private/end-point.phtml = internal file.
 - public/_private.phtml = internal file.
 ## Controllers
-Controllers are loaded from a seperate folder and should implement the following functions within their own namespace.
-- "{$controller name}\_init" - required
-- "{$controller name}\_has_access" - optional, will default to access set by controller_init().
+Controllers are loaded from a seperate folder and should implement the following interface. within their own namespace.
+- "{$controller name}\_init"
+- "{$controller name}\_dispose" 
+- "{$controller name}\_has_access"
 - "{$controller name}\_error_403" - optional, intercepts and handles HTTP 403 errors form default controller.
 - "{$controller name}\_error_404" - optional, intercepts and handles HTTP 404 errors form default controller.
 - "{$controller name}\_error_405" - optional, intercepts and handles HTTP 405 errors form default controller.
