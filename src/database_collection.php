@@ -10,7 +10,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue;
+namespace pirogue\database_collection;
 
 use mysqli;
 
@@ -49,14 +49,14 @@ $GLOBALS['._pirogue.database_collection.connections'] = [];
  * @param string $pattern a sprintf pattern used to find the desired database config file based on inputed name.
  * @param string $default the name of the default database.
  */
-function database_collection_init(string $pattern, string $default): void
+function _init(string $pattern, string $default): void
 {
     $GLOBALS['._pirogue.database_collection.pattern'] = $pattern;
     $GLOBALS['._pirogue.database_collection.default'] = $default;
     $GLOBALS['._pirogue.database_collection.connections'] = [];
 
     // register destruct function.
-    register_shutdown_function('pirogue\_database_collection_finalize');
+    register_shutdown_function('pirogue\database_collection\_finalize');
 }
 
 /**
@@ -67,14 +67,16 @@ function database_collection_init(string $pattern, string $default): void
  *
  * @return void
  */
-function _database_collection_finalize(): void
+function _finalize(): void
 {
-    foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
-        if ('mysqli' == get_class($connection)) {
-            mysqli_close($connection);
+    if (array_key_exists('._pirogue.database_collection.connections', $GLOBALS)) {
+        foreach ($GLOBALS['._pirogue.database_collection.connections'] as $connection) {
+            if ('mysqli' == get_class($connection)) {
+                mysqli_close($connection);
+            }
         }
+        unset($GLOBALS['._pirogue.database_collection.connections']);
     }
-    $GLOBALS['._pirogue.database_collection.connections'] = [];
 }
 
 /**
@@ -90,7 +92,7 @@ function _database_collection_finalize(): void
  * @param string $name
  * @return mysqli resource item.
  */
-function database_collection_get(?string $name = null): mysqli
+function get_connection(?string $name = null): mysqli
 {
     // use default if not specified.
     $name = null == $name ? $GLOBALS['._pirogue.database_collection.default'] : $name;
