@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing pirogue\session\user\_end().
+ * Testing pirogue\session\user\_destroy().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -19,7 +19,7 @@ user\_init($GLOBALS['._pirogue-testing.session.user.label']);
 
 pirogue_test_execute('_end()', function () {
     $_SESSION[$GLOBALS['._pirogue.session.user.label']] = $GLOBALS['._pirogue-testing.session.user'];
-    user\_end();
+    user\_destroy();
     return array_key_exists($GLOBALS['._pirogue.session.user.label'], $_SESSION) ? 'session not cleared.' : '';
 });
 
