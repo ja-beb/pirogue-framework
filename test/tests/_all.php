@@ -30,7 +30,7 @@ function _pirogue_test_log(string $label, string $error_message = ''): void
 {
     if ('' != $error_message) {
         $GLOBALS['._pirogue_test.count_errors']++;
-        printf("[FAILED] %s\n", $label);
+        printf("\n[FAILED] %s\n\n", $label);
         printf("%s\n", $error_message);
     }
 }
@@ -55,25 +55,26 @@ function pirogue_test_execute(string $label, $callable): void
 // scan for child directories and execute any /^[^_].*.php$/ files encountered.
 $_test_files_loaded = 0;
 foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_dir') as $_test_group) {
+    $_files = 0;
+    $_offset_count_test = $GLOBALS['._pirogue_test.count_test'];
     foreach (scandir($_test_group) as $_test_file) {
         $_test_path = implode(DIRECTORY_SEPARATOR, [$_test_group, $_test_file]);
         if (!is_dir($_test_path) && preg_match('/^[^_].*\.php$/', $_test_file)) {
+            $_files++;
             try {
                 printf("%s/%s\n", basename($_test_group), basename($_test_file));
                 $_test_files_loaded++;
-                $_offset_count_test = $GLOBALS['._pirogue_test.count_test'];
                 require $_test_path;
             } catch (Throwable $e) {
                 _pirogue_test_log(
                     "require $_test_path",
                     sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())
                 );
-            } finally {
-                printf("number of test performed: %d\n", $GLOBALS['._pirogue_test.count_test'] - $_offset_count_test);
-                echo "\n";
             }
         }
     }
+    printf("files loaded: %d, number of test performed: %d\n", $_files, $GLOBALS['._pirogue_test.count_test'] - $_offset_count_test);
+    echo "\n";
 }
 
 // Report result counts.

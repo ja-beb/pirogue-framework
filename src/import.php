@@ -48,7 +48,7 @@ function _dispose(): void
  * @param string $name the name of library being loaded (translates to the filename without extension).
  * @return void
  */
-function import(string $name): void
+function load(string $name): void
 {
     $include_file = sprintf($GLOBALS['._pirogue.import.path_pattern'], $name);
     if (false == file_exists($include_file)) {
