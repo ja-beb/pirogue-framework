@@ -60,7 +60,7 @@ function _dispose(): void
  */
 function _convert_case(string $value): string
 {
-    return strtolower(str_replace('-', '_', $value));
+    return str_replace('-', '_', $value);
 }
 
 /**
