@@ -1,9 +1,9 @@
 <?php
 
 /**
- * database connections for a MySQL backend.
- * handles the opening, storing, retrieving and closing of database connections
- * by translating requested name into config file.
+ * handle database connections for a MySQL backend.
+ * used to open, register, retrieve, store and closing database connections. 
+ * translates from database name to an ini file that contains settings.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -14,7 +14,7 @@ namespace pirogue\database;
 use mysqli;
 
 /**
- * a sprintf format string used to build file path based on inputed name.
+ * a sprintf format string of the connection ini file's path.
  * @internal
  * @var string $GLOBALS['._pirogue.database.path_format']
  */
@@ -28,7 +28,7 @@ $GLOBALS['._pirogue.database.path_format'] = null;
 $GLOBALS['._pirogue.database.default'] = '';
 
 /**
- * registered database connections.
+ * a list of the registered database connections.
  * @internal
  * @var array $GLOBALS['._pirogue.database.connections']
  */
