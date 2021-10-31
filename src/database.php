@@ -91,6 +91,20 @@ function _close(): void
 }
 
 /**
+ * translates database name to the ini file's path.
+ * @internal
+ * @uses $GLOBALS['._pirogue.database.path_format']
+ * @param string $name name of connection to load configuration for.
+ * @return ?array returns config file or null if not found.
+ */
+function _config(string $name): ?array
+{
+    $connection = false;
+    $file = sprintf($GLOBALS['._pirogue.database.path_format'], $name);
+    returnfile_exists($file) ? parse_ini_file($file) : null;
+}
+
+/**
  * open requested connection. translates name to the mysqli ini file's path and loads using data.
  * @internal
  * @throws error error tiggered if unable to connect or not registered.
@@ -99,7 +113,7 @@ function _close(): void
  * @return ?mysqli return null if not found or does not connect.
  */
 function _open(string $name): ?mysqli
-{1
+{
     $connection = false;
     $file = sprintf($GLOBALS['._pirogue.database.path_format'], $name);
     if (file_exists($file)) {
