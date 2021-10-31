@@ -133,16 +133,6 @@ function _get(string $name): ?mysqli
     }
 }
 
-function close_all(): void
-{
-    foreach (($GLOBALS['._pirogue.database.mysqli.connections'] ?? []) as $connection) {
-        if (null != $connection && 'mysqli' == get_class($connection)) {
-            mysqli_close($connection);
-        }
-    }
-    $GLOBALS['._pirogue.database.mysqli.connections'] = [];
-}
-
 /**
  * get database connection.
  * @throws error error tiggered if unable to connect or not registered.
@@ -161,4 +151,19 @@ function get(?string $name = null): mysqli
         }
     }
     return $GLOBALS['._pirogue.database.mysqli.connections'][$name];
+}
+
+/**
+ * close all connections.
+ * @uses $GLOBALS['._pirogue.database.mysqli.connections']
+ * @return void
+ */
+function close_all(): void
+{
+    foreach (($GLOBALS['._pirogue.database.mysqli.connections'] ?? []) as $connection) {
+        if (null != $connection && 'mysqli' == get_class($connection)) {
+            mysqli_close($connection);
+        }
+    }
+    $GLOBALS['._pirogue.database.mysqli.connections'] = [];
 }
