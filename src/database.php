@@ -91,7 +91,7 @@ function _close(): void
 }
 
 /**
- * open requested connection
+ * open requested connection. translates name to the mysqli ini file's path and loads using data.
  * @internal
  * @throws error error tiggered if unable to connect or not registered.
  * @uses $GLOBALS['._pirogue.database.path_format']
@@ -123,12 +123,11 @@ function _open(string $name): ?mysqli
 }
 
 /**
- * fetch a registerd database connection or register a new connection.
+ * get database connection. 
  * @throws error error tiggered if unable to connect or not registered.
- * @uses $GLOBALS['._pirogue.database.path_format']
  * @uses $GLOBALS['._pirogue.database.connections']
  * @uses $GLOBALS['._pirogue.database.default']
- * @param string $name
+ * @param string $name name of database to connect. will return default if null.
  * @return mysqli resource item.
  */
 function get(?string $name = null): mysqli
