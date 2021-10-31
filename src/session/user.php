@@ -1,7 +1,7 @@
 <?php
 
 /**
- * library for working with user session - handles start, end, fetching current, and working with sessioned variables.
+ * start, end and fetch curretn useer session.
  * php version 8.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -10,7 +10,7 @@
 namespace pirogue\session\user;
 
 /**
- * label for user's session account data.
+ * label for user's account data.
  * @internal
  * @var string $GLOBALS['._pirogue.session.user.label']
  */
@@ -18,7 +18,6 @@ $GLOBALS['._pirogue.session.user.label'] = '';
 
 /**
  * initialize user session library.
- * @uses _dispose()
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
  * @return void
@@ -26,17 +25,13 @@ $GLOBALS['._pirogue.session.user.label'] = '';
 function _init(string $label): void
 {
     $GLOBALS['._pirogue.session.user.label'] = $label;
-
-    // initialize session variables if needed.
     if (!array_key_exists($GLOBALS['._pirogue.session.user.label'], $_SESSION)) {
         $_SESSION[$GLOBALS['._pirogue.session.user.label']] = null;
     }
-
-    register_shutdown_function('pirogue\session\user\_dispose');
 }
 
 /**
- * writes session data before exiting.
+ * dispose of this library.
  * @internal
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return void
@@ -50,7 +45,7 @@ function _dispose(): void
 }
 
 /**
- * start new user session - this will clobber and existing session.
+ * start new user session - this will clobber an existing session.
  * @internal
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @param array $user the user's account data.

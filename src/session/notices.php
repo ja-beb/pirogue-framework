@@ -1,7 +1,7 @@
 <?php
 
 /**
- * library for passing user notifications between pages.
+ * passing user internal between pages.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -10,7 +10,7 @@
 namespace pirogue\session\notices;
 
 /**
- * index for storing notices in the global session array.
+ * label for storing notices.
  * @internal
  * @var string $GLOBALS['._pirogue.session.notices.label']
  */
@@ -47,7 +47,7 @@ function _dispose(): void
 /**
  * append site notice to list of existing notices.
  * @uses $GLOBALS['._pirogue.session.notices.label']
- * @param int $type the code for the notice type to add.
+ * @param string $type the code for the notice type to add.
  * @param string $message the notice's message.
  */
 function create(string $type, string $message): void
