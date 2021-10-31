@@ -100,7 +100,7 @@ function _build_action(string $controller_name, string $action_name, string $req
     if (function_exists($function_name)) {
         return strtolower($function_name);
     } else {
-        return 'GET' == $request_method ? null : _build_action($controller_name, $action_name, 'GET');
+        return 'GET' == $request_method ? null : _build_action($controller_name, $action_name);
     }
 }
 
