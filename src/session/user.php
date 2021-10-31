@@ -1,7 +1,7 @@
 <?php
 
 /**
- * start, end and fetch curretn useer session.
+ * start, end and fetch current user session.
  * php version 8.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -38,37 +38,46 @@ function _init(string $label): void
  */
 function _dispose(): void
 {
-    session_id() && session_write_close();
     if (array_key_exists('._pirogue.session.user.label', $GLOBALS)) {
         unset($GLOBALS['._pirogue.session.user.label']);
     }
 }
 
 /**
- * start new user session - this will clobber an existing session.
+ * save session if currently active.
+ * @internal
+ * @return void
+ */
+function _write(): void
+{
+    session_id() && session_write_close();
+}
+
+/**
+ * save account data as the current session.
  * @internal
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @param array $user the user's account data.
  * @return void
  */
-function _start(array $user): void
+function _save(array $user): void
 {
     $_SESSION[$GLOBALS['._pirogue.session.user.label']] = $user;
 }
 
 /**
- * end the current user session.
+ * destory the current user session.
  * @internal
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return void
  */
-function _end(): void
+function _destroy(): void
 {
     unset($_SESSION[$GLOBALS['._pirogue.session.user.label']]);
 }
 
 /**
- * get current user's data.
+ * get the current user's account data if present.
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return array current user session data or null if no session data exists.
  */
