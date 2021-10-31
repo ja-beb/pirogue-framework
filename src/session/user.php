@@ -48,7 +48,7 @@ function _dispose(): void
  * @internal 
  * @return void
  */
-function _save(): void {
+function _write(): void {
     session_id() && session_write_close();    
 }
 
