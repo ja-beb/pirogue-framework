@@ -54,10 +54,10 @@ function register(string $name, string $address): void
 }
 
 /**
- * create url to resource relative to the cdn base using registered cdn.
+ * return the url to a registered server.
  * @uses $GLOBALS['._pirogue.dispatcher.cdn.servers']
  * @param string $server_name the name of the server to retrieve the address of.
- * @return string url to cdn sever
+ * @return string url to sever or null if not registered.
  */
 function url(string $server_name): ?string
 {
