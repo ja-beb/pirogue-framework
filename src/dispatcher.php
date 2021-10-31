@@ -118,15 +118,13 @@ function _error_handler(int $number, string $message, string $file, int $line): 
 /**
  * clear all output buffers and return contents.
  * @internal
- * @return string contents of all buffers.
+ * @return void
  */
-function _buffer_clear(): string
+function _buffer_clear(): void
 {
-    $buffer = '';
     while (0 < ob_get_level()) {
-        $buffer .= ob_get_clean();
+        ob_get_clean();
     }
-    return $buffer;
 }
 
 /**
