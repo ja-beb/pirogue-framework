@@ -35,12 +35,11 @@ $GLOBALS['._pirogue.database.default'] = '';
 $GLOBALS['._pirogue.database.connections'] = [];
 
 /**
- * initialize database collection library.
+ * initialize library.
  * @internal
  * @uses $GLOBALS['._pirogue.database.path_format']
  * @uses $GLOBALS['._pirogue.database.default']
  * @uses $GLOBALS['._pirogue.database.connections']
- * @uses _dispose()
  * @param string $path_format a sprintf path_format used to find the desired database config file based on inputed name.
  * @param string $default the name of the default database.
  * @return void
@@ -50,9 +49,6 @@ function _init(string $path_format, string $default): void
     $GLOBALS['._pirogue.database.path_format'] = $path_format;
     $GLOBALS['._pirogue.database.default'] = $default;
     $GLOBALS['._pirogue.database.connections'] = [];
-
-    // register destruct function.
-    register_shutdown_function('pirogue\database\_dispose');
 }
 
 /**
