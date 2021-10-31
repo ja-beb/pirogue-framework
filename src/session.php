@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\session\session;
+namespace pirogue\session;
 
 /**
  * name for the user session.
