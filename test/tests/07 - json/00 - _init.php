@@ -11,7 +11,7 @@ use pirogue\view\json;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'view', 'json.php']));
 
-$GLOBALS['._pirogue-testing.view.html.path_pattern'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view', 'json', '%s.php']);
+$GLOBALS['._pirogue-testing.view.json.path_pattern'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view', 'json', '%s.php']);
 $GLOBALS['._pirogue-testing.view.json.view_fragment'] = ['content' => ''];
 
 json\_init($GLOBALS['._pirogue-testing.view.json.path_pattern']);
