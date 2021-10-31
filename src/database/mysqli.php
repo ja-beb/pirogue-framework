@@ -83,7 +83,7 @@ function _config(string $name): ?array
 {
     $connection = false;
     $file = sprintf($GLOBALS['._pirogue.database.mysqli.path_format'], $name);
-    returnfile_exists($file) ? parse_ini_file($file) : null;
+    return file_exists($file) ? parse_ini_file($file) : null;
 }
 
 /**
