@@ -117,7 +117,7 @@ function _open(string $hostname, string $username, ?string $password = null, ?st
  */
 function _get(string $name): ?mysqli
 {
-    $config = _open($name);
+    $config = _config($name);
     if (null == $config) {
         return null;
     } else {
