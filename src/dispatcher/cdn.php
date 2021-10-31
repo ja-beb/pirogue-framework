@@ -21,7 +21,7 @@ $GLOBALS['._pirogue.dispatcher.cdn.servers'] = [];
  * @uses $GLOBALS['._pirogue.cdn.current_index']
  * @uses $GLOBALS['._pirogue.dispatcher.cdn.servers']
  * @internal
- * @param array $servers an assocative array of servers to register.
+ * @param array $servers an assocative array of servers to register in the form of "name" => "server address"
  * @return $void
  */
 function _init(array $servers = []): void
