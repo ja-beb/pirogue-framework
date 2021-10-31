@@ -26,13 +26,9 @@ $GLOBALS['._pirogue.session.environment.label'] = '';
 function _init(string $label): void
 {
     $GLOBALS['._pirogue.session.environment.label'] = $label;
-
-    // initialize session variables if needed.
     if (!array_key_exists($GLOBALS['._pirogue.session.environment.label'], $_SESSION)) {
         $_SESSION[$GLOBALS['._pirogue.session.environment.label']] = [];
     }
-
-    register_shutdown_function('pirogue\session\environment\_dispose');
 }
 
 /**
