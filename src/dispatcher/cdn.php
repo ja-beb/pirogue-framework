@@ -41,9 +41,7 @@ function _init(array $servers = []): void
  */
 function _dispose(): void
 {
-    unset(
-        $GLOBALS['._pirogue.dispatcher.cdn.servers'],
-    );
+    unset($GLOBALS['._pirogue.dispatcher.cdn.servers']);
 }
 
 /**
