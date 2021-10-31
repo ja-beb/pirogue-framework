@@ -51,14 +51,14 @@ function _dispose(): void
  */
 function load(string $view, array $view_data = []): string
 {
+    $buffer = '';
     $view_file = sprintf($GLOBALS['._pirogue.view.html.path_pattern'], $view);
-    if (!file_exists($view_file)) {
+    if (file_exists($view_file)) {
+        ob_start();
+        require $view_file;
+        $buffer = ob_get_clean();
+    } else {
         trigger_error(sprintf('requested view file "%s" does not exists.', $view));
-        return [];
     }
-
-    // load view and return output as body content.
-    ob_start();
-    require $view_file;
-    return ob_get_clean();
+    return $buffer;
 }
