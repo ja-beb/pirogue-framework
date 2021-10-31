@@ -62,8 +62,7 @@ function _init(string $path_format, string $default): void
 function _dispose(): void
 {
     if (!empty($GLOBALS['._pirogue.database.mysqli.connections'])) {
-        )
-        _close();
+        clos();
     }
 
     unset(
@@ -108,7 +107,7 @@ function _open(string $hostname, string $username, ?string $password = null, ?st
         port:$port,
         socket:$socket
     );
-    return false == $connection ? null $connection;
+    return false == $connection ? null : $connection;
 }
 
 /**
