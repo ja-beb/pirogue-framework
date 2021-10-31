@@ -41,6 +41,7 @@ pirogue_test_execute('pirogue_get(): website-invalid', function () {
         return '';
     }
 });
+pirogue_test_execute('pirogue_get(): website-invalid', fn() => empty($GLOBALS['._pirogue.database.mysqli.connections']) ? 'connections not registered.' : '');
 
 // clean up testing environment
 mysqli\_dispose();
