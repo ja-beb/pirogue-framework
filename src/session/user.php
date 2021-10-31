@@ -76,7 +76,7 @@ function _destroy(): void
 }
 
 /**
- * get current user's data.
+ * get the current user's account data if present.
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return array current user session data or null if no session data exists.
  */
