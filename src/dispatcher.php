@@ -1,7 +1,7 @@
 <?php
 
 /**
- * library for handling basic dispatcher actions.
+ * basic dispatcher actions.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -116,7 +116,7 @@ function _error_handler(int $number, string $message, string $file, int $line): 
 }
 
 /**
- * clear all output buffers and return contents.
+ * clear all output buffers.
  * @internal
  * @return void
  */
