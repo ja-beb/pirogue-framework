@@ -1,7 +1,7 @@
 <?php
 
 /**
- * start, end and fetch curretn useer session.
+ * start, end and fetch current user session.
  * php version 8.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
