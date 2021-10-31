@@ -45,11 +45,12 @@ function _dispose(): void
 
 /**
  * save session if currently active.
- * @internal 
+ * @internal
  * @return void
  */
-function _write(): void {
-    session_id() && session_write_close();    
+function _write(): void
+{
+    session_id() && session_write_close();
 }
 
 /**
