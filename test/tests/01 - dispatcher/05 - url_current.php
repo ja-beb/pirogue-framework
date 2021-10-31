@@ -15,6 +15,12 @@ $GLOBALS['.pirogue-testing.dispatcher.address'] = 'https://site.localhost.locald
 $GLOBALS['.pirogue-testing.dispatcher.request_path'] = 'path.html';
 $GLOBALS['.pirogue-testing.dispatcher.request_data'] = ['id' => 1];
 
+dispatcher\_init(
+    $GLOBALS['.pirogue-testing.dispatcher.address'],
+    $GLOBALS['.pirogue-testing.dispatcher.request_path'],
+    $GLOBALS['.pirogue-testing.dispatcher.request_data']
+);
+
 $GLOBALS['._pirogue-testing.dispatcher.url'] = sprintf(
     '%s/%s?%s',
     $GLOBALS['.pirogue-testing.dispatcher.address'],
