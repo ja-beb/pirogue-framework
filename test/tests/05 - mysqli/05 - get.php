@@ -14,7 +14,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
 // set up testing environment
 mysqli\_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config', 'mysqli-%s.ini']), 'website');
 
-function _pirogue_test_mysqli_query(?mysqli $database_connection)
+function _pirogue_test_mysqli_query(?\mysqli $database_connection)
 {
     $_sql_results = mysqli_query($database_connection, 'SELECT COUNT(id) AS user_count FROM users ORDER BY username');
     $_sql_data = mysqli_fetch_assoc($_sql_results);
