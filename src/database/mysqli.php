@@ -121,7 +121,14 @@ function _get(string $name): ?mysqli
     if (null == $config) {
         return null;
     } else {
-        $connection = _open($name);
+        $connection = _open(
+            hostname: $config['hostname'],
+            username: $config['username'],
+            password: $config['password'],
+            database: $config['database'],
+            port: $config['port'],
+            socket: $config['socket'],
+        );
         return false == $connection ? null : $connection;
     }
 }
