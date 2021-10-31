@@ -53,13 +53,13 @@ function _save(): void {
 }
 
 /**
- * start new user session - this will clobber an existing session.
+ * save account data as the current session.
  * @internal
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @param array $user the user's account data.
  * @return void
  */
-function _start(array $user): void
+function _save(array $user): void
 {
     $_SESSION[$GLOBALS['._pirogue.session.user.label']] = $user;
 }
