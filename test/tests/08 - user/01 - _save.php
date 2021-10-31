@@ -18,7 +18,7 @@ $GLOBALS['._pirogue-testing.session.user.label'] = '.testin-user-session';
 $GLOBALS['._pirogue-testing.session.user'] = ['id' => 1, 'name' => 'test user'];
 user\_init($GLOBALS['._pirogue-testing.session.user.label']);
 
-pirogue_test_execute('_start(): null session', fn() => null != $_SESSION[$GLOBALS['._pirogue.session.user.label']] ? 'User session contains values before being set.' : '');
+pirogue_test_execute('_save(): null session', fn() => null != $_SESSION[$GLOBALS['._pirogue.session.user.label']] ? 'User session contains values before being set.' : '');
 
 pirogue_test_execute('_save(): session set', function () {
     user\_save($GLOBALS['._pirogue-testing.session.user']);

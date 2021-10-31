@@ -17,7 +17,7 @@ $GLOBALS['._pirogue-testing.session.user.label'] = '.testin-user-session';
 $GLOBALS['._pirogue-testing.session.user'] = ['id' => 1, 'name' => 'test user'];
 user\_init($GLOBALS['._pirogue-testing.session.user.label']);
 
-pirogue_test_execute('_end()', function () {
+pirogue_test_execute('_destroy()', function () {
     $_SESSION[$GLOBALS['._pirogue.session.user.label']] = $GLOBALS['._pirogue-testing.session.user'];
     user\_destroy();
     return array_key_exists($GLOBALS['._pirogue.session.user.label'], $_SESSION) ? 'session not cleared.' : '';

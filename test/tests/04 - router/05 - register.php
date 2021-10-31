@@ -15,12 +15,24 @@ $GLOBALS['._pirogue-testing.dispatcher.router.path_format'] = implode(DIRECTORY_
 router\_init($GLOBALS['._pirogue-testing.dispatcher.router.path_format']);
 
 pirogue_test_execute('register()', function () {
-    router\register('example-controller', 'index', 'GET');
+    router\register([
+        'controller_name' => 'example-controller',
+        'action_name' => 'index',
+        'request_method' => 'GET',
+        'controller_path' => 'test path',
+        'action' => 'example_controller\index_get',
+    ]);
     return 1 == count($GLOBALS['._pirogue.dispatcher.router.call_stack']) ? '' : 'did not register controller.';
 });
 
 pirogue_test_execute('register()', function () {
-    $count = router\register('example-controller', 'index', 'POST');
+    $count = router\register([
+        'controller_name' => 'example-controller',
+        'action_name' => 'index',
+        'request_method' => 'GET',
+        'controller_path' => 'test path',
+        'action' => 'example_controller\index_get',
+    ]);
     return count($GLOBALS['._pirogue.dispatcher.router.call_stack']) == $count ? '' : 'return valud does not match.';
 });
 router\_dispose();
