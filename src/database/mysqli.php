@@ -73,16 +73,6 @@ function _dispose(): void
     );
 }
 
-function close_all(): void
-{
-    foreach (($GLOBALS['._pirogue.database.mysqli.connections'] ?? []) as $connection) {
-        if ('mysqli' == get_class($connection)) {
-            mysqli_close($connection);
-        }
-    }
-    $GLOBALS['._pirogue.database.mysqli.connections'] = [];
-}
-
 /**
  * translates database name to the ini file's path.
  * @internal
@@ -135,6 +125,16 @@ function _get(string $name): ?mysqli
         $connection = _open($name);
         return false == $connection ? null : $connection;
     }
+}
+
+function close_all(): void
+{
+    foreach (($GLOBALS['._pirogue.database.mysqli.connections'] ?? []) as $connection) {
+        if ('mysqli' == get_class($connection)) {
+            mysqli_close($connection);
+        }
+    }
+    $GLOBALS['._pirogue.database.mysqli.connections'] = [];
 }
 
 /**
