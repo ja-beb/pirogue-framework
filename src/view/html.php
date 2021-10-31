@@ -1,7 +1,7 @@
 <?php
 
 /**
- * library for working with html views.
+ * loader for html view files.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -10,7 +10,7 @@
 namespace pirogue\view\html;
 
 /**
- * file path pattern for the html view file.
+ * sprintf pattern for the view's file path.
  * @internal
  * @var string $GLOBALS['._pirogue.view.html.path_pattern']
  */
@@ -21,7 +21,6 @@ $GLOBALS['._pirogue.view.html.path_pattern'] = '';
  * @internal
  * @uses $GLOBALS['._pirogue.view.html.path_pattern']
  * @param string $path_pattern the pattern used to build view file paths.
- * @param array $view_fragment view fragement to return.
  * @return void
  */
 function _init(string $path_pattern): void
@@ -30,7 +29,7 @@ function _init(string $path_pattern): void
 }
 
 /**
- * clean up library before exit.
+ * clean up library variable state.
  * @internal
  * @uses $GLOBALS['._pirogue.view.html.path_pattern']
  * @return void
@@ -44,11 +43,10 @@ function _dispose(): void
 
 /**
  * load view file.
- * @throws error file not found.
+ * @throws error tirggers an derror if the view file is not found.
  * @uses $GLOBALS['._pirogue.view.html.path_pattern']
  * @param string $view view to load.
  * @param array $view_data data to pass to view.
- * @param array $page_data page data to use in building this page. Returns data from view.
  * @return string view file's content.
  */
 function load(string $view, array $view_data = []): string
