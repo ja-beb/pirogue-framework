@@ -1,7 +1,7 @@
 <?php
 
 /**
- * library for working with user session - handles start, end, fetching current, and working with sessioned variables.
+ * work with sessioned data passed between requests.
  * php version 8.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -18,7 +18,6 @@ $GLOBALS['._pirogue.session.environment.label'] = '';
 
 /**
  * initialize user session library.
- * @uses _dispose()
  * @uses $GLOBALS['._pirogue.session.environment.label']
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
  * @return void
