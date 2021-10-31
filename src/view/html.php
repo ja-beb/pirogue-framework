@@ -36,9 +36,7 @@ function _init(string $path_pattern): void
  */
 function _dispose(): void
 {
-    unset(
-        $GLOBALS['._pirogue.view.html.path_pattern'],
-    );
+    unset($GLOBALS['._pirogue.view.html.path_pattern']);
 }
 
 /**
