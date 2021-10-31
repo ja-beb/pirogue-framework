@@ -11,13 +11,11 @@ use pirogue\dispatcher;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
 
-<<<<<<< HEAD:test/tests/02 - dispatcher/04 - url_current.php
 $GLOBALS['.pirogue-testing.dispatcher.address'] = 'https://site.localhost.localdomain';
 $GLOBALS['.pirogue-testing.dispatcher.request_path'] = 'path.html';
 $GLOBALS['.pirogue-testing.dispatcher.request_data'] = ['id' => 1];
 
-=======
->>>>>>> main:test/tests/02 - dispatcher/03 - current_url.php
+
 dispatcher\_init(
     $GLOBALS['.pirogue-testing.dispatcher.address'],
     $GLOBALS['.pirogue-testing.dispatcher.request_path'],

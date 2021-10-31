@@ -66,17 +66,11 @@ foreach (array_filter(glob(implode(DIRECTORY_SEPARATOR, [__DIR__, '*'])), 'is_di
                 $_test_files_loaded++;
                 $_offset_count_test = $GLOBALS['._pirogue_test.count_test'];
                 require $_test_path;
-            } catch (Throwable $e) {
+            } catch (Throwable $_throwablee) {
                 _pirogue_test_log(
                     "require $_test_path",
-                    sprintf('%s (%s:%d)', $e->getMessage(), $e->getFile(), $e->getLine())
+                    sprintf('%s (%s:%d)', $_throwablee->getMessage(), $_throwablee->getFile(), $_throwablee->getLine())
                 );
-<<<<<<< HEAD
-=======
-            } finally {
-                printf("number of test performed: %d\n", $GLOBALS['._pirogue_test.count_test'] - $_offset_count_test);
-                echo "\n";
->>>>>>> main
             }
         }
     }
