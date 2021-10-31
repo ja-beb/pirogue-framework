@@ -1,7 +1,7 @@
 <?php
 
 /**
- * library for working with user session - handles start, end, fetching current, and working with sessioned variables.
+ * work with sessioned data passed between requests.
  * php version 8.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
@@ -18,7 +18,6 @@ $GLOBALS['._pirogue.session.environment.label'] = '';
 
 /**
  * initialize user session library.
- * @uses _dispose()
  * @uses $GLOBALS['._pirogue.session.environment.label']
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
  * @return void
@@ -26,13 +25,9 @@ $GLOBALS['._pirogue.session.environment.label'] = '';
 function _init(string $label): void
 {
     $GLOBALS['._pirogue.session.environment.label'] = $label;
-
-    // initialize session variables if needed.
     if (!array_key_exists($GLOBALS['._pirogue.session.environment.label'], $_SESSION)) {
         $_SESSION[$GLOBALS['._pirogue.session.environment.label']] = [];
     }
-
-    register_shutdown_function('pirogue\session\environment\_dispose');
 }
 
 /**
@@ -43,11 +38,19 @@ function _init(string $label): void
  */
 function _dispose(): void
 {
-    session_id() && session_write_close();
-
     if (array_key_exists('._pirogue.session.environment.label', $GLOBALS)) {
         unset($GLOBALS['._pirogue.session.environment.label']);
     }
+}
+
+/**
+ * write session data if session is open.
+ * @internal
+ * @return void
+ */
+function _write(): void
+{
+    session_id() && session_write_close();
 }
 
 /**
@@ -78,7 +81,7 @@ function exists(string $label): bool
  * @uses $GLOBALS['._pirogue.session.environment.label']
  * @param string $label the label of the session variable to fetch.
  * @param mixed $default the default value to return if the variable is not found.
- * @return mixed stored variable or the default value given if not found.
+ * @return mixed the saved variable or the default value given if not found.
  */
 function restore(string $label, mixed $default = null): mixed
 {
