@@ -15,7 +15,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
 mysqli\_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'config', 'mysqli-%s.ini']), 'website');
 
 pirogue_test_execute('_config(): invalid label', fn()  => null == mysqli\_config('invalid-website') ? '' : 'loaded invalid connection.');
-pirogue_test_execute('_config(): valid label', fn () => _pirogue_test_mysqli_query(mysqli\get('website')));
+pirogue_test_execute('_config(): valid label', fn()  => null == mysqli\_config('website') ? 'unable to load connection.' : '');
 
 // clean up testing environment
 mysqli\_dispose();
