@@ -81,7 +81,7 @@ function exists(string $label): bool
  * @uses $GLOBALS['._pirogue.session.environment.label']
  * @param string $label the label of the session variable to fetch.
  * @param mixed $default the default value to return if the variable is not found.
- * @return mixed stored variable or the default value given if not found.
+ * @return mixed the saved variable or the default value given if not found.
  */
 function restore(string $label, mixed $default = null): mixed
 {
