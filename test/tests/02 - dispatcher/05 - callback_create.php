@@ -10,8 +10,10 @@
 use pirogue\dispatcher;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'dispatcher.php']));
-require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'dispatcher.php']));
 
+$GLOBALS['.pirogue-testing.dispatcher.address'] = 'https://site.localhost.localdomain';
+$GLOBALS['.pirogue-testing.dispatcher.request_path'] = 'path.html';
+$GLOBALS['.pirogue-testing.dispatcher.request_data'] = ['id' => 1];
 
 dispatcher\_init(
     $GLOBALS['.pirogue-testing.dispatcher.address'],
