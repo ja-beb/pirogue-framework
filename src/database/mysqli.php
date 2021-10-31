@@ -62,7 +62,7 @@ function _init(string $path_format, string $default): void
 function _dispose(): void
 {
     if (!empty($GLOBALS['._pirogue.database.mysqli.connections'])) {
-        clos();
+        close_all();
     }
 
     unset(
@@ -124,10 +124,10 @@ function _get(string $name): ?mysqli
         $connection = _open(
             hostname: $config['hostname'],
             username: $config['username'],
-            password: $config['password'],
-            database: $config['database'],
-            port: $config['port'],
-            socket: $config['socket'],
+            password: $config['password'] ?? null,
+            database: $config['database'] ?? null,
+            port: $config['port'] ?? 3306,
+            socket: $config['socket'] ?? null,
         );
         return false == $connection ? null : $connection;
     }
@@ -136,7 +136,7 @@ function _get(string $name): ?mysqli
 function close_all(): void
 {
     foreach (($GLOBALS['._pirogue.database.mysqli.connections'] ?? []) as $connection) {
-        if ('mysqli' == get_class($connection)) {
+        if (null != $connection && 'mysqli' == get_class($connection)) {
             mysqli_close($connection);
         }
     }
