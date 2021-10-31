@@ -1,7 +1,7 @@
 <?php
 
 /**
- * store and create urls for cdn resources.
+ * store urls for cdn servers.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
