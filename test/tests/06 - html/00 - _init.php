@@ -11,7 +11,7 @@ use pirogue\view\html;
 
 require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'view', 'html.php']));
 
-$GLOBALS['._pirogue-testing.view.html.path_pattern'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view', '%s.phtml']);
+$GLOBALS['._pirogue-testing.view.html.path_pattern'] = implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'view', 'html', '%s.phtml']);
 $GLOBALS['._pirogue-testing.view.html.view_fragment'] = ['content' => ''];
 
 html\_init($GLOBALS['._pirogue-testing.view.html.path_pattern']);
