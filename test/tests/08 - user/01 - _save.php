@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing pirogue\session\user\_start().
+ * Testing pirogue\session\user\_save().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -20,9 +20,8 @@ user\_init($GLOBALS['._pirogue-testing.session.user.label']);
 
 pirogue_test_execute('_start(): null session', fn() => null != $_SESSION[$GLOBALS['._pirogue.session.user.label']] ? 'User session contains values before being set.' : '');
 
-// test _user_session_start() - check for session set.
-pirogue_test_execute('_user_session_start(): session set', function () {
-    user\_start($GLOBALS['._pirogue-testing.session.user']);
+pirogue_test_execute('_save(): session set', function () {
+    user\_save($GLOBALS['._pirogue-testing.session.user']);
     return $_SESSION[$GLOBALS['._pirogue.session.user.label']] == $GLOBALS['._pirogue-testing.session.user']
         ? ''
         : 'User session not properly set.';
