@@ -38,10 +38,18 @@ function _init(string $label): void
  */
 function _dispose(): void
 {
-    session_id() && session_write_close();
     if (array_key_exists('._pirogue.session.user.label', $GLOBALS)) {
         unset($GLOBALS['._pirogue.session.user.label']);
     }
+}
+
+/**
+ * save session if currently active.
+ * @internal 
+ * @return void
+ */
+function _save(): void {
+    session_id() && session_write_close();    
 }
 
 /**
