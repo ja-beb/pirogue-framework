@@ -2,14 +2,12 @@
 
 /**
  * handle database connections for a MySQL backend.
- * used to open, register, retrieve, store and closing database connections.
- * translates from database name to an ini file that contains settings.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\database;
+namespace pirogue\database\mysqli;
 
 use mysqli;
 
@@ -34,19 +32,6 @@ $GLOBALS['._pirogue.database.default'] = '';
  */
 $GLOBALS['._pirogue.database.connections'] = [];
 
-/**
- * function used to close the database connection.
- * @internal
- * @var array $GLOBALS['._pirogue.database.function_close']
- */
-$GLOBALS['._pirogue.database.function_close'] = null;
-
-/**
- * function used to open the database connection.
- * @internal
- * @var array $GLOBALS['._pirogue.database.function_open']
- */
-$GLOBALS['._pirogue.database.function_open'] = null;
 
 /**
  * initialize library.
@@ -54,8 +39,6 @@ $GLOBALS['._pirogue.database.function_open'] = null;
  * @uses $GLOBALS['._pirogue.database.path_format']
  * @uses $GLOBALS['._pirogue.database.default']
  * @uses $GLOBALS['._pirogue.database.connections']
- * @uses $GLOBALS['._pirogue.database.function_close']
- * @uses $GLOBALS['._pirogue.database.function_open']
  * @param string $path_format a sprintf path_format used to find the desired database config file based on inputed name.
  * @param string $default the name of the default database.
  * @return void
@@ -65,8 +48,6 @@ function _init(string $path_format, string $default): void
     $GLOBALS['._pirogue.database.path_format'] = $path_format;
     $GLOBALS['._pirogue.database.default'] = $default;
     $GLOBALS['._pirogue.database.connections'] = [];
-    $GLOBALS['._pirogue.database.function_close'] = $function_close;
-    $GLOBALS['._pirogue.database.function_open'] = $function_open;
 }
 
 /**
@@ -92,13 +73,7 @@ function _dispose(): void
     );
 }
 
-/**
- * close all database connection.
- * @internal
- * @uses $GLOBALS['._pirogue.database.connections']
- * @return void
- */
-function _close(): void
+function close_all(): void
 {
     foreach (($GLOBALS['._pirogue.database.connections'] ?? []) as $connection) {
         if ('mysqli' == get_class($connection)) {
@@ -125,37 +100,45 @@ function _config(string $name): ?array
 /**
  * open requested connection. translates name to the mysqli ini file's path and loads using data.
  * @internal
- * @throws error error tiggered if unable to connect or not registered.
- * @uses $GLOBALS['._pirogue.database.path_format']
- * @param string $name name of connection to open.
+ * @param string $hostname database's hostname or address.
+ * @param string $username the MySQL user name.
+ * @param ?string $password the password to use for this connection.
+ * @param ?string $database the name of the database to connect to.
+ * @param int $port the port number to attempt to connect to the MySQL server.
+ * @param int $socket the socket or named pipe to used to connect.
  * @return ?mysqli return null if not found or does not connect.
  */
-function _open(string $name): ?mysqli
+function _open(string $hostname, string $username, ?string $password = null, ?string $database = null, int $port = 3306, int $socket = null): ?mysqli
 {
-    $connection = false;
-    $file = sprintf($GLOBALS['._pirogue.database.path_format'], $name);
-    if (file_exists($file)) {
-        $config = parse_ini_file($file);
-        $connection = mysqli_connect(
-            $config['host'] ?? null,
-            $config['username'] ?? null,
-            $config['password'] ?? null,
-            $config['dbname'] ?? '',
-            $config['port'] ?? '3306',
-            $config['socket'] ?? null
-        );
-        if (false == $connection) {
-            trigger_error('unable to connect');
-        } else {
-            return $connection;
-        }
+    $connection = mysqli_connect(
+        hostname:$hostname,
+        username:$username,
+        password:$password,
+        database:$database,
+        port:$port,
+        socket:$socket
+    );
+    return false == $connection ? null $connection;
+}
+
+/**
+ * helper function that fetches an unregistered database connection.
+ * @param string $name
+ * @return mysqli|null
+ */
+function _get(string $name): ?mysqli
+{
+    $config = _open($name);
+    if (null == $config) {
+        return null;
     } else {
-        trigger_error('database not registered');
+        $connection = _open($name);
+        return false == $connection ? null : $connection;
     }
 }
 
 /**
- * get database connection. 
+ * get database connection.
  * @throws error error tiggered if unable to connect or not registered.
  * @uses $GLOBALS['._pirogue.database.connections']
  * @uses $GLOBALS['._pirogue.database.default']
@@ -166,7 +149,10 @@ function get(?string $name = null): mysqli
 {
     $name = null == $name ? $GLOBALS['._pirogue.database.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database.connections'])) {
-        $GLOBALS['._pirogue.database.connections'][$name] = _open($name);
+        $GLOBALS['._pirogue.database.connections'][$name] = _get($name);
+        if (null == $GLOBALS['._pirogue.database.connections'][$name]) {
+            trigger_error(sprintf('unable to connect to database "%s"', $name));
+        }
     }
     return $GLOBALS['._pirogue.database.connections'][$name];
 }
