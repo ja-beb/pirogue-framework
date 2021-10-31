@@ -47,7 +47,7 @@ function _dispose(): void
 function _start(): void
 {
     session_start([
-        'session.name' => $GLOBALS['._pirogue.session.name']
+        'name' => $GLOBALS['._pirogue.session.name']
     ]);
 }
 
