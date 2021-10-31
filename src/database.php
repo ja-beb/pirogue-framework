@@ -52,7 +52,7 @@ function _init(string $path_format, string $default): void
 }
 
 /**
- * close and deallocate all registered mysqli connections.
+ * deallocate library variables. Will close any open connections if they exist.
  * @internal
  * @uses _close()
  * @uses $GLOBALS['._pirogue.database.path_format']
@@ -94,12 +94,12 @@ function _close(): void
  * open requested connection
  * @internal
  * @throws error error tiggered if unable to connect or not registered.
- * @uses $connection()
+ * @uses $GLOBALS['._pirogue.database.path_format']
  * @param string $name name of connection to open.
  * @return ?mysqli return null if not found or does not connect.
  */
-function _open(string $name): mysqli
-{
+function _open(string $name): ?mysqli
+{1
     $connection = false;
     $file = sprintf($GLOBALS['._pirogue.database.path_format'], $name);
     if (file_exists($file)) {
@@ -114,8 +114,9 @@ function _open(string $name): mysqli
         );
         if (false == $connection) {
             trigger_error('unable to connect');
+        } else {
+            return $connection;
         }
-        return $connection;
     } else {
         trigger_error('database not registered');
     }
