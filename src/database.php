@@ -35,11 +35,27 @@ $GLOBALS['._pirogue.database.default'] = '';
 $GLOBALS['._pirogue.database.connections'] = [];
 
 /**
+ * function used to close the database connection.
+ * @internal
+ * @var array $GLOBALS['._pirogue.database.function_close']
+ */
+$GLOBALS['._pirogue.database.function_close'] = null;
+
+/**
+ * function used to open the database connection.
+ * @internal
+ * @var array $GLOBALS['._pirogue.database.function_open']
+ */
+$GLOBALS['._pirogue.database.function_open'] = null;
+
+/**
  * initialize library.
  * @internal
  * @uses $GLOBALS['._pirogue.database.path_format']
  * @uses $GLOBALS['._pirogue.database.default']
  * @uses $GLOBALS['._pirogue.database.connections']
+ * @uses $GLOBALS['._pirogue.database.function_close']
+ * @uses $GLOBALS['._pirogue.database.function_open']
  * @param string $path_format a sprintf path_format used to find the desired database config file based on inputed name.
  * @param string $default the name of the default database.
  * @return void
@@ -49,6 +65,8 @@ function _init(string $path_format, string $default): void
     $GLOBALS['._pirogue.database.path_format'] = $path_format;
     $GLOBALS['._pirogue.database.default'] = $default;
     $GLOBALS['._pirogue.database.connections'] = [];
+    $GLOBALS['._pirogue.database.function_close'] = $function_close;
+    $GLOBALS['._pirogue.database.function_open'] = $function_open;
 }
 
 /**
