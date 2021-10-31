@@ -26,10 +26,7 @@ $GLOBALS['._pirogue.dispatcher.cdn.servers'] = [];
  */
 function _init(array $servers = []): void
 {
-    $GLOBALS['._pirogue.dispatcher.cdn.servers'] = [];
-    foreach ($servers as $name => $address) {
-        register($name, $address);
-    }
+    $GLOBALS['._pirogue.dispatcher.cdn.servers'] = $servers;
 }
 
 /**
@@ -45,7 +42,7 @@ function _dispose(): void
 }
 
 /**
- * registger new cdn server.
+ * register a new cdn server.
  * @uses $GLOBALS['._pirogue.dispatcher.cdn.servers']
  * @param string $name the name of the serer to register.
  * @param string $address the address of the server to register.
