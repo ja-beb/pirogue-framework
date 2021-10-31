@@ -12,7 +12,6 @@ use pirogue\session\user;
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'session', 'user.php']);
-require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'test', 'user_session.php']);
 
 // set up testin environment.
 $_SESSION = [];
