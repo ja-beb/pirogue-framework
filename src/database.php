@@ -2,7 +2,7 @@
 
 /**
  * handle database connections for a MySQL backend.
- * used to open, register, retrieve, store and closing database connections. 
+ * used to open, register, retrieve, store and closing database connections.
  * translates from database name to an ini file that contains settings.
  * php version 8.0.0
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -54,6 +54,7 @@ function _init(string $path_format, string $default): void
 /**
  * close and deallocate all registered mysqli connections.
  * @internal
+ * @uses _close()
  * @uses $GLOBALS['._pirogue.database.path_format']
  * @uses $GLOBALS['._pirogue.database.default']
  * @uses $GLOBALS['._pirogue.database.connections']
@@ -61,18 +62,32 @@ function _init(string $path_format, string $default): void
  */
 function _dispose(): void
 {
-    if (array_key_exists('._pirogue.database.connections', $GLOBALS)) {
-        foreach ($GLOBALS['._pirogue.database.connections'] as $connection) {
-            if ('mysqli' == get_class($connection)) {
-                mysqli_close($connection);
-            }
-        }
-        unset(
-            $GLOBALS['._pirogue.database.default'],
-            $GLOBALS['._pirogue.database.path_format'],
-            $GLOBALS['._pirogue.database.connections'],
-        );
+    if (!empty($GLOBALS['._pirogue.database.connections'])) {
+        )
+        _close();
     }
+
+    unset(
+        $GLOBALS['._pirogue.database.default'],
+        $GLOBALS['._pirogue.database.path_format'],
+        $GLOBALS['._pirogue.database.connections'],
+    );
+}
+
+/**
+ * close all database connection.
+ * @internal
+ * @uses $GLOBALS['._pirogue.database.connections']
+ * @return void
+ */
+function _close(): void
+{
+    foreach (($GLOBALS['._pirogue.database.connections'] ?? []) as $connection) {
+        if ('mysqli' == get_class($connection)) {
+            mysqli_close($connection);
+        }
+    }
+    $GLOBALS['._pirogue.database.connections'] = [];
 }
 
 /**
