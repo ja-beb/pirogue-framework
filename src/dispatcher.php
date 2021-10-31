@@ -133,7 +133,7 @@ function _buffer_clear(): void
  * @param int $status_code the http status code to use in the redirect process.
  * @return void.
  */
-function redirect(string $address, int $status_code = 301): void
+function redirect(string $address, int $status_code = 302): void
 {
     header(sprintf('Location: %s', $address), true, $status_code);
     exit();
