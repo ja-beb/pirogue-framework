@@ -10,7 +10,7 @@
 namespace pirogue\dispatcher\cdn;
 
 /**
- * registered cdn servers.
+ * the list of registered cdn servers.
  * @internal
  * @var array $GLOBALS['._pirogue.dispatcher.cdn.servers']
  */
