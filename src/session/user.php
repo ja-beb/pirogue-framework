@@ -65,12 +65,12 @@ function _save(array $user): void
 }
 
 /**
- * end the current user session.
+ * destory the current user session.
  * @internal
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return void
  */
-function _end(): void
+function _destroy(): void
 {
     unset($_SESSION[$GLOBALS['._pirogue.session.user.label']]);
 }
