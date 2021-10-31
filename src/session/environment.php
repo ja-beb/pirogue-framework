@@ -38,11 +38,19 @@ function _init(string $label): void
  */
 function _dispose(): void
 {
-    session_id() && session_write_close();
-
     if (array_key_exists('._pirogue.session.environment.label', $GLOBALS)) {
         unset($GLOBALS['._pirogue.session.environment.label']);
     }
+}
+
+/**
+ * write session data if session is open.
+ * @internal
+ * @return void
+ */
+function _write(): void
+{
+    session_id() && session_write_close();
 }
 
 /**
