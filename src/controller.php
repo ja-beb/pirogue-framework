@@ -43,7 +43,13 @@ has_access(?int $user_id): bool
 {}
 
 /**
- *
+ * execute controller action.
+ * @uses $GLOBALS['._pirogue.controller.namespace']
+ * @param string $action the contoller action to invoke.
+ * @param array $request_path the request path to pass the action.
+ * @param array $request_data the request data to pass the action.
+ * @param array $form_data the form data to pass the action.
+ * @return array view fragment.
  */
 controller_exec(string $action, array $request_path, array $request_data, array $form_data=[]): array
 {}
