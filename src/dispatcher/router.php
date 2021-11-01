@@ -127,7 +127,7 @@ function create(string $controller_namespace, string $action_name, string $reque
 {
     $controller_path = _build_path([$file_name ?? $controller_namespace, $action_name]);
     return [
-        'controller_namespace' => $controller_namespace,
+        'controller_namespace' => _convert_case(strtolower($controller_namespace)),
         'action_name' => $action_name,
         'request_method' => $request_method,
         'controller_path' => $controller_path,
