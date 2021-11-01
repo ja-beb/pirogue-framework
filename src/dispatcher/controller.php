@@ -34,7 +34,7 @@ function _init(string $name) : void
  * @uses $GLOBALS['._pirogue.controller.namespace']
  * @return void
  */
-function _destroy() : void
+function _dispose() : void
 {
     unset($GLOBALS['._pirogue.controller.namespace']);
 }
