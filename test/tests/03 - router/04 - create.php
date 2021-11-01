@@ -18,8 +18,8 @@ router\_init($GLOBALS['._pirogue-testing.dispatcher.router.path_format']);
 function _router_test_create(array $route_result, array $route_expected): string
 {
     $route = router\create('example-controller', 'index', 'GET');
-    if ($route_result['controller_name'] != $route_expected['controller_name']) {
-        return sprintf('invalid controller name: recieved="%s", expected="%s"', $route_result['controller_name'], $route_expected['controller_name']);
+    if ($route_result['controller_namespace'] != $route_expected['controller_namespace']) {
+        return sprintf('invalid controller name: recieved="%s", expected="%s"', $route_result['controller_namespace'], $route_expected['controller_namespace']);
     }
 
     if ($route_result['action_name'] != $route_expected['action_name']) {
@@ -44,51 +44,51 @@ function _router_test_create(array $route_result, array $route_expected): string
 pirogue_test_execute('create(): GET - example_controller\index', fn() => _router_test_create(
     router\create('example-controller', 'index', 'GET'),
     [
-            'controller_name' => 'example-controller',
+            'controller_namespace' => 'example-controller',
             'action_name' => 'index',
             'request_method' => 'GET',
             'controller_path' => '/pirogue/controller/example-controller.php',
-            'action' => 'example_controller\index_get'
+            'action' => 'index_get'
     ]
 ));
 
 pirogue_test_execute('create(): POST - example_controller\index', fn() => _router_test_create(
     router\create('example-controller', 'index', 'POST'),
     [
-            'controller_name' => 'example-controller',
+            'controller_namespace' => 'example-controller',
             'action_name' => 'index',
             'request_method' => 'POST',
             'controller_path' => '/pirogue/controller/example-controller.php',
-            'action' => 'example_controller\index_post'
+            'action' => 'index_post'
     ]
 ));
 
 pirogue_test_execute('create(): GET internal_controller\fallback', fn() => _router_test_create(
     router\create('internal-controller', 'fallback', 'GET', '_internal-controller'),
     [
-            'controller_name' => 'internal-controller',
+            'controller_namespace' => 'internal-controller',
             'action_name' => 'fallback',
             'request_method' => 'GET',
             'controller_path' => '/pirogue/controller/_internal-controller.php',
-            'action' => 'internal_controller\fallback_get'
+            'action' => 'fallback_get'
     ]
 ));
 
 pirogue_test_execute('create(): POST _internal-controller\fallback', fn() => _router_test_create(
     router\create('internal-controller', 'fallback', 'POST', '_internal-controller'),
     [
-            'controller_name' => 'internal-controller',
+            'controller_namespace' => 'internal-controller',
             'action_name' => 'fallback',
             'request_method' => 'POST',
             'controller_path' => '/pirogue/controller/_internal-controller.php',
-            'action' => 'internal_controller\fallback_get'
+            'action' => 'fallback_get'
     ]
 ));
 
 pirogue_test_execute('create(): GET invalid-controller\index', fn() => _router_test_create(
     router\create('invalid-controller', 'index', 'GET'),
     [
-            'controller_name' => 'invalid-controller',
+            'controller_namespace' => 'invalid-controller',
             'action_name' => 'index',
             'request_method' => 'GET',
             'controller_path' => '',
@@ -99,7 +99,7 @@ pirogue_test_execute('create(): GET invalid-controller\index', fn() => _router_t
 pirogue_test_execute('create(): GET example-controller\invalid-action', fn() => _router_test_create(
     router\create('example-controller', 'invalid-action', 'GET'),
     [
-            'controller_name' => 'example-controller',
+            'controller_namespace' => 'example-controller',
             'action_name' => 'invalid-action',
             'request_method' => 'GET',
             'controller_path' => '/pirogue/controller/example-controller.php',

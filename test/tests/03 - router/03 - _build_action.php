@@ -9,9 +9,9 @@
 
 use pirogue\dispatcher\router;
 
-function _router_get_action_test(string $controller_name, string $action_name, string $request_method, string $results): string
+function _router_get_action_test(string $controller_namespace, string $action_name, string $request_method, string $results): string
 {
-    $function_action = router\_build_action($controller_name, $action_name, $request_method);
+    $function_action = router\_build_action($controller_namespace, $action_name, $request_method);
     return $results == $function_action ? '' : sprintf('invalid action returned: returned "%s" but expected "%s"', $function_action, $results);
 }
 
