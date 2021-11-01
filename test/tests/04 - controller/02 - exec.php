@@ -15,7 +15,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controller', 
 $GLOBALS['._pirogue-testing.controller.namespace'] = 'example_controller';
 controller\_init($GLOBALS['._pirogue-testing.controller.namespace']);
 
-pirogue_test_execute('has_aexecccess()', function() {
+pirogue_test_execute('exec()', function() {
     if (null == controller\exec('index_get', [], [])) {
         return 'exec returned null';
     } else {

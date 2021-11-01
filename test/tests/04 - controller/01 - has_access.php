@@ -18,7 +18,7 @@ controller\_init($GLOBALS['._pirogue-testing.controller.namespace']);
 pirogue_test_execute('has_access()', function() {
     if (controller\has_access(null)) {
         return 'has_access returned wrong value';
-    } elseif (!controller_has_access(1)) {
+    } elseif (!controller\has_access(1)) {
         return 'has_access returned wrong value';
     } else {
         return '';
