@@ -21,5 +21,5 @@ pirogue_test_execute('load(): invalid file', function () {
     }
 });
 
-pirogue_test_execute('load(): valid file', fn() => import\load('pirogue/dispatcher/servers'));
+pirogue_test_execute('load(): valid file', fn() => import\load('pirogue/dispatcher/url_list'));
 import\_dispose();
