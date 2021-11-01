@@ -51,7 +51,7 @@ has_access(?int $user_id) : bool
         sprintf('%s\has_access', $GLOBALS['._pirogue.controller.namespace']),
         $user_id
     );
-    }
+}
 
 /**
  * execute controller action.
@@ -62,12 +62,12 @@ has_access(?int $user_id) : bool
  * @param array $form_data the form data to pass the action.
  * @return array view fragment.
  */
-    controller_exec(string $action, array $request_path, array $request_data, array $form_data = []) : array
-    {
+exec(string $action, array $request_path, array $request_data, array $form_data = []) : array
+{
     return call_user_func(
         sprintf('%s\%s', $GLOBALS['._pirogue.controller.namespace'], $action),
         $request_path,
         $request_data,
         $form_data
     );
-    }
+}
