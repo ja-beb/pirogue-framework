@@ -23,7 +23,7 @@ $GLOBALS['._pirogue.controller.namespace'] = '';
  * @param string $name the name of the controller that is loaded.
  * @return void.
  */
-_init(string $name) : void
+function _init(string $name) : void
 {
     $GLOBALS['._pirogue.controller.namespace'] = $name;
 }
@@ -34,7 +34,7 @@ _init(string $name) : void
  * @uses $GLOBALS['._pirogue.controller.namespace']
  * @return void
  */
-_destroy() : void
+function _destroy() : void
 {
     unset($GLOBALS['._pirogue.controller.namespace']);
 }
@@ -45,7 +45,7 @@ _destroy() : void
  * @param ?int $user_id the user id to check for access.
  * @return bool access flag.
  */
-has_access(?int $user_id) : bool
+function has_access(?int $user_id) : bool
 {
     return call_user_func(
         sprintf('%s\has_access', $GLOBALS['._pirogue.controller.namespace']),
@@ -62,7 +62,7 @@ has_access(?int $user_id) : bool
  * @param array $form_data the form data to pass the action.
  * @return array view fragment.
  */
-exec(string $action, array $request_path, array $request_data, array $form_data = []) : array
+function exec(string $action, array $request_path, array $request_data, array $form_data = []) : array
 {
     return call_user_func(
         sprintf('%s\%s', $GLOBALS['._pirogue.controller.namespace'], $action),

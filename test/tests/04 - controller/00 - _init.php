@@ -22,7 +22,6 @@ pirogue_test_execute('_init()', function() {
     } else {
         return 'invalid value set to ._pirogue.controller.namespace.';
     }
-
 });
 
 controller\_dispose();
