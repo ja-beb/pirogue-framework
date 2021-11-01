@@ -7,37 +7,39 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 + .php = php executable or include file.
 + .phtml = php template file - contains both html and php content.
 ### General Rules
-- snake case for functions and variables.
+- lowercase throughout.
+- snake case for functions, variables, and namespaces.
 - kebab case for path components, array labels, and form input labels (example: site-users/user-assignment.json).
 ### Functions
-- pirogue\ibrary\_init() = library initialize function.
-- pirogue\_library\_dispose() = internal function, library destructor function registered when library is initialized.
-- pirogue\library\name_func() = public function within a library (ie dispatcher_route()).
-- pirogue\library\_name_func() = internal function, used within dispatcher and library only. 
-### Global Variables
-Variables registered with a global array ($GLOBALS or $_SESSION) are prefixed with the '.' character to prevent them from being exported to the current symbol table or being made available with the "register globals" (prevent user from impulating register_globals).
+- pirogue\\library\\_init() = library initialize function.
+- pirogue\\library\\_dispose() = internal function, library destructor function registered when library is initialized.
+- pirogue\\library\\function() = public function within a library (ie redirect()).
+- pirogue\\library\\_function() = internal function, used within dispatcher and library only. 
+### Variables
+#### Global Variables
+Variables registered with a global array ($GLOBALS or $_SESSION) are prefixed with the '.' character to prevent them from being exported to the current symbol table (via register_globals or extract()).
 - $GLOBALS['.\_pirogue.library-name'] = internal variable (prefixed with '.\_').
 - $GLOBALS['.pirogue.library-name'] = public variable (prefixed with '.').
-### Local Variables
+#### Local Variables
 - $\_varaible_name =  interal variable that is scoped to current scope only.
 - $varaible_name = public variable - can be used outside of scope.
 ### Path 
-Any parts of a path that are prefixed with a '_' character are considered "protected" and are not directly accessabile to the client (can not be routed by HTTP requests). The dispatcher is repsonsible for removing these special character prefixes. They can be accessed via internal calls only. 
-- public/public.phtml = public file.
-- _private/end-point.phtml = internal file.
-- public/_private.phtml = internal file.
+Any parts of a path that are prefixed with a '_' character are considered "protected" and are not directly accessabile to the client (can not be routed by HTTP requests). The dispatcher is repsonsible for removing these special character prefixes. 
+- public/public.phtml = public file, inaccessible by client directly.
+- _private/end-point.phtml = internal file, inaccessible by client directly.
+- public/_private.phtml = internal file, inaccessible by client directly.
 ## Controllers
-Controllers are loaded from a seperate folder and should implement the following interface. within their own namespace.
-- "{$controller name}\_init"
-- "{$controller name}\_dispose" 
-- "{$controller name}\_has_access"
-- "{$controller name}\_error_403" - optional, intercepts and handles HTTP 403 errors form default controller.
-- "{$controller name}\_error_404" - optional, intercepts and handles HTTP 404 errors form default controller.
-- "{$controller name}\_error_405" - optional, intercepts and handles HTTP 405 errors form default controller.
-- "{$controller name}\_error_500" - optional, intercepts and handles HTTP 500 errors form default controller.
-- "{$controller name}\{$action}_{$request method}" - action invoked in controller. For example, if the user requests account/index.html then this request would mapp to the function account_index_get().
+Controllers are stored in a controller directory and are loaded when needed. Each controller should implement the following functions:
+- "{$controller namespace}\\_init():void"
+- "{$controller namespace}\\_dispose():void" 
+- "{$controller namespace}\\_has_access():bool"
+- "{$controller namespace}\\_error_403():array" - optional, intercepts and handles HTTP 403 errors from default controller.
+- "{$controller namespace}\\_error_404():array" - optional, intercepts and handles HTTP 404 errors from default controller.
+- "{$controller namespace}\\_error_405():array" - optional, intercepts and handles HTTP 405 errors from default controller.
+- "{$controller namespace}\\_error_500():array" - optional, intercepts and handles HTTP 500 errors from default controller.
+- "{$controller namespace}\\{$action}_{$request method}():array" - action invoked in controller. For example, if the user requests account/index.html then this request would mapp to the account\\index_get() function.
 ## Views
-Views are stored in a seperate folder and are loaded by the controller's action function.
+Views are stored in a view directory and are loaded by the controller's action function.
 ## Example project layout
 The following defines the directory structure for a trival example site that allows users to log in, view account information and update their information.
 ```
