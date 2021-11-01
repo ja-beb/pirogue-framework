@@ -15,7 +15,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'controller', 
 $GLOBALS['._pirogue-testing.controller.namespace'] = 'example_controller';
 controller\_init($GLOBALS['._pirogue-testing.controller.namespace']);
 
-pirogue_test_execute('has_access()', function() {
+pirogue_test_execute('has_access()', function () {
     if (controller\has_access(null)) {
         return 'has_access returned wrong value';
     } elseif (!controller\has_access(1)) {

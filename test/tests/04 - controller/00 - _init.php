@@ -14,7 +14,7 @@ require_once(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
 $GLOBALS['._pirogue-testing.controller.namespace'] = 'site\example_controller';
 controller\_init($GLOBALS['._pirogue-testing.controller.namespace']);
 
-pirogue_test_execute('_init()', function() {
+pirogue_test_execute('_init()', function () {
     if (!array_key_exists('._pirogue.controller.namespace', $GLOBALS)) {
         return 'variable ._pirogue.controller.namespace not set';
     } elseif ($GLOBALS['._pirogue.controller.namespace'] == $GLOBALS['._pirogue-testing.controller.namespace']) {
