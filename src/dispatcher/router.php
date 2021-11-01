@@ -95,15 +95,15 @@ function _build_path(array $path): ?string
  * @param string $request_method the http request method to check for route action.
  * @return ?string null if no route otherwise the name of the routing funciton.
  */
-function _build_action(string $controller_namespace, string $action_name, string $request_method = 'GET'): ?string
+function _build_action(string $controller_namespace, string $action_name, string $request_method = 'get'): ?string
 {
     $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
     if (function_exists($function_name)) {
         return strtolower(sprintf('%s_%s', $action_name, $request_method));
-    } elseif ('GET' == $request_method) {
+    } elseif ('get' == $request_method) {
         return null;
     } else {
-        return 'GET' == $request_method ? null : _build_action($controller_namespace, $action_name);
+        return _build_action($controller_namespace, $action_name);
     }
 }
 
@@ -126,13 +126,14 @@ function _build_action(string $controller_namespace, string $action_name, string
 function create(string $controller_namespace, string $action_name, string $request_method, ?string $file_name = null): array
 {
     $controller_path = _build_path([$file_name ?? $controller_namespace, $action_name]);
+    $controller_namespace = _convert_case($controller_namespace);
     return [
-        'controller_namespace' => _convert_case(strtolower($controller_namespace)),
+        'controller_namespace' => $controller_namespace,
         'action_name' => $action_name,
         'request_method' => $request_method,
         'controller_path' => $controller_path,
         'action' => '' == $controller_path ? null : _build_action(
-            _convert_case($controller_namespace),
+            $controller_namespace,
             _convert_case($action_name),
             strtolower($request_method),
         )
