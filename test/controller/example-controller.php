@@ -29,11 +29,10 @@ function _dispose(): void{}
 /**
  * validate access.
  *
- * @internal
  * @param integer|null $user_id
  * @return bool returns false if user id is null.
  */
-function _has_access(?int $user_id): bool{
+function has_access(?int $user_id): bool{
     return null != $user_id;
 }
 

@@ -90,20 +90,20 @@ function _build_path(array $path): ?string
  * translate the (controller name, action name, request method) values to the function impelementing that controller's action - defaults to the request method 'GET'.
  * @internal
  * @uses pirogue\router\convert_case()
- * @param string $controller_name name of the controller.
+ * @param string $controller_namespace name of the controller.
  * @param string $action_name name of the requested action.
  * @param string $request_method the http request method to check for route action.
  * @return ?string null if no route otherwise the name of the routing funciton.
  */
-function _build_action(string $controller_name, string $action_name, string $request_method = 'GET'): ?string
+function _build_action(string $controller_namespace, string $action_name, string $request_method = 'GET'): ?string
 {
-    $function_name = sprintf('%s\%s_%s', $controller_name, $action_name, $request_method);
+    $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
     if (function_exists($function_name)) {
-        return strtolower($function_name);
+        return strtolower(sprintf('%s_%s', $action_name, $request_method));
     } elseif ('GET' == $request_method) {
         return null;
     } else {
-        return 'GET' == $request_method ? null : _build_action($controller_name, $action_name);
+        return 'GET' == $request_method ? null : _build_action($controller_namespace, $action_name);
     }
 }
 
@@ -111,28 +111,28 @@ function _build_action(string $controller_name, string $action_name, string $req
  * create a new route.
  * @uses _build_path()
  * @uses _build_action()
- * @param string $controller_name the requested controller.
+ * @param string $controller_namespace the requested controller.
  * @param string $action_name the requested action.
  * @param string $request_method method of this request.
  * @param ?string $file_name if provided this is used to build filepath for the controller otherwise the controller name is used.
  * @return array a associate array containing the route components in the form of [
- *      'controller_name' => $controller_name,
+ *      'controller_namespace' => $controller_namespace,
  *      'action_name' => $action_name,
  *      'request_method' => $request_method,
- *      'controller_path' => '{controller base directory}/{$controller_name}.php',
- *      'action' => '{$controller_name}\{$action_name}_{$request_method}',
+ *      'controller_path' => '{controller base directory}/{$controller_namespace}.php',
+ *      'action' => '{$controller_namespace}\{$action_name}_{$request_method}',
  * ]
  */
-function create(string $controller_name, string $action_name, string $request_method, ?string $file_name = null): array
+function create(string $controller_namespace, string $action_name, string $request_method, ?string $file_name = null): array
 {
-    $controller_path = _build_path([$file_name ?? $controller_name, $action_name]);
+    $controller_path = _build_path([$file_name ?? $controller_namespace, $action_name]);
     return [
-        'controller_name' => $controller_name,
+        'controller_namespace' => $controller_namespace,
         'action_name' => $action_name,
         'request_method' => $request_method,
         'controller_path' => $controller_path,
         'action' => '' == $controller_path ? null : _build_action(
-            _convert_case($controller_name),
+            _convert_case($controller_namespace),
             _convert_case($action_name),
             strtolower($request_method),
         )
