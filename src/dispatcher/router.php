@@ -99,7 +99,7 @@ function _build_action(string $controller_name, string $action_name, string $req
 {
     $function_name = sprintf('%s\%s_%s', $controller_name, $action_name, $request_method);
     if (function_exists($function_name)) {
-        return strtolower($function_name);
+        return strtolower(sprintf('%s_%s', $action_name, $request_method));
     } elseif ('GET' == $request_method) {
         return null;
     } else {
