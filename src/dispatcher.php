@@ -174,8 +174,8 @@ function url_create(string $path, array $data): string
 function url_current(): string
 {
     return url_create(
-        $GLOBALS['.pirogue.dispatcher.request_path'],
-        $GLOBALS['.pirogue.dispatcher.request_data']
+        path: $GLOBALS['.pirogue.dispatcher.request_path'],
+        data: $GLOBALS['.pirogue.dispatcher.request_data']
     );
 }
 
