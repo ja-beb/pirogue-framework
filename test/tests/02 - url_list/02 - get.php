@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Testing pirogue\dispatcher\url_list\url()
+ * Testing pirogue\dispatcher\url_list\get()
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
@@ -18,7 +18,7 @@ $GLOBALS['._pirogue-testing.dispatcher.url_list.list'] = [
 url_list\_init();
 
 // run test.
-pirogue_test_execute("url()", fn() => url_list\url('cdn')  == ($GLOBALS['._pirogue-testing.url_list.list']['cdn'] ?? '') ? '' : 'Invalid url returned.');
+pirogue_test_execute("get()", fn() => url_list\get('cdn')  == ($GLOBALS['._pirogue-testing.url_list.list']['cdn'] ?? '') ? '' : 'Invalid url returned.');
 
 // clean up test environment.
 url_list\_dispose();
