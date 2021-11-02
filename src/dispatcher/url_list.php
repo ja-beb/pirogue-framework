@@ -52,12 +52,12 @@ function register(string $name, string $address): void
 }
 
 /**
- * return the url to a registered server.
+ * get a registered url.
  * @uses $GLOBALS['._pirogue.dispatcher.url_list.list']
- * @param string $server_name the name of the server to retrieve the address of.
- * @return string url to sever or null if not registered.
+ * @param string $name the name of the url to retrieve.
+ * @return string the registgered url or null if not registered.
  */
-function url(string $server_name): ?string
+function get(string $name): ?string
 {
-    return $GLOBALS['._pirogue.dispatcher.url_list.list'][$server_name] ?? null;
+    return $GLOBALS['._pirogue.dispatcher.url_list.list'][$name] ?? null;
 }
