@@ -7,50 +7,50 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\view;
+namespace pirogue;
 
 /**
  * sprintf pattern for the view's file path.
  * @internal
  * @var string $GLOBALS['._pirogue.view.html.path_pattern']
  */
-$GLOBALS['._pirogue.view.html.path_pattern'] = '';
+$GLOBALS['._pirogue.view_html.path_pattern'] = '';
 
 /**
  * initialize view
  * @internal
- * @uses $GLOBALS['._pirogue.view.html.path_pattern']
+ * @uses $GLOBALS['._pirogue.view_html.path_pattern']
  * @param string $path_pattern the pattern used to build view file paths.
  * @return void
  */
-function _html_init(string $path_pattern): void
+function _view_html_init(string $path_pattern): void
 {
-    $GLOBALS['._pirogue.view.html.path_pattern'] = $path_pattern;
+    $GLOBALS['._pirogue.view_html.path_pattern'] = $path_pattern;
 }
 
 /**
  * clean up library variable state.
  * @internal
- * @uses $GLOBALS['._pirogue.view.html.path_pattern']
+ * @uses $GLOBALS['._pirogue.view_html.path_pattern']
  * @return void
  */
-function _html_dispose(): void
+function _view_html_dispose(): void
 {
-    unset($GLOBALS['._pirogue.view.html.path_pattern']);
+    unset($GLOBALS['._pirogue.view_html.path_pattern']);
 }
 
 /**
  * load view file.
  * @throws error tirggers an derror if the view file is not found.
- * @uses $GLOBALS['._pirogue.view.html.path_pattern']
+ * @uses $GLOBALS['._pirogue.view_html.path_pattern']
  * @param string $view view to load.
  * @param array $view_data data to pass to view.
  * @return string view file's content.
  */
-function html_load(string $view, array $view_data = []): string
+function view_html_load(string $view, array $view_data = []): string
 {
     $buffer = '';
-    $view_file = sprintf($GLOBALS['._pirogue.view.html.path_pattern'], $view);
+    $view_file = sprintf($GLOBALS['._pirogue.view_html.path_pattern'], $view);
     if (file_exists($view_file)) {
         ob_start();
         require $view_file;

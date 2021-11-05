@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\view;
+namespace pirogue;
 
 /**
  * sprintf pattern for the view's file path.
@@ -23,7 +23,7 @@ $GLOBALS['._pirogue.view.json.path_pattern'] = '';
  * @param string $path_pattern the pattern used to build view file paths.
  * @return void
  */
-function _json_init(string $path_pattern): void
+function _view_json_init(string $path_pattern): void
 {
     $GLOBALS['._pirogue.view.json.path_pattern'] = $path_pattern;
 }
@@ -34,7 +34,7 @@ function _json_init(string $path_pattern): void
  * @uses $GLOBALS['._pirogue.view.json.path_pattern']
  * @return void
  */
-function _json_dispose(): void
+function _view_json_dispose(): void
 {
     unset($GLOBALS['._pirogue.view.json.path_pattern']);
 }
@@ -47,7 +47,7 @@ function _json_dispose(): void
  * @param array $view_data data to pass to view.
  * @return mixed view file's contents.
  */
-function json_load(string $view, array $view_data = []): mixed
+function view_json_load(string $view, array $view_data = []): mixed
 {
     $view_file = sprintf($GLOBALS['._pirogue.view.json.path_pattern'], $view);
     if (file_exists($view_file)) {
