@@ -29,12 +29,20 @@ $GLOBALS['.pirogue.dispatcher.request_path'] = '';
  */
 $GLOBALS['.pirogue.dispatcher.request_data'] = [];
 
+
+/**
+ * store regsitered pathes.
+ * @var array $GLOBALS['._pirogue.dispatcher.path_list']
+ */
+$GLOBALS['._pirogue.dispatcher.path_list'] = [];
+
 /**
  * setup dispatcher library.
  * @internal
  * @uses $GLOBALS['.pirogue.dispatcher.address']
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
+ * @uses $GLOBALS['._pirogue.dispatcher.path_list']
  * @param string $address the base address for the site.
  * @param string $request_path a string containing the path the the client's requested resource.
  * @param array $request_data array containing the request data passed from the client.
@@ -45,6 +53,7 @@ function _dispatcher_init(string $address, string $request_path, array $request_
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
     $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
+    $GLOBALS['._pirogue.dispatcher.path_list'] = [];
 }
 
 /**
@@ -61,6 +70,7 @@ function _dispatcher_dispose(): void
         $GLOBALS['.pirogue.dispatcher.address'],
         $GLOBALS['.pirogue.dispatcher.request_path'],
         $GLOBALS['.pirogue.dispatcher.request_data'],
+        $GLOBALS['._pirogue.dispatcher.path_list'],
     );
 }
 
@@ -177,6 +187,30 @@ function dispatcher_url_current(): string
         path: $GLOBALS['.pirogue.dispatcher.request_path'],
         data: $GLOBALS['.pirogue.dispatcher.request_data']
     );
+}
+
+
+/**
+ * register a new server.
+ * @uses $GLOBALS['._pirogue.dispatcher.path_list']
+ * @param string $name the name of the server to register.
+ * @param string $address the address of the server to register.
+ * @return void.
+ */
+function dispatcher_path_register(string $name, string $address): void
+{
+    $GLOBALS['._pirogue.dispatcher.path_list'][$name] = $address;
+}
+
+/**
+ * get a registered url.
+ * @uses $GLOBALS['._pirogue.dispatcher.path_list']
+ * @param string $name the name of the url to retrieve.
+ * @return string the registgered url or null if not registered.
+ */
+function dispatcher_path_get(string $name): ?string
+{
+    return $GLOBALS['._pirogue.dispatcher.path_list'][$name] ?? null;
 }
 
 /**
