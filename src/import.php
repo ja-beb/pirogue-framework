@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\import;
+namespace pirogue;
 
 /**
  * the sprintf() pattern used to build include file paths.
@@ -23,7 +23,7 @@ $GLOBALS['._pirogue.import.path_pattern'] = '';
  * @param string $path_pattern the file path pattern used to build include file paths.
  * @return void
  */
-function _init(string $path_pattern): void
+function _import_init(string $path_pattern): void
 {
     $GLOBALS['._pirogue.import.path_pattern'] = $path_pattern;
 }
@@ -34,7 +34,7 @@ function _init(string $path_pattern): void
  * @uses $GLOBALS['._pirogue.import.path_pattern']
  * @return void
  */
-function _dispose(): void
+function _import_dispose(): void
 {
     unset(
         $GLOBALS['._pirogue.import.path_pattern']
@@ -48,7 +48,7 @@ function _dispose(): void
  * @param string $name the name of library being loaded (translates to the filename without extension).
  * @return void
  */
-function load(string $name): void
+function import_load(string $name): void
 {
     $include_file = sprintf($GLOBALS['._pirogue.import.path_pattern'], $name);
     if (false == file_exists($include_file)) {
