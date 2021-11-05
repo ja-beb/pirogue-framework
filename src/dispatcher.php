@@ -40,7 +40,7 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = [];
  * @param array $request_data array containing the request data passed from the client.
  * @return void
  */
-function _init(string $address, string $request_path, array $request_data): void
+function _dispatcher_init(string $address, string $request_path, array $request_data): void
 {
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
@@ -55,7 +55,7 @@ function _init(string $address, string $request_path, array $request_data): void
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @return void
  */
-function _dispose(): void
+function _dispatcher_dispose(): void
 {
     unset(
         $GLOBALS['.pirogue.dispatcher.address'],
@@ -70,7 +70,7 @@ function _dispose(): void
  * @param string $content the content that will be sent to the client.
  * @return void
  */
-function _send(string $content): void
+function _dispatcher_send(string $content): void
 {
     ob_start('ob_gzhandler');
 
@@ -107,7 +107,7 @@ function _send(string $content): void
  * @param int $line the line that the error was encountered at.
  * @return boolean continuation flag.
  */
-function _error_handler(int $number, string $message, string $file, int $line): bool
+function _dispatcher_error_handler(int $number, string $message, string $file, int $line): bool
 {
     if ($number & error_reporting()) {
         throw new ErrorException($message, 0, $number, $file, $line);
@@ -120,7 +120,7 @@ function _error_handler(int $number, string $message, string $file, int $line): 
  * @internal
  * @return string contents of all buffers.
  */
-function _buffer_clear(): string
+function _dispatcher_buffer_clear(): string
 {
     $buffer = '';
     while (0 < ob_get_level()) {
@@ -135,7 +135,7 @@ function _buffer_clear(): string
  * @param int $status_code the http status code to use in the redirect process.
  * @return void.
  */
-function redirect(string $address, int $status_code = 301): void
+function dispatcher_redirect(string $address, int $status_code = 301): void
 {
     header(sprintf('Location: %s', $address), true, $status_code);
     exit();
@@ -148,7 +148,7 @@ function redirect(string $address, int $status_code = 301): void
  * @param array $data an array containing key => value pairs of data use as request parameters.
  * @return string the url created from user input.
  */
-function url_create(string $path, array $data): string
+function dispatcher_url_create(string $path, array $data): string
 {
     $pattern_code = ('' == $path ? 0 : 1) | (empty($data) ? 0 : 2);
     return sprintf(
@@ -171,7 +171,7 @@ function url_create(string $path, array $data): string
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @return string the current requested url.
  */
-function url_current(): string
+function dispatcher_url_current(): string
 {
     return url_create(
         path: $GLOBALS['.pirogue.dispatcher.request_path'],
@@ -184,7 +184,7 @@ function url_current(): string
  * @param string $url the url to create a callback from.
  * @return string parsed callback.
  */
-function callback_create(string $url): string
+function dispatcher_callback_create(string $url): string
 {
     return urlencode($url);
 }
@@ -194,7 +194,7 @@ function callback_create(string $url): string
  * @param string $callback the request data.
  * @return array parsed callback in the form of a url.
  */
-function callback_parse(string $callback): string
+function dispatcher_callback_parse(string $callback): string
 {
     return urldecode($callback);
 }
@@ -204,7 +204,7 @@ function callback_parse(string $callback): string
  * @param string $path the path to convert to array.
  * @return array an array containing the path.
  */
-function request_path_parse(string $path): array
+function dispatcher_request_path_parse(string $path): array
 {
     $result = [];
     foreach (explode('/', $path) as $key => $value) {
