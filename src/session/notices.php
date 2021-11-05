@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\session\notices;
+namespace pirogue\session;
 
 /**
  * label for storing notices.
@@ -23,7 +23,7 @@ $GLOBALS['._pirogue.session.notices.label'] = '';
  * @param string $label the session array index for notices.
  * @return void
  */
-function _init(string $label): void
+function _notices_init(string $label): void
 {
     $GLOBALS['._pirogue.session.notices.label'] = $label;
     if (!array_key_exists($GLOBALS['._pirogue.session.notices.label'], $_SESSION)) {
@@ -37,7 +37,7 @@ function _init(string $label): void
  * @uses $GLOBALS['._pirogue.session.notices.label']
  * @return void
  */
-function _dispose(): void
+function _notices_dispose(): void
 {
     unset(
         $GLOBALS['._pirogue.session.notices.label']
@@ -50,7 +50,7 @@ function _dispose(): void
  * @param string $type the code for the notice type to add.
  * @param string $message the notice's message.
  */
-function create(string $type, string $message): void
+function notices_create(string $type, string $message): void
 {
     array_push($_SESSION[$GLOBALS['._pirogue.session.notices.label']], [$type, $message]);
 }
@@ -60,7 +60,7 @@ function create(string $type, string $message): void
  * @uses $GLOBALS['._pirogue.session.notices.label']
  * @return array the list of cleared session notices in a [type,text] format.
  */
-function clear(): array
+function notices_clear(): array
 {
     $list = $_SESSION[$GLOBALS['._pirogue.session.notices.label']];
     $_SESSION[$GLOBALS['._pirogue.session.notices.label']] = [];

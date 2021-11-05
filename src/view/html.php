@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\view\html;
+namespace pirogue\view;
 
 /**
  * sprintf pattern for the view's file path.
@@ -23,7 +23,7 @@ $GLOBALS['._pirogue.view.html.path_pattern'] = '';
  * @param string $path_pattern the pattern used to build view file paths.
  * @return void
  */
-function _init(string $path_pattern): void
+function _html_init(string $path_pattern): void
 {
     $GLOBALS['._pirogue.view.html.path_pattern'] = $path_pattern;
 }
@@ -34,7 +34,7 @@ function _init(string $path_pattern): void
  * @uses $GLOBALS['._pirogue.view.html.path_pattern']
  * @return void
  */
-function _dispose(): void
+function _html_dispose(): void
 {
     unset($GLOBALS['._pirogue.view.html.path_pattern']);
 }
@@ -47,7 +47,7 @@ function _dispose(): void
  * @param array $view_data data to pass to view.
  * @return string view file's content.
  */
-function load(string $view, array $view_data = []): string
+function html_load(string $view, array $view_data = []): string
 {
     $buffer = '';
     $view_file = sprintf($GLOBALS['._pirogue.view.html.path_pattern'], $view);

@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\session\user;
+namespace pirogue\session;
 
 /**
  * label for user's account data.
@@ -22,7 +22,7 @@ $GLOBALS['._pirogue.session.user.label'] = '';
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
  * @return void
  */
-function _init(string $label): void
+function _user_init(string $label): void
 {
     $GLOBALS['._pirogue.session.user.label'] = $label;
     if (!array_key_exists($GLOBALS['._pirogue.session.user.label'], $_SESSION)) {
@@ -36,7 +36,7 @@ function _init(string $label): void
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return void
  */
-function _dispose(): void
+function _user_dispose(): void
 {
     if (array_key_exists('._pirogue.session.user.label', $GLOBALS)) {
         unset($GLOBALS['._pirogue.session.user.label']);
@@ -48,7 +48,7 @@ function _dispose(): void
  * @internal
  * @return void
  */
-function _write(): void
+function _user_write(): void
 {
     session_id() && session_write_close();
 }
@@ -60,7 +60,7 @@ function _write(): void
  * @param array $user the user's account data.
  * @return void
  */
-function _save(array $user): void
+function _user_save(array $user): void
 {
     $_SESSION[$GLOBALS['._pirogue.session.user.label']] = $user;
 }
@@ -71,7 +71,7 @@ function _save(array $user): void
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return void
  */
-function _destroy(): void
+function _user_destroy(): void
 {
     unset($_SESSION[$GLOBALS['._pirogue.session.user.label']]);
 }
@@ -81,7 +81,7 @@ function _destroy(): void
  * @uses $GLOBALS['._pirogue.session.user.label']
  * @return array current user session data or null if no session data exists.
  */
-function current(): ?array
+function user_current(): ?array
 {
     return $_SESSION[$GLOBALS['._pirogue.session.user.label']] ?? null;
 }

@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\session\environment;
+namespace pirogue\session;
 
 /**
  * label for user's session data.
@@ -22,7 +22,7 @@ $GLOBALS['._pirogue.session.environment.label'] = '';
  * @param string $label the index label to use for storing user session data in the $_SESSION array.
  * @return void
  */
-function _init(string $label): void
+function _environment_init(string $label): void
 {
     $GLOBALS['._pirogue.session.environment.label'] = $label;
     if (!array_key_exists($GLOBALS['._pirogue.session.environment.label'], $_SESSION)) {
@@ -36,7 +36,7 @@ function _init(string $label): void
  * @uses $GLOBALS['._pirogue.session.environment.label']
  * @return void
  */
-function _dispose(): void
+function _environment_dispose(): void
 {
     if (array_key_exists('._pirogue.session.environment.label', $GLOBALS)) {
         unset($GLOBALS['._pirogue.session.environment.label']);
@@ -48,7 +48,7 @@ function _dispose(): void
  * @internal
  * @return void
  */
-function _write(): void
+function _environment_write(): void
 {
     session_id() && session_write_close();
 }
@@ -60,7 +60,7 @@ function _write(): void
  * @param string $value the value to store.
  * @return void
  */
-function save(string $label, mixed $value): void
+function environment_save(string $label, mixed $value): void
 {
     $_SESSION[$GLOBALS['._pirogue.session.environment.label']][$label] = $value;
 }
@@ -71,7 +71,7 @@ function save(string $label, mixed $value): void
  * @param string $label the label to check if exists.
  * @return bool a flag representing if variable exists.
  */
-function exists(string $label): bool
+function environment_exists(string $label): bool
 {
     return array_key_exists($label, $_SESSION[$GLOBALS['._pirogue.session.environment.label']]);
 }
@@ -83,7 +83,7 @@ function exists(string $label): bool
  * @param mixed $default the default value to return if the variable is not found.
  * @return mixed the saved variable or the default value given if not found.
  */
-function restore(string $label, mixed $default = null): mixed
+function environment_restore(string $label, mixed $default = null): mixed
 {
     return $_SESSION[$GLOBALS['._pirogue.session.environment.label']][$label] ?? $default;
 }
@@ -95,7 +95,7 @@ function restore(string $label, mixed $default = null): mixed
  * @param mixed $default the default value to return if the variable is not found.
  * @return mixed the removed variable or the default value given if not found.
  */
-function remove(string $label, mixed $default = null): mixed
+function environment_remove(string $label, mixed $default = null): mixed
 {
     $value = $_SESSION[$GLOBALS['._pirogue.session.environment.label']][$label] ?? $default;
     unset($_SESSION[$GLOBALS['._pirogue.session.environment.label']][$label]);
@@ -107,7 +107,7 @@ function remove(string $label, mixed $default = null): mixed
  * @uses $GLOBALS['._pirogue.session.environment.label']
  * @return array the session variables before cleared.
  */
-function clear(): array
+function environment_clear(): array
 {
     $data = $_SESSION[$GLOBALS['._pirogue.session.environment.label']];
     $_SESSION[$GLOBALS['._pirogue.session.environment.label']] = [];

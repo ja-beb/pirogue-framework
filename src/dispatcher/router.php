@@ -12,43 +12,43 @@ namespace pirogue\dispatcher\router;
 /**
  * router file's path format for sprintf().
  * @internal
- * @var string $GLOBALS['._pirogue.dispatcher.router.path_format']
+ * @var string $GLOBALS['._pirogue.dispatcher.router_path_format']
  */
-$GLOBALS['._pirogue.dispatcher.router.path_format'] = '';
+$GLOBALS['._pirogue.dispatcher.route_path_format'] = '';
 
 /**
  * a stack containing registered routers.
  * @internal
- * @var string $GLOBALS['._pirogue.dispatcher.router.call_stack']
+ * @var string $GLOBALS['._pirogue.dispatcher.router_call_stack']
  */
-$GLOBALS['._pirogue.dispatcher.router.call_stack'] = [];
+$GLOBALS['._pirogue.dispatcher.router_call_stack'] = [];
 
 /**
  * initialize router library.
  * @internal
- * @uses $GLOBALS['._pirogue.dispatcher.router.call_stack']
- * @uses $GLOBALS['._pirogue.dispatcher.router.path_format']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_call_stack']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_path_format']
  * @param string $path_format a sprintf format to build the controller's file path.
  * @return void
  */
-function _init(string $path_format): void
+function _router_init(string $path_format): void
 {
-    $GLOBALS['._pirogue.dispatcher.router.path_format'] = $path_format;
-    $GLOBALS['._pirogue.dispatcher.router.call_stack'] = [];
+    $GLOBALS['._pirogue.dispatcher.router_path_format'] = $path_format;
+    $GLOBALS['._pirogue.dispatcher.router_call_stack'] = [];
 }
 
 /**
  * cleanup library variables.
  * @internal
- * @uses $GLOBALS['._pirogue.dispatcher.router.call_stack']
- * @uses $GLOBALS['._pirogue.dispatcher.router.path_format']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_call_stack']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_path_format']
  * @return void
  */
-function _dispose(): void
+function _router_dispose(): void
 {
     unset(
-        $GLOBALS['._pirogue.dispatcher.router.path_format'],
-        $GLOBALS['._pirogue.dispatcher.router.call_stack'],
+        $GLOBALS['._pirogue.dispatcher.router_path_format'],
+        $GLOBALS['._pirogue.dispatcher.router_call_stack'],
     );
 }
 
@@ -58,7 +58,7 @@ function _dispose(): void
  * @param string $value string to be converted.
  * @return string converted string.
  */
-function _convert_case(string $value): string
+function _router_convert_case(string $value): string
 {
     return str_replace('-', '_', $value);
 }
@@ -67,17 +67,17 @@ function _convert_case(string $value): string
  * find the controller's file path. will search given path until a matching file is found by removing last element in the list each time it fails. this function also includes the file
  * into the execution scope.
  * @internal
- * @uses $GLOBALS['._pirogue.dispatcher.router.router_format']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_router_format']
  * @param array $path an array of strings to build the path from.
  * @return ?string path if file is found or null.
  */
-function _build_path(array $path): ?string
+function _router_build_path(array $path): ?string
 {
     if (empty($path)) {
         return null;
     }
 
-    $controller_path = sprintf($GLOBALS['._pirogue.dispatcher.router.path_format'], implode(DIRECTORY_SEPARATOR, $path));
+    $controller_path = sprintf($GLOBALS['._pirogue.dispatcher.router_path_format'], implode(DIRECTORY_SEPARATOR, $path));
     if (file_exists($controller_path)) {
         require_once $controller_path;
         return $controller_path;
@@ -95,7 +95,7 @@ function _build_path(array $path): ?string
  * @param string $request_method the http request method to check for route action.
  * @return ?string null if no route otherwise the name of the routing funciton.
  */
-function _build_action(string $controller_namespace, string $action_name, string $request_method = 'get'): ?string
+function _router_build_action(string $controller_namespace, string $action_name, string $request_method = 'get'): ?string
 {
     $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
     if (function_exists($function_name)) {
@@ -123,7 +123,7 @@ function _build_action(string $controller_namespace, string $action_name, string
  *      'action' => '{$controller_namespace}\{$action_name}_{$request_method}',
  * ]
  */
-function create(string $controller_namespace, string $action_name, string $request_method, ?string $file_name = null): array
+function router_create(string $controller_namespace, string $action_name, string $request_method, ?string $file_name = null): array
 {
     $controller_path = _build_path([$file_name ?? $controller_namespace, $action_name]);
     $controller_namespace = _convert_case($controller_namespace);
@@ -142,22 +142,22 @@ function create(string $controller_namespace, string $action_name, string $reque
 
 /**
  * register a new router to call stack.
- * @uses $GLOBALS['._pirogue.dispatcher.router.call_stack']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_call_stack']
  * @param array $route the route to add to the callstack, generated using the function create().
  * @return int number of elements on the callstack.
  */
-function register(array $route): int
+function router_register(array $route): int
 {
-    array_unshift($GLOBALS['._pirogue.dispatcher.router.call_stack'], $route);
-    return count($GLOBALS['._pirogue.dispatcher.router.call_stack']);
+    array_unshift($GLOBALS['._pirogue.dispatcher.router_call_stack'], $route);
+    return count($GLOBALS['._pirogue.dispatcher.router_call_stack']);
 }
 
 /**
  * return the name of the current controller on the callstack.
- * @uses $GLOBALS['._pirogue.dispatcher.router.call_stack']
+ * @uses $GLOBALS['._pirogue.dispatcher.router_call_stack']
  * @return array the current route or null if stack is empty.
  */
-function current(): ?array
+function router_current(): ?array
 {
-    return $GLOBALS['._pirogue.dispatcher.router.call_stack'][0] ?? null;
+    return $GLOBALS['._pirogue.dispatcher.router_call_stack'][0] ?? null;
 }
