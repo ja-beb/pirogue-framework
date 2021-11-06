@@ -62,7 +62,7 @@ function _database_mysqli_init(string $path_format, string $default): void
 function _database_mysqli_dispose(): void
 {
     if (!empty($GLOBALS['._pirogue.database_mysqli.connections'])) {
-        close_all();
+        database_mysqli_close_all();
     }
 
     unset(
@@ -112,21 +112,23 @@ function _database_mysqli_open(string $hostname, string $username, ?string $pass
 
 /**
  * helper function that fetches an unregistered database connection.
+ * @uses _database_mysqli_config()
+ * @uses _database_mysqli_open()
  * @param string $name
- * @return mysqli|null
+ * @return ?mysqli
  */
 function _database_mysqli_get(string $name): ?mysqli
 {
-    $config = _config($name);
+    $config = _database_mysqli_config($name);
     if (null == $config) {
         return null;
     } else {
-        $connection = _open(
+        $connection = _database_mysqli_open(
             hostname: $config['hostname'],
             username: $config['username'],
             password: $config['password'] ?? null,
             database: $config['database'] ?? null,
-            port: $config['port'] ?? 3306,
+            port: intval($config['port'] ?? 3306),
             socket: $config['socket'] ?? null,
         );
         return false == $connection ? null : $connection;
@@ -138,14 +140,15 @@ function _database_mysqli_get(string $name): ?mysqli
  * @throws error error tiggered if unable to connect or not registered.
  * @uses $GLOBALS['._pirogue.database_mysqli.connections']
  * @uses $GLOBALS['._pirogue.database_mysqli.default']
+ * @uses _database_mysqli_get()
  * @param string $name name of database to connect. will return default if null.
  * @return mysqli resource item.
  */
 function database_mysqli_get(?string $name = null): mysqli
 {
-    $name = null == $name ? $GLOBALS['._pirogue.database_mysqlidatabase_mysqli.default'] : $name;
+    $name = null == $name ? $GLOBALS['._pirogue.database_mysqli.default'] : $name;
     if (false == array_key_exists($name, $GLOBALS['._pirogue.database_mysqli.connections'])) {
-        $GLOBALS['._pirogue.database_mysqli.connections'][$name] = _get($name);
+        $GLOBALS['._pirogue.database_mysqli.connections'][$name] = _database_mysqli_get($name);
         if (null == $GLOBALS['._pirogue.database_mysqli.connections'][$name]) {
             trigger_error(sprintf('unable to connect to database "%s"', $name));
         }
