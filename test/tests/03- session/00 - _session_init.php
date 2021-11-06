@@ -1,14 +1,14 @@
 <?php
 
 /**
- * Testing for pirogue\session\_init() && pirogue\session\_dispose().
+ * Testing for pirogue\_session_init() && pirogue\_session_dispose().
  * php version 8.0.0
- *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-use pirogue\session;
+use function pirogue\_session_init;
+use function pirogue\_session_dispose;
 
 // load required library.
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'session.php']);
@@ -16,7 +16,7 @@ require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pi
 // set up testin environment.
 $_SESSION = [];
 $GLOBALS['._pirogue-testing.session.name'] = '._pirogue-testing.session';
-session\_init($GLOBALS['._pirogue-testing.session.name']);
+_session_init($GLOBALS['._pirogue-testing.session.name']);
 
 pirogue_test_execute('_init(): initialize ._pirogue.session.user.label', function () {
     if (false == array_key_exists('._pirogue.session.name', $GLOBALS)) {
@@ -28,7 +28,7 @@ pirogue_test_execute('_init(): initialize ._pirogue.session.user.label', functio
     }
 });
 
-session\_dispose();
+_session_dispose();
 
 pirogue_test_execute('_dispose(): $GLOBALS[\'._pirogue.session.user.label\']', function () {
     return array_key_exists('._pirogue.session.name', $GLOBALS) ? 'value still set.' : '';
