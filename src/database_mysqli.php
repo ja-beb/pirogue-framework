@@ -7,82 +7,82 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\database\mysqli;
+namespace pirogue;
 
 use mysqli;
 
 /**
  * a sprintf format string of the connection ini file's path.
  * @internal
- * @var string $GLOBALS['._pirogue.database.mysqli.path_format']
+ * @var string $GLOBALS['._pirogue.database_mysqli.path_format']
  */
-$GLOBALS['._pirogue.database.mysqli.path_format'] = null;
+$GLOBALS['._pirogue.database_mysqli.path_format'] = null;
 
 /**
  * default database connection that used.
  * @internal
- * @var string $GLOBALS['._pirogue.database.mysqli.default']
+ * @var string $GLOBALS['._pirogue.database_mysqli.default']
  */
-$GLOBALS['._pirogue.database.mysqli.default'] = '';
+$GLOBALS['._pirogue.database_mysqli.default'] = '';
 
 /**
  * a list of the registered database connections.
  * @internal
- * @var array $GLOBALS['._pirogue.database.mysqli.connections']
+ * @var array $GLOBALS['._pirogue.database_mysqli.connections']
  */
-$GLOBALS['._pirogue.database.mysqli.connections'] = [];
+$GLOBALS['._pirogue.database_mysqli.connections'] = [];
 
 
 /**
  * initialize library.
  * @internal
- * @uses $GLOBALS['._pirogue.database.mysqli.path_format']
- * @uses $GLOBALS['._pirogue.database.mysqli.default']
- * @uses $GLOBALS['._pirogue.database.mysqli.connections']
+ * @uses $GLOBALS['._pirogue.database_mysqli.path_format']
+ * @uses $GLOBALS['._pirogue.database_mysqli.default']
+ * @uses $GLOBALS['._pirogue.database_mysqli.connections']
  * @param string $path_format a sprintf path_format used to find the desired database config file based on inputed name.
  * @param string $default the name of the default database.
  * @return void
  */
-function _init(string $path_format, string $default): void
+function _database_mysqli_init(string $path_format, string $default): void
 {
-    $GLOBALS['._pirogue.database.mysqli.path_format'] = $path_format;
-    $GLOBALS['._pirogue.database.mysqli.default'] = $default;
-    $GLOBALS['._pirogue.database.mysqli.connections'] = [];
+    $GLOBALS['._pirogue.database_mysqli.path_format'] = $path_format;
+    $GLOBALS['._pirogue.database_mysqli.default'] = $default;
+    $GLOBALS['._pirogue.database_mysqli.connections'] = [];
 }
 
 /**
  * deallocate library variables. Will close any open connections if they exist.
  * @internal
  * @uses _close()
- * @uses $GLOBALS['._pirogue.database.mysqli.path_format']
- * @uses $GLOBALS['._pirogue.database.mysqli.default']
- * @uses $GLOBALS['._pirogue.database.mysqli.connections']
+ * @uses $GLOBALS['._pirogue.database_mysqli.path_format']
+ * @uses $GLOBALS['._pirogue.database_mysqli.default']
+ * @uses $GLOBALS['._pirogue.database_mysqli.connections']
  * @return void
  */
-function _dispose(): void
+function _database_mysqli_dispose(): void
 {
-    if (!empty($GLOBALS['._pirogue.database.mysqli.connections'])) {
+    if (!empty($GLOBALS['._pirogue.database_mysqli.connections'])) {
         close_all();
     }
 
     unset(
-        $GLOBALS['._pirogue.database.mysqli.default'],
-        $GLOBALS['._pirogue.database.mysqli.path_format'],
-        $GLOBALS['._pirogue.database.mysqli.connections'],
+        $GLOBALS['._pirogue.database_mysqli.default'],
+        $GLOBALS['._pirogue.database_mysqli.path_format'],
+        $GLOBALS['._pirogue.database_mysqli.connections'],
     );
 }
 
 /**
  * translates database name to the ini file's path.
  * @internal
- * @uses $GLOBALS['._pirogue.database.mysqli.path_format']
+ * @uses $GLOBALS['._pirogue.database_mysqli.path_format']
  * @param string $name name of connection to load configuration for.
  * @return ?array returns config file or null if not found.
  */
-function _config(string $name): ?array
+function _database_mysqli_config(string $name): ?array
 {
     $connection = false;
-    $file = sprintf($GLOBALS['._pirogue.database.mysqli.path_format'], $name);
+    $file = sprintf($GLOBALS['._pirogue.database_mysqli.path_format'], $name);
     return file_exists($file) ? parse_ini_file($file) : null;
 }
 
@@ -97,7 +97,7 @@ function _config(string $name): ?array
  * @param int $socket the socket or named pipe to used to connect.
  * @return ?mysqli return null if not found or does not connect.
  */
-function _open(string $hostname, string $username, ?string $password = null, ?string $database = null, int $port = 3306, int $socket = null): ?mysqli
+function _database_mysqli_open(string $hostname, string $username, ?string $password = null, ?string $database = null, int $port = 3306, int $socket = null): ?mysqli
 {
     $connection = mysqli_connect(
         hostname:$hostname,
@@ -115,7 +115,7 @@ function _open(string $hostname, string $username, ?string $password = null, ?st
  * @param string $name
  * @return mysqli|null
  */
-function _get(string $name): ?mysqli
+function _database_mysqli_get(string $name): ?mysqli
 {
     $config = _config($name);
     if (null == $config) {
@@ -136,34 +136,34 @@ function _get(string $name): ?mysqli
 /**
  * get database connection.
  * @throws error error tiggered if unable to connect or not registered.
- * @uses $GLOBALS['._pirogue.database.mysqli.connections']
- * @uses $GLOBALS['._pirogue.database.mysqli.default']
+ * @uses $GLOBALS['._pirogue.database_mysqli.connections']
+ * @uses $GLOBALS['._pirogue.database_mysqli.default']
  * @param string $name name of database to connect. will return default if null.
  * @return mysqli resource item.
  */
-function get(?string $name = null): mysqli
+function database_mysqli_get(?string $name = null): mysqli
 {
-    $name = null == $name ? $GLOBALS['._pirogue.database.mysqli.default'] : $name;
-    if (false == array_key_exists($name, $GLOBALS['._pirogue.database.mysqli.connections'])) {
-        $GLOBALS['._pirogue.database.mysqli.connections'][$name] = _get($name);
-        if (null == $GLOBALS['._pirogue.database.mysqli.connections'][$name]) {
+    $name = null == $name ? $GLOBALS['._pirogue.database_mysqlidatabase_mysqli.default'] : $name;
+    if (false == array_key_exists($name, $GLOBALS['._pirogue.database_mysqli.connections'])) {
+        $GLOBALS['._pirogue.database_mysqli.connections'][$name] = _get($name);
+        if (null == $GLOBALS['._pirogue.database_mysqli.connections'][$name]) {
             trigger_error(sprintf('unable to connect to database "%s"', $name));
         }
     }
-    return $GLOBALS['._pirogue.database.mysqli.connections'][$name];
+    return $GLOBALS['._pirogue.database_mysqli.connections'][$name];
 }
 
 /**
  * close all connections.
- * @uses $GLOBALS['._pirogue.database.mysqli.connections']
+ * @uses $GLOBALS['._pirogue.database_mysqli.connections']
  * @return void
  */
-function close_all(): void
+function database_mysqli_close_all(): void
 {
-    foreach (($GLOBALS['._pirogue.database.mysqli.connections'] ?? []) as $connection) {
+    foreach (($GLOBALS['._pirogue.database_mysqli.connections'] ?? []) as $connection) {
         if (null != $connection && 'mysqli' == get_class($connection)) {
             mysqli_close($connection);
         }
     }
-    $GLOBALS['._pirogue.database.mysqli.connections'] = [];
+    $GLOBALS['._pirogue.database_mysqli.connections'] = [];
 }
