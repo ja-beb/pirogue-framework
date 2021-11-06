@@ -36,6 +36,21 @@ $GLOBALS['.pirogue.dispatcher.request_data'] = [];
  */
 $GLOBALS['._pirogue.dispatcher.path_list'] = [];
 
+
+/**
+ * controller file's path format for sprintf().
+ * @internal
+ * @var string $GLOBALS['._pirogue.dispatcher_route.path_format']
+ */
+$GLOBALS['._pirogue.dispatcher_route.path_format'] = '';
+
+/**
+ * a stack containing called routes in a FILO order.
+ * @internal
+ * @var string $GLOBALS['._pirogue.dispatcher_route.call_stack']
+ */
+$GLOBALS['._pirogue.dispatcher_route.call_stack'] = [];
+
 /**
  * setup dispatcher library.
  * @internal
@@ -43,25 +58,39 @@ $GLOBALS['._pirogue.dispatcher.path_list'] = [];
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @uses $GLOBALS['._pirogue.dispatcher.path_list']
+ * @uses $GLOBALS['._pirogue.dispatcher_route.path_format']
+ * @uses $GLOBALS['._pirogue.dispatcher_route.call_stack']
  * @param string $address the base address for the site.
  * @param string $request_path a string containing the path the the client's requested resource.
  * @param array $request_data array containing the request data passed from the client.
+ * @param string $controller_path_format file path format for the controller variable.
  * @return void
  */
-function _dispatcher_init(string $address, string $request_path, array $request_data): void
+function _dispatcher_init(
+    string $address, 
+    string $request_path, 
+    array $request_data,
+    string $controller_path_format,
+): void
 {
+
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
     $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
+    $GLOBALS['._pirogue.dispatcher_route.path_format'] = $controller_path_format;
     $GLOBALS['._pirogue.dispatcher.path_list'] = [];
+    $GLOBALS['._pirogue.dispatcher_route.call_stack'] = [];
 }
 
 /**
- * clean up memory for library
+ * destory the diispatcher library state (variables).
  * @internal
  * @uses $GLOBALS['.pirogue.dispatcher.address']
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
+ * @uses $GLOBALS['._pirogue.dispatcher.path_list']
+ * @uses $GLOBALS['._pirogue.dispatcher_route.path_format']
+ * @uses $GLOBALS['._pirogue.dispatcher_route.call_stack']
  * @return void
  */
 function _dispatcher_dispose(): void
@@ -71,6 +100,8 @@ function _dispatcher_dispose(): void
         $GLOBALS['.pirogue.dispatcher.request_path'],
         $GLOBALS['.pirogue.dispatcher.request_data'],
         $GLOBALS['._pirogue.dispatcher.path_list'],
+        $GLOBALS['._pirogue.dispatcher_route.path_format'],
+        $GLOBALS['._pirogue.dispatcher_route.call_stack'],
     );
 }
 
@@ -126,6 +157,35 @@ function _dispatcher_error_handler(int $number, string $message, string $file, i
 }
 
 /**
+ * redirect user to new address. this function calls exit() to terminated any further code execution.
+ * @param string $address the address to redirect too. If no address is specified the page is refreshed.
+ * @param int $status_code the http status code to use in the redirect process.
+ * @return void.
+ */
+function dispatcher_redirect(string $address, int $status_code = 301): void
+{
+    header(sprintf('Location: %s', $address), true, $status_code);
+    exit();
+}
+
+
+/ ==============================================================================================
+// Helper functions (base actions).
+// ==============================================================================================
+
+
+/**
+ * convert string from kebab case to camel case. used to convert user provided route to a controller's name.
+ * @internal
+ * @param string $value string to be converted.
+ * @return string converted string.
+ */
+function _dispatcher_route_convert_case(string $value): string
+{
+    return str_replace('-', '_', $value);
+}
+
+/**
  * clear all output buffers and return contents.
  * @internal
  * @return string contents of all buffers.
@@ -139,17 +199,11 @@ function _dispatcher_buffer_clear(): string
     return $buffer;
 }
 
-/**
- * redirect user to new address. this function calls exit() to terminated any further code execution.
- * @param string $address the address to redirect too. If no address is specified the page is refreshed.
- * @param int $status_code the http status code to use in the redirect process.
- * @return void.
- */
-function dispatcher_redirect(string $address, int $status_code = 301): void
-{
-    header(sprintf('Location: %s', $address), true, $status_code);
-    exit();
-}
+
+// ==============================================================================================
+// URL functions.
+// ==============================================================================================
+
 
 /**
  * create url to resource relative to site base.
@@ -190,6 +244,10 @@ function dispatcher_url_current(): string
 }
 
 
+// ==============================================================================================
+// Path functions.
+// ==============================================================================================
+
 /**
  * register a new server.
  * @uses $GLOBALS['._pirogue.dispatcher.path_list']
@@ -212,6 +270,11 @@ function dispatcher_path_get(string $name): ?string
 {
     return $GLOBALS['._pirogue.dispatcher.path_list'][$name] ?? null;
 }
+
+
+// ==============================================================================================
+// Callback functions.
+// ==============================================================================================
 
 /**
  * convert url into a callback string to be passed as a http query variable.
@@ -249,3 +312,9 @@ function dispatcher_request_path_parse(string $path): array
     }
     return $result;
 }
+
+// ==============================================================================================
+// Router functions.
+// ==============================================================================================
+
+
