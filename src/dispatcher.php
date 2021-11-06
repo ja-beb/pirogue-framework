@@ -388,7 +388,7 @@ function dispatcher_controller_path_build(array $path): ?string
  * @param string $request_method the http request method to check for route action.
  * @return ?string null if no route otherwise the name of the routing funciton.
  */
-function dispatcher_route_build_action(string $controller_namespace, string $action_name, string $request_method): ?string
+function dispatcher_route_action_build(string $controller_namespace, string $action_name, string $request_method): ?string
 {
     $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
     return function_exists($function_name) ? $function_name : null;
