@@ -38,6 +38,11 @@ function _session_dispose(): void
     unset($GLOBALS['._pirogue.session.name']);
 }
 
+
+//
+// session start/end functions
+//
+
 /**
  * start new user session
  * @internal
