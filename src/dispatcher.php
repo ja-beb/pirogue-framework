@@ -7,7 +7,7 @@
  * @license https://opensource.org/licenses/GPL-3.0 GPL-v3
  */
 
-namespace pirogue\dispatcher;
+namespace pirogue;
 
 use ErrorException;
 
@@ -166,10 +166,22 @@ function dispatcher_redirect(string $address, int $status_code = 301): void
     exit();
 }
 
-
 //
 // Helper functions (base actions).
 //
+
+/**
+ * clear all output buffers and return contents.
+ * @internal
+ * @return void.
+ */
+function _dispatcher_buffer_clear(): void
+{
+    $buffer = '';
+    while (0 < ob_get_level()) {
+        $buffer .= ob_get_clean();
+    }
+}
 
 /**
  * convert string from kebab case to camel case. used to convert user provided route to a controller's name.
@@ -182,19 +194,6 @@ function _dispatcher_route_convert_case(string $value): string
     return str_replace('-', '_', $value);
 }
 
-/**
- * clear all output buffers and return contents.
- * @internal
- * @return string contents of all buffers.
- */
-function _dispatcher_buffer_clear(): string
-{
-    $buffer = '';
-    while (0 < ob_get_level()) {
-        $buffer .= ob_get_clean();
-    }
-    return $buffer;
-}
 
 /**
  * convert path from string to array and removes the '_' prefix that denotes a internal path name.
@@ -243,14 +242,14 @@ function dispatcher_url_create(string $path, array $data): string
 
 /**
  * get the current url.
- * @uses _url_create()
+ * @uses dispatcher_url_create()
  * @uses $GLOBALS['.pirogue.dispatcher.request_path']
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @return string the current requested url.
  */
 function dispatcher_url_current(): string
 {
-    return url_create(
+    return dispatcher_url_create(
         path: $GLOBALS['.pirogue.dispatcher.request_path'],
         data: $GLOBALS['.pirogue.dispatcher.request_data']
     );
@@ -327,7 +326,6 @@ function dispatcher_callback_parse(string $callback): string
  */
 function dispatcher_route_create(string $namespace, string $action, string $method): array
 {
-    $controller_path = _build_path($file_path);
     return [
         'namespace' => $namespace,
         'action' => $action,
@@ -357,7 +355,6 @@ function dispatcher_route_current(): ?array
     return $GLOBALS['._pirogue.dispatcher.call_stack'][0] ?? null;
 }
 
-
 /**
  * find the controller's file path. will search given path until a matching file is found by removing last element in the list each time it fails. this function also includes the file
  * into the execution scope.
@@ -376,7 +373,7 @@ function dispatcher_controller_path_build(array $path): ?string
         require_once $controller_path;
         return $controller_path;
     } else {
-        return _build_path(array_slice($path, 0, count($path) - 1));
+        return dispatcher_controller_path_build(array_slice($path, 0, count($path) - 1));
     }
 }
 

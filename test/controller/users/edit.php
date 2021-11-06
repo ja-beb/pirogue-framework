@@ -7,7 +7,7 @@
  * @return void
  */
 
-namespace internal_controller;
+namespace edit;
 
 /**
  * initialize this library.
