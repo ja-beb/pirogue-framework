@@ -72,7 +72,6 @@ function _dispatcher_init(
     array $request_data,
     string $controller_path_format,
 ): void {
-
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
     $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
