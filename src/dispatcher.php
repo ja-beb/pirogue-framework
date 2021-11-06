@@ -354,7 +354,7 @@ function dispatcher_route_current(): ?array
 {
     return $GLOBALS['._pirogue.dispatcher.call_stack'][0] ?? null;
 }
-
+ 
 /**
  * find the controller's file path. will search given path until a matching file is found by removing last element in the list each time it fails. this function also includes the file
  * into the execution scope.
