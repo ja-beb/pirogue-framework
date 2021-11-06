@@ -47,9 +47,9 @@ $GLOBALS['._pirogue.dispatcher_route.path_format'] = '';
 /**
  * a stack containing called routes in a FILO order.
  * @internal
- * @var string $GLOBALS['._pirogue.dispatcher_route.call_stack']
+ * @var string $GLOBALS['._pirogue.dispatcher.call_stack']
  */
-$GLOBALS['._pirogue.dispatcher_route.call_stack'] = [];
+$GLOBALS['._pirogue.dispatcher.call_stack'] = [];
 
 /**
  * setup dispatcher library.
@@ -59,7 +59,7 @@ $GLOBALS['._pirogue.dispatcher_route.call_stack'] = [];
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @uses $GLOBALS['._pirogue.dispatcher.path_list']
  * @uses $GLOBALS['._pirogue.dispatcher_route.path_format']
- * @uses $GLOBALS['._pirogue.dispatcher_route.call_stack']
+ * @uses $GLOBALS['._pirogue.dispatcher.call_stack']
  * @param string $address the base address for the site.
  * @param string $request_path a string containing the path the the client's requested resource.
  * @param array $request_data array containing the request data passed from the client.
@@ -78,7 +78,7 @@ function _dispatcher_init(
     $GLOBALS['.pirogue.dispatcher.request_data'] = $request_data;
     $GLOBALS['._pirogue.dispatcher_route.path_format'] = $controller_path_format;
     $GLOBALS['._pirogue.dispatcher.path_list'] = [];
-    $GLOBALS['._pirogue.dispatcher_route.call_stack'] = [];
+    $GLOBALS['._pirogue.dispatcher.call_stack'] = [];
 }
 
 /**
@@ -89,7 +89,7 @@ function _dispatcher_init(
  * @uses $GLOBALS['.pirogue.dispatcher.request_data']
  * @uses $GLOBALS['._pirogue.dispatcher.path_list']
  * @uses $GLOBALS['._pirogue.dispatcher_route.path_format']
- * @uses $GLOBALS['._pirogue.dispatcher_route.call_stack']
+ * @uses $GLOBALS['._pirogue.dispatcher.call_stack']
  * @return void
  */
 function _dispatcher_dispose(): void
@@ -100,7 +100,7 @@ function _dispatcher_dispose(): void
         $GLOBALS['.pirogue.dispatcher.request_data'],
         $GLOBALS['._pirogue.dispatcher.path_list'],
         $GLOBALS['._pirogue.dispatcher_route.path_format'],
-        $GLOBALS['._pirogue.dispatcher_route.call_stack'],
+        $GLOBALS['._pirogue.dispatcher.call_stack'],
     );
 }
 
@@ -314,3 +314,103 @@ function dispatcher_request_path_parse(string $path): array
 //
 // Router functions.
 //
+
+/**
+ * create a new route.
+ * @uses _build_path()
+ * @uses _build_action()
+ * @param array $file_path path to search for controller path.
+ * @param string $controller_namespace the requested controller.
+ * @param string $action_name the requested action.
+ * @param string $request_method method of this request.
+ * @param ?string $file_name if provided this is used to build filepath for the controller otherwise the controller name is used.
+ * @return array a associate array containing the route components in the form of [
+ *      'file_name' => $file_name,
+ *      'controller_namespace' => $controller_namespace,
+ *      'action_name' => $action_name,
+ *      'request_method' => $request_method,
+ *      'controller_path' => '{controller base directory}/{$controller_namespace}.php',
+ *      'action' => '{$controller_namespace}\{$action_name}_{$request_method}',
+ * ]
+ */
+function dispatcher_route_create(array $file_path, string $controller_namespace, string $action_name, string $request_method): array
+{
+    $controller_path = _build_path($file_path);
+    return [
+        'file_path' => $file_path,
+        'controller_namespace' => $controller_namespace,
+        'action_name' => $action_name,
+        'request_method' => $request_method,
+        'controller_path' => $controller_path,
+        'action' => '' == $controller_path ? null : _build_action(
+            $controller_namespace,
+            _convert_case($action_name),
+            strtolower($request_method),
+        )
+    ];
+}
+
+/**
+ * register a new route to call stack.
+ * @uses $GLOBALS['._pirogue.dispatcher.call_stack']
+ * @param array $route the route to add to the callstack, generated using the function create().
+ * @return int number of elements on the callstack.
+ */
+function dispatcher_route_register(array $route): int
+{
+    array_unshift($GLOBALS['._pirogue.dispatcher.call_stack'], $route);
+    return count($GLOBALS['._pirogue.dispatcher.call_stack']);
+}
+
+/**
+ * return the name of the current controller on the callstack.
+ * @uses $GLOBALS['._pirogue.dispatcher.call_stack']
+ * @return array the current route or null if stack is empty.
+ */
+function dispatcher_route_current(): ?array
+{
+    return $GLOBALS['._pirogue.dispatcher.call_stack'][0] ?? null;
+}
+
+
+/**
+ * find the controller's file path. will search given path until a matching file is found by removing last element in the list each time it fails. this function also includes the file
+ * into the execution scope.
+ * @uses $GLOBALS['._pirogue.dispatcher_route.path_format']
+ * @param array $path an array of strings to build the path from.
+ * @return ?string path if file is found or null.
+ */
+function dispatcher_controller_path_build(array $path): ?string
+{
+    if (empty($path)) {
+        return null;
+    }
+
+    $controller_path = sprintf($GLOBALS['._pirogue.dispatcher_route.path_format'], implode(DIRECTORY_SEPARATOR, $path));
+    if (file_exists($controller_path)) {
+        require_once $controller_path;
+        return $controller_path;
+    } else {
+        return _build_path(array_slice($path, 0, count($path) - 1));
+    }
+}
+
+/**
+ * translate the (controller name, action name, request method) values to the function impelementing that controller's action - defaults to the request method 'GET'.
+ * @internal
+ * @param string $controller_namespace name of the controller.
+ * @param string $action_name name of the requested action.
+ * @param string $request_method the http request method to check for route action.
+ * @return ?string null if no route otherwise the name of the routing funciton.
+ */
+function _dispatcher_route_build_action(string $controller_namespace, string $action_name, string $request_method = 'get'): ?string
+{
+    $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
+    if (function_exists($function_name)) {
+        return strtolower(sprintf('%s_%s', $action_name, $request_method));
+    } elseif ('get' == $request_method) {
+        return null;
+    } else {
+        return _build_action($controller_namespace, $action_name);
+    }
+}
