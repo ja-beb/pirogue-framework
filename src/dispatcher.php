@@ -197,6 +197,22 @@ function _dispatcher_buffer_clear(): string
     return $buffer;
 }
 
+/**
+ * convert path from string to array and removes the '_' prefix that denotes a internal path name.
+ * @param string $path the path to convert to array.
+ * @return array an array containing the path.
+ */
+function dispatcher_request_path_parse(string $path): array
+{
+    $result = [];
+    foreach (explode('/', $path) as $key => $value) {
+        $_tmp = preg_replace('/^_*/', '', $value);
+        if ('' != $_tmp) {
+            $result[$key] = $_tmp;
+        }
+    }
+    return $result;
+}
 
 //
 // URL functions.
@@ -294,25 +310,9 @@ function dispatcher_callback_parse(string $callback): string
     return urldecode($callback);
 }
 
-/**
- * convert path from string to array and removes the '_' prefix that denotes a internal path name.
- * @param string $path the path to convert to array.
- * @return array an array containing the path.
- */
-function dispatcher_request_path_parse(string $path): array
-{
-    $result = [];
-    foreach (explode('/', $path) as $key => $value) {
-        $_tmp = preg_replace('/^_*/', '', $value);
-        if ('' != $_tmp) {
-            $result[$key] = $_tmp;
-        }
-    }
-    return $result;
-}
 
 //
-// Router functions.
+// Route functions.
 //
 
 /**
