@@ -44,16 +44,6 @@ function _user_session_data_dispose(): void
 }
 
 /**
- * write session data if session is open.
- * @internal
- * @return void
- */
-function _user_session_data_write(): void
-{
-    session_id() && session_write_close();
-}
-
-/**
  * save session variable.
  * @uses $GLOBALS['._pirogue.user_session_data.label']
  * @param string $label the label of the session variable to save.
