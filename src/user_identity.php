@@ -24,7 +24,7 @@ $GLOBALS['._pirogue.user_identity.label'] = '';
  */
 function _user_identity_init(string $label): void
 {
-    $GLOBALS['._pirogue.session.user.label'] = $label;
+    $GLOBALS['._pirogue.user_identity.label'] = $label;
     if (!array_key_exists($GLOBALS['._pirogue.user_identity.label'], $_SESSION)) {
         $_SESSION[$GLOBALS['._pirogue.user_identity.label']] = null;
     }

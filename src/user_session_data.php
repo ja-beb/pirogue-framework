@@ -38,9 +38,9 @@ function _user_session_data_init(string $label): void
  */
 function _user_session_data_dispose(): void
 {
-    if (array_key_exists('._pirogue.user_session_data.label', $GLOBALS)) {
-        unset($GLOBALS['._pirogue.user_session_data.label']);
-    }
+    unset(
+        $GLOBALS['._pirogue.user_session_data.label']
+    );
 }
 
 /**
