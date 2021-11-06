@@ -382,21 +382,14 @@ function dispatcher_controller_path_build(array $path): ?string
 }
 
 /**
- * translate the (controller name, action name, request method) values to the function impelementing that controller's action - defaults to the request method 'GET'.
- * @internal
+ * translate the (controller name, action name, request method) values to the function impelementing that controller's action.
  * @param string $controller_namespace name of the controller.
  * @param string $action_name name of the requested action.
  * @param string $request_method the http request method to check for route action.
  * @return ?string null if no route otherwise the name of the routing funciton.
  */
-function _dispatcher_route_build_action(string $controller_namespace, string $action_name, string $request_method = 'get'): ?string
+function dispatcher_route_build_action(string $controller_namespace, string $action_name, string $request_method): ?string
 {
     $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
-    if (function_exists($function_name)) {
-        return strtolower(sprintf('%s_%s', $action_name, $request_method));
-    } elseif ('get' == $request_method) {
-        return null;
-    } else {
-        return _build_action($controller_namespace, $action_name);
-    }
+    return function_exists($function_name) ? $function_name : null;
 }
