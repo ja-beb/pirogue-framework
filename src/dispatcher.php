@@ -316,37 +316,23 @@ function dispatcher_request_path_parse(string $path): array
 //
 
 /**
- * create a new route.
- * @uses _build_path()
- * @uses _build_action()
- * @param array $file_path path to search for controller path.
- * @param string $controller_namespace the requested controller.
- * @param string $action_name the requested action.
- * @param string $request_method method of this request.
- * @param ?string $file_name if provided this is used to build filepath for the controller otherwise the controller name is used.
+ * create a new route array.
+ * @param string $namespace the namespace to use for this route.
+ * @param string $action the routes's action.
+ * @param string $method the requset method of this route.
  * @return array a associate array containing the route components in the form of [
- *      'file_name' => $file_name,
- *      'controller_namespace' => $controller_namespace,
- *      'action_name' => $action_name,
- *      'request_method' => $request_method,
- *      'controller_path' => '{controller base directory}/{$controller_namespace}.php',
- *      'action' => '{$controller_namespace}\{$action_name}_{$request_method}',
+ *      'namespace' => $namespace,
+ *      'action' => $action,
+ *      'method' => $method
  * ]
  */
-function dispatcher_route_create(array $file_path, string $controller_namespace, string $action_name, string $request_method): array
+function dispatcher_route_create(string $namespace, string $action, string $method): array
 {
     $controller_path = _build_path($file_path);
     return [
-        'file_path' => $file_path,
-        'controller_namespace' => $controller_namespace,
-        'action_name' => $action_name,
-        'request_method' => $request_method,
-        'controller_path' => $controller_path,
-        'action' => '' == $controller_path ? null : _build_action(
-            $controller_namespace,
-            _convert_case($action_name),
-            strtolower($request_method),
-        )
+        'namespace' => $namespace,
+        'action' => $action,
+        'method' => $method,
     ];
 }
 
