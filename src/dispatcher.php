@@ -67,12 +67,11 @@ $GLOBALS['._pirogue.dispatcher_route.call_stack'] = [];
  * @return void
  */
 function _dispatcher_init(
-    string $address, 
-    string $request_path, 
+    string $address,
+    string $request_path,
     array $request_data,
     string $controller_path_format,
-): void
-{
+): void {
 
     $GLOBALS['.pirogue.dispatcher.address'] = $address;
     $GLOBALS['.pirogue.dispatcher.request_path'] = $request_path;
@@ -169,10 +168,9 @@ function dispatcher_redirect(string $address, int $status_code = 301): void
 }
 
 
-/ ==============================================================================================
+//
 // Helper functions (base actions).
-// ==============================================================================================
-
+//
 
 /**
  * convert string from kebab case to camel case. used to convert user provided route to a controller's name.
@@ -200,9 +198,9 @@ function _dispatcher_buffer_clear(): string
 }
 
 
-// ==============================================================================================
+//
 // URL functions.
-// ==============================================================================================
+//
 
 
 /**
@@ -244,9 +242,9 @@ function dispatcher_url_current(): string
 }
 
 
-// ==============================================================================================
+//
 // Path functions.
-// ==============================================================================================
+//
 
 /**
  * register a new server.
@@ -272,9 +270,9 @@ function dispatcher_path_get(string $name): ?string
 }
 
 
-// ==============================================================================================
+//
 // Callback functions.
-// ==============================================================================================
+//
 
 /**
  * convert url into a callback string to be passed as a http query variable.
@@ -313,8 +311,6 @@ function dispatcher_request_path_parse(string $path): array
     return $result;
 }
 
-// ==============================================================================================
+//
 // Router functions.
-// ==============================================================================================
-
-
+//
