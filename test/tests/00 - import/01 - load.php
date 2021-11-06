@@ -1,25 +1,27 @@
 <?php
 
 /**
- * Test pirogue\import\load().
+ * Test pirogue\import_load().
  * php version 8.0.0
  *
  * @author Bourg, Sean <sean.bourg@gmail.com>
  */
 
-use pirogue\import;
+use function pirogue\_import_init;
+use function pirogue\_import_dispose;
+use function pirogue\import_load;
 
 require_once implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', 'pirogue', 'import.php']);
 
-import\_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', '%s.php']));
+_import_init(implode(DIRECTORY_SEPARATOR, [_PIROGUE_TESTING_PATH, 'include', '%s.php']));
 pirogue_test_execute('load(): invalid file', function () {
     try {
-        import\load('file-not-found');
+        import_load('file-not-found');
         return 'Loaded invalid library file.';
     } catch (ErrorException) {
         return '';
     }
 });
 
-pirogue_test_execute('load(): valid file', fn() => import\load('pirogue/dispatcher/url_list'));
-import\_dispose();
+pirogue_test_execute('load(): valid file', fn() => import_load('pirogue/dispatcher'));
+_import_dispose();
