@@ -315,19 +315,19 @@ function dispatcher_callback_parse(string $callback): string
 
 /**
  * create a new route array.
- * @param string $namespace the namespace to use for this route.
+ * @param string $controller the controller name to use for this route.
  * @param string $action the routes's action.
  * @param string $method the requset method of this route.
  * @return array a associate array containing the route components in the form of [
- *      'namespace' => $namespace,
+ *      'controller' => $controller,
  *      'action' => $action,
  *      'method' => $method
  * ]
  */
-function dispatcher_route_create(string $namespace, string $action, string $method): array
+function dispatcher_route_create(string $controller, string $action, string $method): array
 {
     return [
-        'namespace' => $namespace,
+        'controller' => $controller,
         'action' => $action,
         'method' => $method,
     ];
@@ -354,7 +354,7 @@ function dispatcher_route_current(): ?array
 {
     return $GLOBALS['._pirogue.dispatcher.call_stack'][0] ?? null;
 }
- 
+
 /**
  * find the controller's file path. will search given path until a matching file is found by removing last element in the list each time it fails. this function also includes the file
  * into the execution scope.
@@ -379,13 +379,13 @@ function dispatcher_controller_path_build(array $path): ?string
 
 /**
  * translate the (controller name, action name, request method) values to the function impelementing that controller's action.
- * @param string $controller_namespace name of the controller.
+ * @param string $controller_name name of the controller.
  * @param string $action_name name of the requested action.
  * @param string $request_method the http request method to check for route action.
  * @return ?string null if no route otherwise the name of the routing funciton.
  */
-function dispatcher_route_action_build(string $controller_namespace, string $action_name, string $request_method): ?string
+function dispatcher_route_action_build(string $controller_name, string $action_name, string $request_method): ?string
 {
-    $function_name = sprintf('%s\%s_%s', $controller_namespace, $action_name, $request_method);
+    $function_name = sprintf('%s_%s_%s', $controller_name, $action_name, $request_method);
     return function_exists($function_name) ? $function_name : null;
 }
