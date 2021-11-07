@@ -7,7 +7,7 @@
  * @return void
  */
 
-namespace edit;
+namespace controller;
 
 /**
  * initialize this library.
@@ -16,7 +16,7 @@ namespace edit;
  * @param string $name
  * @return void
  */
-function _init(string $name): void{}
+function _edit_init(string $name): void{}
 
 /**
  * finalize this library.
@@ -24,7 +24,7 @@ function _init(string $name): void{}
  * @internal
  * @return void
  */
-function _dispose(): void{}
+function _edit_dispose(): void{}
 
 /**
  * validate access.
@@ -32,7 +32,7 @@ function _dispose(): void{}
  * @param integer|null $user_id
  * @return bool returns false if user id is null.
  */
-function has_access(?int $user_id): bool{
+function edit_has_access(?int $user_id): bool{
     return null != $user_id;
 }
 
@@ -43,7 +43,7 @@ function has_access(?int $user_id): bool{
  * @param array $data
  * @return array
  */
-function index_get(array $path, array $data): array {
+function edit_index_get(array $path, array $data): array {
     return ['file' => __FILE__, 'function' => __FUNCTION__, 'path' => $path, 'data' => $data];
 }
 
@@ -55,7 +55,7 @@ function index_get(array $path, array $data): array {
  * @param array $form_data
  * @return array
  */
-function index_post(array $path, array $data, array $form_data): array {
+function edit_index_post(array $path, array $data, array $form_data): array {
     return ['file' => __FILE__, 'function' => __FUNCTION__, 'path' => $path, 'data' => $data, 'form_data' => $form_data];
 }
 
@@ -66,6 +66,6 @@ function index_post(array $path, array $data, array $form_data): array {
  * @param array $data
  * @return array
  */
-function fallback_get(array $path, array $data): array {
+function edit_fallback_get(array $path, array $data): array {
     return ['file' => __FILE__, 'function' => __FUNCTION__, 'path' => $path, 'data' => $data];
 }

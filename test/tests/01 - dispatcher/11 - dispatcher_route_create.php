@@ -26,9 +26,9 @@ _dispatcher_init(
 );
 
 pirogue_test_execute('pirogue\dispatcher_route_create()', function () {
-    $route = dispatcher_route_create('namespace', 'action', 'method');
-    if ('namespace' != $route['namespace']) {
-        return 'invalid value for namespace';
+    $route = dispatcher_route_create('controller', 'action', 'method');
+    if ('controller' != $route['controller']) {
+        return 'invalid value for controller';
     } elseif ('action' != $route['action']) {
         return 'invalid value for action';
     } elseif ('method' != $route['method']) {

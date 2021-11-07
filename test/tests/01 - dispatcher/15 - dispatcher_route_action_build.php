@@ -27,13 +27,13 @@ _dispatcher_init(
 );
 
 pirogue_test_execute('pirogue\dispatcher_route_action_build(): valid get', function () {
-    $action = dispatcher_route_action_build('example_controller', 'index', 'get');
-    return 'example_controller\index_get' == $action ? '' : sprintf('returned invalid action: "%s"', $action);
+    $action = dispatcher_route_action_build('controller\example_controller', 'index', 'get');
+    return 'controller\example_controller_index_get' == $action ? '' : sprintf('returned invalid action: "%s"', $action);
 });
 
 pirogue_test_execute('pirogue\dispatcher_route_action_build(): valid post', function () {
-    $action = dispatcher_route_action_build('example_controller', 'index', 'post');
-    return 'example_controller\index_post' == $action ? '' : sprintf('returned invalid action: "%s"', $action);
+    $action = dispatcher_route_action_build('controller\example_controller', 'index', 'post');
+    return 'controller\example_controller_index_post' == $action ? '' : sprintf('returned invalid action: "%s"', $action);
 });
 
 pirogue_test_execute('pirogue\dispatcher_route_action_build(): invalid get', function () {
