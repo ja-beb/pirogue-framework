@@ -13,8 +13,8 @@ I would not recommend the usage of this beyond "quick and dirty" prototypes or l
 ### Functions
 - pirogue\\_library_init() = library initialize function.
 - pirogue\\_library_dispose() = internal function, library destructor function registered when library is initialized.
-- pirogue\\library_function() = public function within a library (ie redirect()).
-- pirogue\\_library_function() = internal function, used within dispatcher and library only. 
+- pirogue\\library_function() = public function within a library (example: dispatcher_redirect()).
+- pirogue\\_library_function() = internal function, used within dispatcher and library only(example: _dispatcher_send()). 
 ### Variables
 #### Global Variables
 Variables registered with a global array ($GLOBALS or $_SESSION) are prefixed with the '.' character to prevent them from being exported to the current symbol table (via register_globals or extract()).
